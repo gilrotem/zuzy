@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZUZY - שפה וטון</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+    <link rel="icon" href="favicon.png">
+    <link rel="apple-touch-icon" href="favicon.png">
+    <link rel="stylesheet" href="assets/theme.css">
+    <script src="assets/theme.js" defer></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        .layout { display: flex; min-height: 100vh; }
+
+        .sidebar {
+            width: 280px;
+            background: var(--bg-secondary);
+            border-left: 1px solid var(--border-color);
+            padding: 2rem 0;
+            position: fixed;
+            right: 0;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .logo-container {
+            padding: 0 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .logo-container img { height: 50px; width: auto; }
+        .nav-section { padding: 0 1rem; }
+
+        .nav-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 0.5rem 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.875rem 1rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: var(--radius-pill);
+            margin-bottom: 0.25rem;
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+        }
+
+        .nav-link:hover { background: var(--bg-card); color: var(--text-primary); }
+        .nav-link.active { background: var(--primary-container); color: white; }
+        .nav-icon { width: 20px; height: 20px; opacity: 0.8; }
+
+        .main-content {
+            flex: 1;
+            margin-right: 280px;
+            padding: 3rem;
+        }
+
+        .page-header { margin-bottom: 3rem; }
+
+        .breadcrumb {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb a { color: var(--accent-purple); text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+
+        .page-title {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+        }
+
+        /* DNA Hero */
+        .dna-hero {
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-secondary) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .dna-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-cyan));
+        }
+
+        .dna-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .dna-subtitle {
+            font-size: 1.15rem;
+            color: var(--accent-cyan);
+            font-weight: 500;
+        }
+
+        /* Content Section */
+        .content-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .section-title-group h2 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .section-title-group p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        .section-content {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.85;
+        }
+
+        .section-content p { margin-bottom: 1rem; }
+        .section-content p:last-child { margin-bottom: 0; }
+
+        /* Tone Principles */
+        .tone-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .tone-card {
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+
+        .tone-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .tone-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .tone-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* Example Box */
+        .example-box {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .example-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .example-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent-purple);
+        }
+
+        .example-content {
+            background: var(--bg-card);
+            border-radius: 8px;
+            padding: 1.25rem;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            line-height: 1.7;
+            border-right: 3px solid var(--accent-cyan);
+        }
+
+        .example-context {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.75rem;
+            font-style: italic;
+        }
+
+        /* Do/Don't Grid */
+        .do-dont-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .do-card, .dont-card {
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+
+        .do-card { border-top: 3px solid var(--success); }
+        .dont-card { border-top: 3px solid var(--danger); }
+
+        .do-title, .dont-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .do-title { color: var(--success); }
+        .dont-title { color: var(--danger); }
+
+        .do-list, .dont-list {
+            list-style: none;
+        }
+
+        .do-list li, .dont-list li {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            padding: 0.4rem 0;
+            padding-right: 1.5rem;
+            position: relative;
+        }
+
+        .do-list li::before {
+            content: '✓';
+            position: absolute;
+            right: 0;
+            color: var(--success);
+        }
+
+        .dont-list li::before {
+            content: '×';
+            position: absolute;
+            right: 0;
+            color: var(--danger);
+            font-weight: bold;
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: var(--bg-secondary);
+            border-right: 3px solid var(--accent-purple);
+            padding: 1.25rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .highlight-box p {
+            margin: 0;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* Summary Box */
+        .summary-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .summary-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .summary-quote {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 1100px) {
+            .tone-grid, .do-dont-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 900px) {
+            .sidebar { display: none; }
+            .main-content { margin-right: 0; }
+        }
+
+        @media (max-width: 600px) {
+            .main-content { padding: 1.5rem; }
+        }
+        .nav-link,
+        .card,
+        .voice-card,
+        .tone-card,
+        .example-card,
+        .dos-card,
+        .donts-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link::after,
+        .card::after,
+        .voice-card::after,
+        .tone-card::after,
+        .example-card::after,
+        .dos-card::after,
+        .donts-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--state-layer);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            pointer-events: none;
+        }
+
+        .nav-link:hover::after,
+        .nav-link:focus-visible::after,
+        .card:hover::after,
+        .voice-card:hover::after,
+        .tone-card:hover::after,
+        .example-card:hover::after,
+        .dos-card:hover::after,
+        .donts-card:hover::after {
+            opacity: 1;
+        }
+
+        .site-footer {
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: center;
+        }
+
+        .inline-flex { display: inline-flex; }
+        .flex-row-reverse { flex-direction: row-reverse; }
+        .items-center { align-items: center; }
+        .gap-1\.5 { gap: 0.375rem; }
+        .opacity-60 { opacity: 0.6; }
+        .hover\:opacity-100:hover { opacity: 1; }
+        .transition-opacity { transition: opacity 0.3s ease; }
+        .duration-300 { transition-duration: 300ms; }
+        .no-underline { text-decoration: none; }
+        .text-\[10px\] { font-size: 10px; }
+        .font-medium { font-weight: 500; }
+        .text-gray-400 { color: #888888; }
+        .text-gray-300 { color: #9A9A9A; }
+        .font-sans { font-family: var(--font-sans); }
+        .tracking-wide { letter-spacing: 0.04em; }
+        .mx-0\.5 { margin: 0 0.125rem; }
+        .w-3 { width: 0.75rem; }
+        .h-auto { height: auto; }
+        .grayscale { filter: grayscale(1); }
+        .opacity-80 { opacity: 0.8; }
+    </style>
+</head>
+<body>
+    <div class="layout">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="logo-container">
+                <img src="assets/logo-full-dark.png" alt="ZUZY Logo">
+            </div>
+            <div class="nav-section">
+                <div class="nav-title">ניווט ראשי</div>
+                <a href="index.html" class="nav-link">
+                    <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                    סקירה כללית
+                </a>
+                <a href="essence.html" class="nav-link">
+                    <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    מהות ו-DNA
+                </a>
+                <a href="differentiation.html" class="nav-link">
+                    <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                    בידול ומיצוב
+                </a>
+                <a href="solutions.html" class="nav-link">
+                    <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                    פתרונות ושירותים
+                </a>
+                <a href="process.html" class="nav-link">
+                    <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+                    תהליך עבודה
+                </a>
+                <a href="business-model.html" class="nav-link">
+                    <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    מודל עסקי
+                </a>
+                <a href="sales.html" class="nav-link">
+                    <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                    אסטרטגיית מכירה
+                </a>
+                <a href="brand-voice.html" class="nav-link active">
+                    <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+                    שפה וטון
+                </a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="page-header">
+                <div class="breadcrumb">
+                    <a href="index.html">בית</a> / שפה וטון
+                </div>
+                <h1 class="page-title">שפה וטון תקשורת</h1>
+                <p class="page-subtitle">DNA המותג – איך מדברים, כותבים ונראים בכל נקודת מגע</p>
+                <button class="theme-toggle" type="button" onclick="ZuziTheme.toggle()">
+                    <span class="theme-dot"></span>
+                    <span>מצב בהיר / כהה</span>
+                </button>
+            </header>
+
+            <!-- DNA Hero -->
+            <section class="dna-hero">
+                <h2 class="dna-title"><span class="material-symbols-outlined">track_changes</span> תדמית המותג</h2>
+                <p class="dna-subtitle">המומחה הידידותי – יודעים את העבודה לעומק, מסבירים בפשטות ולעניין</p>
+            </section>
+
+            <!-- Tone Principles -->
+            <section class="content-section">
+                <div class="section-header">
+                    <div class="section-icon"><span class="material-symbols-outlined">palette</span></div>
+                    <div class="section-title-group">
+                        <h2>עקרונות הטון והשפה</h2>
+                        <p>מה מנחה את הדרך שבה אנחנו מתקשרים</p>
+                    </div>
+                </div>
+
+                <div class="tone-grid">
+                    <div class="tone-card">
+                        <div class="tone-icon"><span class="material-symbols-outlined">visibility</span></div>
+                        <div class="tone-title">בגובה העיניים, אך מקצועי</div>
+                        <div class="tone-desc">תקשורת מובנת לבעל עסק שאינו טכנאי, בלי לזלזל באינטליגנציה שלו. נמנעים מז'רגון טכני כבד ומונחים מעורפלים.</div>
+                    </div>
+                    <div class="tone-card">
+                        <div class="tone-icon"><span class="material-symbols-outlined">track_changes</span></div>
+                        <div class="tone-title">ממוקד תועלות, לא תכונות</div>
+                        <div class="tone-desc">מדברים על מה יוצא ללקוח ולא על הטכנולוגיה עצמה. סיפורים והצלחות, לא מפרטים טכניים.</div>
+                    </div>
+                    <div class="tone-card">
+                        <div class="tone-icon"><span class="material-symbols-outlined">fitness_center</span></div>
+                        <div class="tone-title">חד ובוטח</div>
+                        <div class="tone-desc">כשאומרים משהו – זה ברור ונחרץ. לא מטביעים את המסר בתוך פסקאות מפותלות. הביטחון מעיד על מומחיות.</div>
+                    </div>
+                    <div class="tone-card">
+                        <div class="tone-icon"><span class="material-symbols-outlined">favorite</span></div>
+                        <div class="tone-title">אנושי, ידידותי ותומך</div>
+                        <div class="tone-desc">טון אמפתי ואכפתי. מילים של שותפות ("בוא נפתור את זה יחד") במקום מילים מנוכרות.</div>
+                    </div>
+                    <div class="tone-card">
+                        <div class="tone-icon"><span class="material-symbols-outlined">auto_awesome</span></div>
+                        <div class="tone-title">חיובי ומעצים</div>
+                        <div class="tone-desc">מדגישים אפשרויות ולא מגבלות. מילים כמו "להצליח", "לצמוח", "לשלוט בעסק שלך".</div>
+                    </div>
+                    <div class="tone-card">
+                        <div class="tone-icon"><span class="material-symbols-outlined">sync</span></div>
+                        <div class="tone-title">עקבי בכל הערוצים</div>
+                        <div class="tone-desc">הטון והשפה זהים באתר, ברשתות, במצגות ובאימיילים. מיתוג עקבי בונה אמון.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Examples -->
+            <section class="content-section">
+                <div class="section-header">
+                    <div class="section-icon"><span class="material-symbols-outlined">chat_bubble</span></div>
+                    <div class="section-title-group">
+                        <h2>דוגמאות לשפה בפועל</h2>
+                        <p>איך זה נראה בנקודות מגע שונות</p>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-header">
+                        <span class="example-label"><span class="material-symbols-outlined">push_pin</span> כותרת עמוד באתר</span>
+                    </div>
+                    <div class="example-content">
+                        "פחות בלגן, יותר צמיחה. הטכנולוגיה עושה עבורך את העבודה."
+                    </div>
+                    <p class="example-context">מסר שמדבר ישר לצורך, קל להבנה, בטון חיובי</p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-header">
+                        <span class="example-label"><span class="material-symbols-outlined">push_pin</span> תוכן "למה ZUZY" באתר</span>
+                    </div>
+                    <div class="example-content">
+                        "אנחנו ב-ZUZY יודעים איך זה מרגיש כשהעסק גדל והכאוס חוגג. בדיוק בגלל זה בנינו פתרונות שעושים סדר בבלאגן, ומפנים לך זמן להגדיל את העסק. תן לטכנולוגיה לרוץ – ואת/ה תתמקד/י בלקוחות."
+                    </div>
+                    <p class="example-context">אמפתיה, פנייה ישירה, הבטחה ברורה</p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-header">
+                        <span class="example-label"><span class="material-symbols-outlined">push_pin</span> מסמך הדרכה למשתמש</span>
+                    </div>
+                    <div class="example-content">
+                        "ברוך הבא למערכת ZUZY! מוכנים להתחיל? תוך 15 דקות תגדירו את המערכת ותתחילו לחסוך זמן. אם משהו לא ברור – אנחנו כאן בשבילכם בצ'אט."
+                    </div>
+                    <p class="example-context">טון מעודד, קליל אבל אינפורמטיבי וברור</p>
+                </div>
+            </section>
+
+            <!-- Do's and Don'ts -->
+            <section class="content-section">
+                <div class="section-header">
+                    <div class="section-icon">⚖️</div>
+                    <div class="section-title-group">
+                        <h2>כן ולא בתקשורת</h2>
+                        <p>הנחיות ברורות לכתיבה</p>
+                    </div>
+                </div>
+
+                <div class="do-dont-grid">
+                    <div class="do-card">
+                        <div class="do-title">✓ כן לעשות</div>
+                        <ul class="do-list">
+                            <li>לדבר בגוף שני ישיר ("אתה/את")</li>
+                            <li>להמחיש מושגים בדימויים פשוטים</li>
+                            <li>להדגיש תועלות ותוצאות</li>
+                            <li>להשתמש במילים יומיומיות</li>
+                            <li>לספר סיפורים והצלחות</li>
+                            <li>להיות ברור ונחרץ</li>
+                            <li>לשמור על עקביות בכל הערוצים</li>
+                        </ul>
+                    </div>
+                    <div class="dont-card">
+                        <div class="dont-title">× לא לעשות</div>
+                        <ul class="dont-list">
+                            <li>ז'רגון טכני כבד ומונחים מעורפלים</li>
+                            <li>משפטים ארוכים ומפותלים</li>
+                            <li>להתמקד בתכונות טכניות במקום תועלות</li>
+                            <li>טון מנוכר או "קורפורטי"</li>
+                            <li>קלישאות או שפה "ילדותית"</li>
+                            <li>הבטחות מעורפלות ולא מדידות</li>
+                            <li>חוסר עקביות בין ערוצים</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Key Words -->
+            <section class="content-section">
+                <div class="section-header">
+                    <div class="section-icon"><span class="material-symbols-outlined">key</span></div>
+                    <div class="section-title-group">
+                        <h2>מילות מפתח של המותג</h2>
+                        <p>מילים שחוזרות ומחזקות את האסוציאציה</p>
+                    </div>
+                </div>
+
+                <div class="section-content">
+                    <div class="highlight-box">
+                        <p>סדר • שקט • צמיחה • פשטות • שותפות • תוצאות • יעילות • אוטומציה • התאמה • ליווי</p>
+                    </div>
+                    <p style="margin-top: 1.5rem;">
+                        מילים אלה יופיעו שוב ושוב בתקשורת – באתר, בפוסטים, במיילים ובמצגות. 
+                        למשל, המילה "סדר" או "שקט" תופיע הרבה כדי לחזק את האסוציאציה. 
+                        אפילו בנושאי אימייל: "איך נעשה לך שקט תפעולי?"
+                    </p>
+                </div>
+            </section>
+
+            <!-- Summary -->
+            <div class="summary-box">
+                <h3 class="summary-title"><span class="material-symbols-outlined">track_changes</span> המטרה הסופית</h3>
+                <p class="summary-quote">
+                    "אני אוהב לעבוד עם החברה הזו, הם מדברים לעניין, אני סומך עליהם ומרגיש בנוח לשאול שאלות."
+                    <br><br>
+                    תקשורת נכונה בונה מערכת יחסים חזקה בין המותג ללקוח – וזו המהות של מותג חזק.
+                </p>
+            </div>
+
+            <footer class="site-footer">
+                <a
+                    href="https://seoagency.co.il"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex flex-row-reverse items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity duration-300 no-underline"
+                    style="direction: rtl"
+                >
+                    <span class="text-[10px] font-medium text-gray-400 font-sans tracking-wide">AI &amp; דיגיטל</span>
+                    <span class="text-[10px] text-gray-300 mx-0.5">|</span>
+                    <span class="text-[10px] font-medium text-gray-400 font-sans">גיל רותם GPR</span>
+                    <span class="text-[10px] font-medium text-gray-400 font-sans">ארכיטקטורה ופיתוח:</span>
+                    <img src="/favicon.png" alt="GPR Icon" class="w-3 h-auto grayscale opacity-80">
+                </a>
+            </footer>
+        </main>
+    </div>
+</body>
+</html>

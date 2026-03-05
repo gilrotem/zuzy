@@ -1,0 +1,79 @@
+/* =============================================================================
+ * ZUZY Design Tokens
+ * ZUZY design tokens
+ * These extend the base Tailwind/shadcn tokens with ZUZY brand values
+ * ============================================================================= */
+
+:root {
+  /* ===== ZUZY Brand Colors ===== */
+  --zuzy-primary: #6750A4;
+  --zuzy-on-primary: #FFFFFF;
+  --zuzy-primary-container: #EADDFF;
+  --zuzy-secondary: #625B71;
+  --zuzy-surface: #F7F5FB;
+  --zuzy-outline: #C9C5D4;
+
+  --zuzy-bg-primary: #FFFFFF;
+  --zuzy-bg-secondary: #F7F5FB;
+  --zuzy-bg-card: #FFFFFF;
+  --zuzy-bg-card-hover: #F1EEF8;
+  --zuzy-text-primary: #1F1B2E;
+  --zuzy-text-secondary: #4A4458;
+  --zuzy-text-muted: #6B6576;
+
+  --zuzy-accent-purple: var(--zuzy-primary);
+  --zuzy-accent-purple-muted: #D0BCFF;
+  --zuzy-accent-cyan: #4CA3C7;
+
+  --zuzy-border: var(--zuzy-outline);
+  --zuzy-border-light: #D8D4E3;
+
+  --zuzy-radius-card: 32px;
+  --zuzy-radius-pill: 24px;
+  --zuzy-state-layer: rgba(103, 80, 164, 0.08);
+
+  --zuzy-success: #2E7D32;
+  --zuzy-warning: #F9A825;
+  --zuzy-danger: #C62828;
+
+  /* ===== Typography ===== */
+  --font-zuzy: 'FB Coherenti Sans', 'Roboto', 'Heebo', 'Arial', sans-serif;
+
+  /* ===== Spacing ===== */
+  --zuzy-space-xs: 0.25rem;
+  --zuzy-space-sm: 0.5rem;
+  --zuzy-space-md: 1rem;
+  --zuzy-space-lg: 2rem;
+  --zuzy-space-xl: 4rem;
+}
+
+[data-theme='dark'] {
+  /* ===== ZUZY Dark Mode ===== */
+  --zuzy-primary: #D0BCFF;
+  --zuzy-on-primary: #381E72;
+  --zuzy-primary-container: #4F378B;
+  --zuzy-secondary: #CCC2DC;
+  --zuzy-surface: #14121A;
+  --zuzy-outline: #3A3845;
+
+  --zuzy-bg-primary: #0b0b12;
+  --zuzy-bg-secondary: #14121A;
+  --zuzy-bg-card: #1b1a24;
+  --zuzy-bg-card-hover: #232230;
+  --zuzy-text-primary: #F6F4FA;
+  --zuzy-text-secondary: #C8C3D4;
+  --zuzy-text-muted: #9B95AA;
+
+  --zuzy-accent-purple: #D0BCFF;
+  --zuzy-accent-purple-muted: #4F378B;
+  --zuzy-accent-cyan: #5BA3C0;
+
+  --zuzy-border: var(--zuzy-outline);
+  --zuzy-border-light: #4A4757;
+
+  --zuzy-state-layer: rgba(255, 255, 255, 0.08);
+
+  --zuzy-success: #4ADE80;
+  --zuzy-warning: #FBBF24;
+  --zuzy-danger: #F87171;
+}

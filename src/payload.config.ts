@@ -20,6 +20,7 @@ import { Users } from './collections/Users'
 import { BrandDocs } from './collections/BrandDocs'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
+import { SiteSettings } from './SiteSettings/config'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
@@ -86,7 +87,7 @@ export default buildConfig({
   }),
   collections: [Pages, Posts, Media, Categories, ProductCategories, Products, BrandDocs, Users],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer],
+  globals: [Header, Footer, SiteSettings],
 
   // ===== I18N — Admin Interface =====
   i18n: {

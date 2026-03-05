@@ -68,7 +68,7 @@
 ---
 
 ### משימה 4: חיבור Logo דינמי ל-Frontend
-**סטטוס:** ⬜
+**סטטוס:** ✅
 
 **מה:**
 - [ ] עדכון `src/components/Logo/Logo.tsx` — קבלת `logoImage` + `siteName` props
@@ -155,7 +155,7 @@
 | 1 | Supabase Storage | ✅ |
 | 2 | SiteSettings שלד | 🔄 |
 | 3 | Branding fields | ✅ |
-| 4 | Logo דינמי | ⬜ |
+| 4 | Logo דינמי | ✅ |
 | 5 | Theme fields | ⬜ |
 | 6 | Theme ל-Frontend | ⬜ |
 | 7 | Custom Code fields | ⬜ |

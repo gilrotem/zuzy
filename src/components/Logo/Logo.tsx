@@ -1,15 +1,34 @@
 import clsx from 'clsx'
+import Image from 'next/image'
 import React from 'react'
 
 interface Props {
   className?: string
   loading?: 'lazy' | 'eager'
   priority?: 'auto' | 'high' | 'low'
+  logoObject?: {
+    url?: string
+    filename?: string
+    alt?: string
+  } | null
+  siteName?: string
 }
 
 export const Logo = (props: Props) => {
-  const { className } = props
+  const { className, logoObject, siteName = 'ZUZY' } = props
 
+  // If logo image exists, show it
+  if (logoObject?.url) {
+    return (
+      <img
+        src={logoObject.url}
+        alt={logoObject.alt || siteName}
+        className={clsx('h-8 object-contain', className)}
+      />
+    )
+  }
+
+  // Fallback to site name text
   return (
     <span
       className={clsx(
@@ -18,7 +37,7 @@ export const Logo = (props: Props) => {
       )}
       style={{ fontFamily: 'var(--font-zuzy), sans-serif' }}
     >
-      ZUZY
+      {siteName}
     </span>
   )
 }

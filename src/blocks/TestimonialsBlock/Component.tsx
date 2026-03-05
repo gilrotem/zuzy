@@ -8,9 +8,7 @@ export const TestimonialsBlockComponent: React.FC<
 > = ({ heading, testimonials, style = 'cards' }) => {
   return (
     <section className="container py-16">
-      {heading && (
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">{heading}</h2>
-      )}
+      {heading && <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">{heading}</h2>}
       <div
         className={cn('grid gap-8', {
           'md:grid-cols-2 lg:grid-cols-3': style === 'cards' || style === 'grid',
@@ -18,14 +16,13 @@ export const TestimonialsBlockComponent: React.FC<
         })}
       >
         {testimonials?.map((testimonial, i: number) => (
-          <div
-            key={i}
-            className="bg-card rounded-xl border border-border p-6 flex flex-col"
-          >
+          <div key={i} className="bg-card rounded-xl border border-border p-6 flex flex-col">
             {testimonial.rating && (
               <div className="flex gap-1 mb-4">
                 {Array.from({ length: testimonial.rating }).map((_, j) => (
-                  <span key={j} className="text-yellow-500">★</span>
+                  <span key={j} className="text-yellow-500">
+                    ★
+                  </span>
                 ))}
               </div>
             )}

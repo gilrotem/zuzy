@@ -21,21 +21,20 @@ export const CTABlockComponent: React.FC<CTABlockProps & { disableInnerContainer
     >
       {backgroundImage && typeof backgroundImage === 'object' && style === 'withBackground' && (
         <div className="absolute inset-0 -z-10 overflow-hidden">
-          <Media
-            resource={backgroundImage}
-            imgClassName="w-full h-full object-cover opacity-10"
-          />
+          <Media resource={backgroundImage} imgClassName="w-full h-full object-cover opacity-10" />
         </div>
       )}
       <div className="container text-center max-w-3xl mx-auto">
         {heading && (
-          <h2 className={cn('text-3xl md:text-4xl font-bold mb-6', {
-            'text-2xl': style === 'minimal',
-          })}>{heading}</h2>
+          <h2
+            className={cn('text-3xl md:text-4xl font-bold mb-6', {
+              'text-2xl': style === 'minimal',
+            })}
+          >
+            {heading}
+          </h2>
         )}
-        {richText && (
-          <RichText data={richText} enableGutter={false} className="mb-8" />
-        )}
+        {richText && <RichText data={richText} enableGutter={false} className="mb-8" />}
         {links && links.length > 0 && (
           <div className="flex flex-wrap gap-4 justify-center">
             {links.map(({ link }: any, i: number) => (

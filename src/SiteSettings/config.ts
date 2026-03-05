@@ -71,7 +71,26 @@ export const SiteSettings: GlobalConfig = {
         },
         {
           label: 'Custom Code',
-          fields: [],
+          fields: [
+            {
+              name: 'customCSS',
+              label: 'Custom CSS',
+              type: 'textarea',
+              admin: {
+                description: 'CSS code to inject into <head>',
+                rows: 8,
+              },
+            },
+            {
+              name: 'customJS',
+              label: 'Custom JavaScript',
+              type: 'textarea',
+              admin: {
+                description: 'JavaScript code to inject before </body>',
+                rows: 8,
+              },
+            },
+          ],
         },
       ],
     },

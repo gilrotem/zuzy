@@ -40,7 +40,11 @@ export const ProcessStepsBlockComponent: React.FC<
                   <h3 className="text-xl font-semibold">{step.title}</h3>
                 </div>
                 {step.description && (
-                  <RichText data={step.description} enableGutter={false} className="text-muted-foreground" />
+                  <RichText
+                    data={step.description}
+                    enableGutter={false}
+                    className="text-muted-foreground"
+                  />
                 )}
                 {step.image && typeof step.image === 'object' && (
                   <div className="mt-4 rounded-lg overflow-hidden">
@@ -63,14 +67,16 @@ export const ProcessStepsBlockComponent: React.FC<
                 >
                   {step.icon || stepNum}
                 </div>
-                {i < (steps?.length || 0) - 1 && (
-                  <div className="w-0.5 flex-1 bg-border mt-2" />
-                )}
+                {i < (steps?.length || 0) - 1 && <div className="w-0.5 flex-1 bg-border mt-2" />}
               </div>
               <div className="pb-8">
                 <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
                 {step.description && (
-                  <RichText data={step.description} enableGutter={false} className="text-muted-foreground" />
+                  <RichText
+                    data={step.description}
+                    enableGutter={false}
+                    className="text-muted-foreground"
+                  />
                 )}
                 {step.image && typeof step.image === 'object' && (
                   <div className="mt-4 rounded-lg overflow-hidden max-w-md">

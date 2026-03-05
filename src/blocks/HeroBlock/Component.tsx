@@ -22,23 +22,20 @@ export const HeroBlockComponent: React.FC<HeroBlockProps & { disableInnerContain
     >
       {backgroundImage && typeof backgroundImage === 'object' && (
         <div className="absolute inset-0 -z-10 overflow-hidden">
-          <Media
-            resource={backgroundImage}
-            imgClassName="w-full h-full object-cover opacity-20"
-          />
+          <Media resource={backgroundImage} imgClassName="w-full h-full object-cover opacity-20" />
         </div>
       )}
-      <div className={cn('container', { 'grid md:grid-cols-2 gap-12 items-center': style === 'withImage' })}>
+      <div
+        className={cn('container', {
+          'grid md:grid-cols-2 gap-12 items-center': style === 'withImage',
+        })}
+      >
         <div className="max-w-3xl">
-          {heading && (
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">{heading}</h1>
-          )}
+          {heading && <h1 className="text-4xl md:text-6xl font-bold mb-6">{heading}</h1>}
           {subheading && (
             <p className="text-xl md:text-2xl text-muted-foreground mb-8">{subheading}</p>
           )}
-          {richText && (
-            <RichText data={richText} enableGutter={false} className="mb-8" />
-          )}
+          {richText && <RichText data={richText} enableGutter={false} className="mb-8" />}
           {links && links.length > 0 && (
             <div className="flex flex-wrap gap-4">
               {links.map(({ link }: any, i: number) => (
@@ -49,10 +46,7 @@ export const HeroBlockComponent: React.FC<HeroBlockProps & { disableInnerContain
         </div>
         {style === 'withImage' && backgroundImage && typeof backgroundImage === 'object' && (
           <div className="relative">
-            <Media
-              resource={backgroundImage}
-              imgClassName="rounded-xl border border-border"
-            />
+            <Media resource={backgroundImage} imgClassName="rounded-xl border border-border" />
           </div>
         )}
       </div>

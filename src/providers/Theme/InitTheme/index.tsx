@@ -14,14 +14,16 @@ export const InitTheme: React.FC<InitThemeProps> = ({
 }) => {
   return (
     <>
-      <style dangerouslySetInnerHTML={{
-        __html: `
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
           :root {
             --color-primary: ${primaryColor};
             --color-accent: ${accentColor};
           }
         `,
-      }} />
+        }}
+      />
       {/* eslint-disable-next-line @next/next/no-before-interactive-script-outside-document */}
       <Script
         dangerouslySetInnerHTML={{

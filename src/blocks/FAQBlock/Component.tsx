@@ -21,9 +21,7 @@ const AccordionItem: React.FC<{
         type="button"
       >
         <span>{question}</span>
-        <span className={cn('transition-transform shrink-0', { 'rotate-180': isOpen })}>
-          ▼
-        </span>
+        <span className={cn('transition-transform shrink-0', { 'rotate-180': isOpen })}>▼</span>
       </button>
       <div
         className={cn('overflow-hidden transition-all duration-300', {
@@ -31,7 +29,9 @@ const AccordionItem: React.FC<{
           'max-h-[1000px] pb-4': isOpen,
         })}
       >
-        {answer && <RichText data={answer} enableGutter={false} className="text-muted-foreground" />}
+        {answer && (
+          <RichText data={answer} enableGutter={false} className="text-muted-foreground" />
+        )}
       </div>
     </div>
   )
@@ -50,7 +50,9 @@ export const FAQBlockComponent: React.FC<FAQBlockProps & { disableInnerContainer
       {(heading || subheading) && (
         <div className="text-center mb-12">
           {heading && <h2 className="text-3xl md:text-4xl font-bold mb-4">{heading}</h2>}
-          {subheading && <p className="text-lg text-muted-foreground max-w-2xl mx-auto">{subheading}</p>}
+          {subheading && (
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">{subheading}</p>
+          )}
         </div>
       )}
       <div
@@ -63,7 +65,13 @@ export const FAQBlockComponent: React.FC<FAQBlockProps & { disableInnerContainer
             return (
               <div key={i} className="mb-8">
                 <h3 className="text-xl font-semibold mb-2">{item.question}</h3>
-                {item.answer && <RichText data={item.answer} enableGutter={false} className="text-muted-foreground" />}
+                {item.answer && (
+                  <RichText
+                    data={item.answer}
+                    enableGutter={false}
+                    className="text-muted-foreground"
+                  />
+                )}
               </div>
             )
           }

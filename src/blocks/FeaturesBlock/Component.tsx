@@ -18,10 +18,14 @@ export const FeaturesBlockComponent: React.FC<
       {(heading || subheading) && (
         <div className="text-center mb-12">
           {heading && <h2 className="text-3xl md:text-4xl font-bold mb-4">{heading}</h2>}
-          {subheading && <p className="text-lg text-muted-foreground max-w-2xl mx-auto">{subheading}</p>}
+          {subheading && (
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">{subheading}</p>
+          )}
         </div>
       )}
-      <div className={cn('grid gap-8', gridCols[columns as keyof typeof gridCols] || 'md:grid-cols-3')}>
+      <div
+        className={cn('grid gap-8', gridCols[columns as keyof typeof gridCols] || 'md:grid-cols-3')}
+      >
         {features?.map((feature, i: number) => (
           <div
             key={i}
@@ -31,19 +35,19 @@ export const FeaturesBlockComponent: React.FC<
               'text-center items-center': style === 'grid',
             })}
           >
-            {feature.icon && (
-              <span className="text-3xl mb-4 block">{feature.icon}</span>
-            )}
+            {feature.icon && <span className="text-3xl mb-4 block">{feature.icon}</span>}
             {feature.image && typeof feature.image === 'object' && (
               <div className="mb-4 rounded-lg overflow-hidden">
                 <Media resource={feature.image} imgClassName="w-full h-48 object-cover" />
               </div>
             )}
-            {feature.title && (
-              <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-            )}
+            {feature.title && <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>}
             {feature.description && (
-              <RichText data={feature.description} enableGutter={false} className="text-muted-foreground" />
+              <RichText
+                data={feature.description}
+                enableGutter={false}
+                className="text-muted-foreground"
+              />
             )}
           </div>
         ))}

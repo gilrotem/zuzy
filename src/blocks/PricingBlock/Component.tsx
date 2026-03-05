@@ -36,13 +36,21 @@ export const PricingBlockComponent: React.FC<
             <h3 className="text-xl font-bold mb-2">{plan.name}</h3>
             <p className="text-3xl font-bold mb-4">{plan.price}</p>
             {plan.description && (
-              <RichText data={plan.description} enableGutter={false} className="text-muted-foreground mb-6" />
+              <RichText
+                data={plan.description}
+                enableGutter={false}
+                className="text-muted-foreground mb-6"
+              />
             )}
             {plan.features && plan.features.length > 0 && (
               <ul className="space-y-2 mb-8 flex-1">
                 {plan.features.map((f, j) => (
                   <li key={j} className="flex items-center gap-2">
-                    <span className={f.included ? 'text-green-500' : 'text-muted-foreground line-through'}>
+                    <span
+                      className={
+                        f.included ? 'text-green-500' : 'text-muted-foreground line-through'
+                      }
+                    >
                       {f.included ? '✓' : '✗'}
                     </span>
                     <span className={cn({ 'text-muted-foreground line-through': !f.included })}>

@@ -119,7 +119,7 @@
 ---
 
 ### משימה 7: שדות Custom Code
-**סטטוס:** ⬜
+**סטטוס:** ✅
 
 **מה:**
 - [ ] הוספת שדה `customCSS` — textarea
@@ -158,7 +158,7 @@
 | 4 | Logo דינמי | ✅ |
 | 5 | Theme fields | ✅ |
 | 6 | Theme ל-Frontend | ✅ |
-| 7 | Custom Code fields | ⬜ |
+| 7 | Custom Code fields | ✅ |
 | 8 | Custom CSS/JS ל-Frontend | ⬜ |
 
 ---

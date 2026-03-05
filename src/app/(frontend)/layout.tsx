@@ -34,6 +34,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const defaultTheme = siteSettingsData?.defaultTheme || 'light'
   const primaryColor = siteSettingsData?.primaryColor || '#6750A4'
   const accentColor = siteSettingsData?.accentColor || '#4CA3C7'
+  const customCSS = siteSettingsData?.customCSS
+  const customJS = siteSettingsData?.customJS
 
   return (
     <html
@@ -48,6 +50,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           primaryColor={primaryColor}
           accentColor={accentColor}
         />
+        {customCSS && <style dangerouslySetInnerHTML={{ __html: customCSS }} />}
         <link href="/favicon.ico" rel="icon" sizes="32x32" />
         <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
       </head>
@@ -63,6 +66,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           {children}
           <Footer />
         </Providers>
+        {customJS && (
+          <script dangerouslySetInnerHTML={{ __html: customJS }} />
+        )}
       </body>
     </html>
   )

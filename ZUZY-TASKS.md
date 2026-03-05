@@ -133,7 +133,7 @@
 ---
 
 ### משימה 8: חיבור Custom CSS/JS ל-Frontend
-**סטטוס:** ⬜
+**סטטוס:** ✅
 
 **מה:**
 - [ ] עדכון `src/app/(frontend)/layout.tsx` — הזרקת `<style>` מ-customCSS ל-`<head>`
@@ -159,7 +159,7 @@
 | 5 | Theme fields | ✅ |
 | 6 | Theme ל-Frontend | ✅ |
 | 7 | Custom Code fields | ✅ |
-| 8 | Custom CSS/JS ל-Frontend | ⬜ |
+| 8 | Custom CSS/JS ל-Frontend | ✅ |
 
 ---
 

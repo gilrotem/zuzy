@@ -85,7 +85,7 @@
 ---
 
 ### משימה 5: שדות Theme & Colors
-**סטטוס:** ⬜
+**סטטוס:** ✅
 
 **מה:**
 - [ ] הוספת שדה `defaultTheme` — select: light / dark / auto
@@ -156,7 +156,7 @@
 | 2 | SiteSettings שלד | 🔄 |
 | 3 | Branding fields | ✅ |
 | 4 | Logo דינמי | ✅ |
-| 5 | Theme fields | ⬜ |
+| 5 | Theme fields | ✅ |
 | 6 | Theme ל-Frontend | ⬜ |
 | 7 | Custom Code fields | ⬜ |
 | 8 | Custom CSS/JS ל-Frontend | ⬜ |

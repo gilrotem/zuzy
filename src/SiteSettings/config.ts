@@ -37,7 +37,37 @@ export const SiteSettings: GlobalConfig = {
         },
         {
           label: 'Theme & Colors',
-          fields: [],
+          fields: [
+            {
+              name: 'defaultTheme',
+              label: 'Default Theme',
+              type: 'select',
+              defaultValue: 'light',
+              options: [
+                { label: 'Light', value: 'light' },
+                { label: 'Dark', value: 'dark' },
+                { label: 'Auto', value: 'auto' },
+              ],
+            },
+            {
+              name: 'primaryColor',
+              label: 'Primary Color',
+              type: 'text',
+              defaultValue: '#6750A4',
+              admin: {
+                description: 'Hex color code (e.g., #6750A4)',
+              },
+            },
+            {
+              name: 'accentColor',
+              label: 'Accent Color',
+              type: 'text',
+              defaultValue: '#4CA3C7',
+              admin: {
+                description: 'Hex color code (e.g., #4CA3C7)',
+              },
+            },
+          ],
         },
         {
           label: 'Custom Code',

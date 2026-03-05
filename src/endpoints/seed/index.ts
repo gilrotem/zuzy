@@ -20,7 +20,7 @@ const collections: CollectionSlug[] = [
   'search',
 ]
 
-const globals: GlobalSlug[] = ['header', 'footer']
+const globals: GlobalSlug[] = ['header', 'footer', 'site-settings']
 
 const categories = ['Technology', 'News', 'Finance', 'Design', 'Software', 'Engineering']
 
@@ -48,9 +48,18 @@ export const seed = async ({
     globals.map((global) =>
       payload.updateGlobal({
         slug: global,
-        data: {
-          navItems: [],
-        },
+        data: (
+          global === 'site-settings'
+            ? {
+                siteName: 'ZUZY',
+                primaryColor: '#6750A4',
+                accentColor: '#4CA3C7',
+                defaultTheme: 'light',
+              }
+            : {
+                navItems: [],
+              }
+        ) as any,
         depth: 0,
         context: {
           disableRevalidate: true,

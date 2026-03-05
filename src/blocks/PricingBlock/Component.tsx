@@ -23,7 +23,7 @@ export const PricingBlockComponent: React.FC<
           'md:grid-cols-3': plans && plans.length >= 3,
         })}
       >
-        {plans?.map((plan, i) => (
+        {plans?.map((plan, i: number) => (
           <div
             key={i}
             className={cn(

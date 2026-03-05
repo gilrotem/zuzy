@@ -38,7 +38,7 @@ export const CTABlockComponent: React.FC<CTABlockProps & { disableInnerContainer
         )}
         {links && links.length > 0 && (
           <div className="flex flex-wrap gap-4 justify-center">
-            {links.map(({ link }, i) => (
+            {links.map(({ link }: any, i: number) => (
               <CMSLink key={i} size="lg" {...link} />
             ))}
           </div>

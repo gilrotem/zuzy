@@ -17,7 +17,7 @@ export const TestimonialsBlockComponent: React.FC<
           'max-w-3xl mx-auto': style === 'carousel',
         })}
       >
-        {testimonials?.map((testimonial, i) => (
+        {testimonials?.map((testimonial, i: number) => (
           <div
             key={i}
             className="bg-card rounded-xl border border-border p-6 flex flex-col"

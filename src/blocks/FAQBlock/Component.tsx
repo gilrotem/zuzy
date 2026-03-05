@@ -58,7 +58,7 @@ export const FAQBlockComponent: React.FC<FAQBlockProps & { disableInnerContainer
           'grid md:grid-cols-2 gap-8 max-w-none': style === 'twoColumns',
         })}
       >
-        {items?.map((item, i) => {
+        {items?.map((item, i: number) => {
           if (style === 'list') {
             return (
               <div key={i} className="mb-8">

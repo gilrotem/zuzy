@@ -13,6 +13,7 @@ import { Providers } from '@/providers'
 import { InitTheme } from '@/providers/Theme/InitTheme'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { draftMode } from 'next/headers'
+import { getCachedGlobal } from '@/utilities/getGlobals'
 
 import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
@@ -28,6 +29,11 @@ const zuzyFont = localFont({
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { isEnabled } = await draftMode()
+  const siteSettingsData: any = await getCachedGlobal('site-settings' as any, 0)()
+
+  const defaultTheme = siteSettingsData?.defaultTheme || 'light'
+  const primaryColor = siteSettingsData?.primaryColor || '#6750A4'
+  const accentColor = siteSettingsData?.accentColor || '#4CA3C7'
 
   return (
     <html
@@ -37,7 +43,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       suppressHydrationWarning
     >
       <head>
-        <InitTheme />
+        <InitTheme
+          serverDefaultTheme={defaultTheme}
+          primaryColor={primaryColor}
+          accentColor={accentColor}
+        />
         <link href="/favicon.ico" rel="icon" sizes="32x32" />
         <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
       </head>

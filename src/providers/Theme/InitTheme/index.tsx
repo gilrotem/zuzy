@@ -1,50 +1,70 @@
 import Script from 'next/script'
 import React from 'react'
 
-import { defaultTheme, themeLocalStorageKey } from '../ThemeSelector/types'
+interface InitThemeProps {
+  serverDefaultTheme?: string
+  primaryColor?: string
+  accentColor?: string
+}
 
-export const InitTheme: React.FC = () => {
+export const InitTheme: React.FC<InitThemeProps> = ({
+  serverDefaultTheme = 'light',
+  primaryColor = '#6750A4',
+  accentColor = '#4CA3C7',
+}) => {
   return (
-    // eslint-disable-next-line @next/next/no-before-interactive-script-outside-document
-    <Script
-      dangerouslySetInnerHTML={{
+    <>
+      <style dangerouslySetInnerHTML={{
         __html: `
-  (function () {
-    function getImplicitPreference() {
-      var mediaQuery = '(prefers-color-scheme: dark)'
-      var mql = window.matchMedia(mediaQuery)
-      var hasImplicitPreference = typeof mql.matches === 'boolean'
+          :root {
+            --color-primary: ${primaryColor};
+            --color-accent: ${accentColor};
+          }
+        `,
+      }} />
+      {/* eslint-disable-next-line @next/next/no-before-interactive-script-outside-document */}
+      <Script
+        dangerouslySetInnerHTML={{
+          __html: `
+    (function () {
+      function getImplicitPreference() {
+        var mediaQuery = '(prefers-color-scheme: dark)'
+        var mql = window.matchMedia(mediaQuery)
+        var hasImplicitPreference = typeof mql.matches === 'boolean'
 
-      if (hasImplicitPreference) {
-        return mql.matches ? 'dark' : 'light'
+        if (hasImplicitPreference) {
+          return mql.matches ? 'dark' : 'light'
+        }
+
+        return null
       }
 
-      return null
-    }
-
-    function themeIsValid(theme) {
-      return theme === 'light' || theme === 'dark'
-    }
-
-    var themeToSet = '${defaultTheme}'
-    var preference = window.localStorage.getItem('${themeLocalStorageKey}')
-
-    if (themeIsValid(preference)) {
-      themeToSet = preference
-    } else {
-      var implicitPreference = getImplicitPreference()
-
-      if (implicitPreference) {
-        themeToSet = implicitPreference
+      function themeIsValid(theme) {
+        return theme === 'light' || theme === 'dark'
       }
-    }
 
-    document.documentElement.setAttribute('data-theme', themeToSet)
-  })();
-  `,
-      }}
-      id="theme-script"
-      strategy="beforeInteractive"
-    />
+      var themeToSet = '${serverDefaultTheme}'
+      var preference = window.localStorage.getItem('payload-theme')
+
+      if (themeIsValid(preference)) {
+        themeToSet = preference
+      } else if (themeToSet === 'auto') {
+        var implicitPreference = getImplicitPreference()
+
+        if (implicitPreference) {
+          themeToSet = implicitPreference
+        } else {
+          themeToSet = 'light'
+        }
+      }
+
+      document.documentElement.setAttribute('data-theme', themeToSet)
+    })();
+    `,
+        }}
+        id="theme-script"
+        strategy="beforeInteractive"
+      />
+    </>
   )
 }

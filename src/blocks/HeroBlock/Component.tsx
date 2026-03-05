@@ -41,7 +41,7 @@ export const HeroBlockComponent: React.FC<HeroBlockProps & { disableInnerContain
           )}
           {links && links.length > 0 && (
             <div className="flex flex-wrap gap-4">
-              {links.map(({ link }, i) => (
+              {links.map(({ link }: any, i: number) => (
                 <CMSLink key={i} size="lg" {...link} />
               ))}
             </div>

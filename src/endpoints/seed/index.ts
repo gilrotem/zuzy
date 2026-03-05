@@ -48,18 +48,16 @@ export const seed = async ({
     globals.map((global) =>
       payload.updateGlobal({
         slug: global,
-        data: (
-          global === 'site-settings'
-            ? {
-                siteName: 'ZUZY',
-                primaryColor: '#6750A4',
-                accentColor: '#4CA3C7',
-                defaultTheme: 'light',
-              }
-            : {
-                navItems: [],
-              }
-        ) as any,
+        data: (global === 'site-settings'
+          ? {
+              siteName: 'ZUZY',
+              primaryColor: '#6750A4',
+              accentColor: '#4CA3C7',
+              defaultTheme: 'light',
+            }
+          : {
+              navItems: [],
+            }) as any,
         depth: 0,
         context: {
           disableRevalidate: true,

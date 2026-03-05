@@ -22,7 +22,7 @@ export const FeaturesBlockComponent: React.FC<
         </div>
       )}
       <div className={cn('grid gap-8', gridCols[columns as keyof typeof gridCols] || 'md:grid-cols-3')}>
-        {features?.map((feature, i) => (
+        {features?.map((feature, i: number) => (
           <div
             key={i}
             className={cn('flex flex-col', {

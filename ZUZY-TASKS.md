@@ -101,7 +101,7 @@
 ---
 
 ### משימה 6: חיבור Theme & Colors ל-Frontend
-**סטטוס:** ⬜
+**סטטוס:** ✅
 
 **מה:**
 - [ ] עדכון `src/app/(frontend)/layout.tsx` — קריאת SiteSettings, הזרקת CSS variables override
@@ -157,7 +157,7 @@
 | 3 | Branding fields | ✅ |
 | 4 | Logo דינמי | ✅ |
 | 5 | Theme fields | ✅ |
-| 6 | Theme ל-Frontend | ⬜ |
+| 6 | Theme ל-Frontend | ✅ |
 | 7 | Custom Code fields | ⬜ |
 | 8 | Custom CSS/JS ל-Frontend | ⬜ |
 

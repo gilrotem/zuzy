@@ -23,7 +23,7 @@ export const ProcessStepsBlockComponent: React.FC<
           'grid md:grid-cols-2 lg:grid-cols-3 gap-8': style === 'cards',
         })}
       >
-        {steps?.map((step, i) => {
+        {steps?.map((step, i: number) => {
           const stepNum = step.stepNumber || i + 1
 
           if (style === 'cards') {

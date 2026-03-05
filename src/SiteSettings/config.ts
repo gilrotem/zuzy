@@ -14,7 +14,26 @@ export const SiteSettings: GlobalConfig = {
       tabs: [
         {
           label: 'Branding',
-          fields: [],
+          fields: [
+            {
+              name: 'logo',
+              label: 'Logo',
+              type: 'relationship',
+              relationTo: 'media',
+            },
+            {
+              name: 'favicon',
+              label: 'Favicon',
+              type: 'relationship',
+              relationTo: 'media',
+            },
+            {
+              name: 'siteName',
+              label: 'Site Name',
+              type: 'text',
+              defaultValue: 'ZUZY',
+            },
+          ],
         },
         {
           label: 'Theme & Colors',

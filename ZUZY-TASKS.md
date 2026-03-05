@@ -52,7 +52,7 @@
 ---
 
 ### משימה 3: שדות Branding (Logo, Favicon, SiteName)
-**סטטוס:** ⬜
+**סטטוס:** ✅
 
 **מה:**
 - [ ] הוספת שדה `logo` — upload מ-Media collection
@@ -154,7 +154,7 @@
 |---|---|---|
 | 1 | Supabase Storage | ✅ |
 | 2 | SiteSettings שלד | 🔄 |
-| 3 | Branding fields | ⬜ |
+| 3 | Branding fields | ✅ |
 | 4 | Logo דינמי | ⬜ |
 | 5 | Theme fields | ⬜ |
 | 6 | Theme ל-Frontend | ⬜ |

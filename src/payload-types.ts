@@ -2528,6 +2528,23 @@ export interface SiteSetting {
   logo?: (number | null) | Media;
   favicon?: (number | null) | Media;
   siteName?: string | null;
+  defaultTheme?: ('light' | 'dark' | 'auto') | null;
+  /**
+   * Hex color code (e.g., #6750A4)
+   */
+  primaryColor?: string | null;
+  /**
+   * Hex color code (e.g., #4CA3C7)
+   */
+  accentColor?: string | null;
+  /**
+   * CSS code to inject into <head>
+   */
+  customCSS?: string | null;
+  /**
+   * JavaScript code to inject before </body>
+   */
+  customJS?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2585,6 +2602,11 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   logo?: T;
   favicon?: T;
   siteName?: T;
+  defaultTheme?: T;
+  primaryColor?: T;
+  accentColor?: T;
+  customCSS?: T;
+  customJS?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

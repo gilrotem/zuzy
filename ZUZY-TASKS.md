@@ -1,7 +1,7 @@
 # ZUZY — תוכנית משימות פיתוח
 
 > מסמך עבודה חי. כל משימה מסומנת בסטטוס: ⬜ לא התחיל | 🔄 בביצוע | ✅ הושלם ונבדק
-> עדכון אחרון: 2026-03-05
+> עדכון אחרון: 2026-03-08
 
 ---
 
@@ -35,17 +35,17 @@
 ## שלב ב: SiteSettings Global — בנייה מדורגת
 
 ### משימה 2: שלד SiteSettings Global
-**סטטוס:** 🔄
+**סטטוס:** ✅
 
 **מה:**
-- [ ] יצירת `src/SiteSettings/config.ts` — Global עם 3 tabs ריקים (Branding, Theme & Colors, Custom Code)
-- [ ] יצירת `src/SiteSettings/hooks/revalidateSiteSettings.ts`
-- [ ] רישום ב-`src/payload.config.ts` — `globals: [Header, Footer, SiteSettings]`
+- [x] יצירת `src/SiteSettings/config.ts` — Global עם 3 tabs ריקים (Branding, Theme & Colors, Custom Code)
+- [x] יצירת `src/SiteSettings/hooks/revalidateSiteSettings.ts`
+- [x] רישום ב-`src/payload.config.ts` — `globals: [Header, Footer, SiteSettings]`
 
 **בדיקה:**
-- [ ] `pnpm dev` עולה ללא שגיאות
-- [ ] ממשק אדמין → "Site Settings" מופיע בתפריט
-- [ ] נפתח עם 3 tabs
+- [x] `pnpm dev` עולה ללא שגיאות
+- [x] ממשק אדמין → "Site Settings" מופיע בתפריט
+- [x] נפתח עם 3 tabs
 
 **קומיט:** `feat: add SiteSettings global skeleton`
 
@@ -55,13 +55,13 @@
 **סטטוס:** ✅
 
 **מה:**
-- [ ] הוספת שדה `logo` — upload מ-Media collection
-- [ ] הוספת שדה `favicon` — upload מ-Media collection
-- [ ] הוספת שדה `siteName` — text field
+- [x] הוספת שדה `logo` — upload מ-Media collection
+- [x] הוספת שדה `favicon` — upload מ-Media collection
+- [x] הוספת שדה `siteName` — text field
 
 **בדיקה:**
-- [ ] ממשק אדמין → Site Settings → Branding → העלאת לוגו + favicon + כתיבת שם → שמירה ✓
-- [ ] אין שגיאות TypeScript
+- [x] ממשק אדמין → Site Settings → Branding → העלאת לוגו + favicon + כתיבת שם → שמירה ✓
+- [x] אין שגיאות TypeScript
 
 **קומיט:** `feat: SiteSettings branding fields`
 
@@ -71,14 +71,14 @@
 **סטטוס:** ✅
 
 **מה:**
-- [ ] עדכון `src/components/Logo/Logo.tsx` — קבלת `logoImage` + `siteName` props
-- [ ] עדכון `src/Header/Component.tsx` — קריאת SiteSettings, העברת logo ל-component
-- [ ] עדכון `src/Footer/Component.tsx` — אותו דבר
+- [x] עדכון `src/components/Logo/Logo.tsx` — קבלת `logoImage` + `siteName` props
+- [x] עדכון `src/Header/Component.tsx` — קריאת SiteSettings, העברת logo ל-component
+- [x] עדכון `src/Footer/Component.tsx` — אותו דבר
 
 **בדיקה:**
-- [ ] אדמין → העלאת לוגו → שמירה → ריפרש דף הבית → הלוגו מופיע ב-Header וב-Footer
-- [ ] בלי לוגו → fallback לטקסט siteName (או "ZUZY")
-- [ ] `pnpm build` עובר
+- [x] אדמין → העלאת לוגו → שמירה → ריפרש דף הבית → הלוגו מופיע ב-Header וב-Footer
+- [x] בלי לוגו → fallback לטקסט siteName (או "ZUZY")
+- [x] `pnpm build` עובר
 
 **קומיט:** `feat: dynamic logo from SiteSettings`
 
@@ -88,13 +88,13 @@
 **סטטוס:** ✅
 
 **מה:**
-- [ ] הוספת שדה `defaultTheme` — select: light / dark / auto
-- [ ] הוספת שדה `primaryColor` — text עם validation של hex color
-- [ ] הוספת שדה `accentColor` — text עם validation של hex color
+- [x] הוספת שדה `defaultTheme` — select: light / dark / auto
+- [x] הוספת שדה `primaryColor` — text עם validation של hex color
+- [x] הוספת שדה `accentColor` — text עם validation של hex color
 
 **בדיקה:**
-- [ ] ממשק אדמין → שינוי ערכים → שמירה ✓
-- [ ] אין שגיאות TypeScript
+- [x] ממשק אדמין → שינוי ערכים → שמירה ✓
+- [x] אין שגיאות TypeScript
 
 **קומיט:** `feat: SiteSettings theme fields`
 
@@ -104,15 +104,15 @@
 **סטטוס:** ✅
 
 **מה:**
-- [ ] עדכון `src/app/(frontend)/layout.tsx` — קריאת SiteSettings, הזרקת CSS variables override
-- [ ] עדכון `src/providers/Theme/InitTheme/index.tsx` — קבלת `serverDefault` prop
-- [ ] עדכון `src/providers/Theme/shared.ts` — הסרת hardcoded default
+- [x] עדכון `src/app/(frontend)/layout.tsx` — קריאת SiteSettings, הזרקת CSS variables override
+- [x] עדכון `src/providers/Theme/InitTheme/index.tsx` — קבלת `serverDefault` prop
+- [x] עדכון `src/providers/Theme/shared.ts` — הסרת hardcoded default
 
 **בדיקה:**
-- [ ] אדמין → defaultTheme=Dark → ריפרש → האתר נטען ב-Dark
-- [ ] אדמין → primaryColor=#FF0000 → ריפרש → הצבע הראשי אדום
-- [ ] מחיקת primaryColor → חוזר ל-default (#6750A4)
-- [ ] `pnpm build` עובר
+- [x] אדמין → defaultTheme=Dark → ריפרש → האתר נטען ב-Dark
+- [x] אדמין → primaryColor=#FF0000 → ריפרש → הצבע הראשי אדום
+- [x] מחיקת primaryColor → חוזר ל-default (#6750A4)
+- [x] `pnpm build` עובר
 
 **קומיט:** `feat: dynamic theme from SiteSettings`
 
@@ -122,11 +122,11 @@
 **סטטוס:** ✅
 
 **מה:**
-- [ ] הוספת שדה `customCSS` — textarea
-- [ ] הוספת שדה `customJS` — textarea
+- [x] הוספת שדה `customCSS` — textarea
+- [x] הוספת שדה `customJS` — textarea
 
 **בדיקה:**
-- [ ] ממשק אדמין → כתיבת תוכן בשדות → שמירה ✓
+- [x] ממשק אדמין → כתיבת תוכן בשדות → שמירה ✓
 
 **קומיט:** `feat: SiteSettings custom code fields`
 
@@ -136,13 +136,13 @@
 **סטטוס:** ✅
 
 **מה:**
-- [ ] עדכון `src/app/(frontend)/layout.tsx` — הזרקת `<style>` מ-customCSS ל-`<head>`
-- [ ] עדכון `src/app/(frontend)/layout.tsx` — הזרקת `<script>` מ-customJS לפני `</body>`
+- [x] עדכון `src/app/(frontend)/layout.tsx` — הזרקת `<style>` מ-customCSS ל-`<head>`
+- [x] עדכון `src/app/(frontend)/layout.tsx` — הזרקת `<script>` מ-customJS לפני `</body>`
 
 **בדיקה:**
-- [ ] אדמין → customCSS = `body { border: 5px solid red; }` → ריפרש → גבול אדום מופיע
-- [ ] הסרת CSS → ריפרש → הגבול נעלם
-- [ ] `pnpm build` עובר
+- [x] אדמין → customCSS = `body { border: 5px solid red; }` → ריפרש → גבול אדום מופיע
+- [x] הסרת CSS → ריפרש → הגבול נעלם
+- [x] `pnpm build` עובר
 
 **קומיט:** `feat: inject custom CSS/JS from SiteSettings`
 
@@ -153,7 +153,7 @@
 | # | משימה | סטטוס |
 |---|---|---|
 | 1 | Supabase Storage | ✅ |
-| 2 | SiteSettings שלד | 🔄 |
+| 2 | SiteSettings שלד | ✅ |
 | 3 | Branding fields | ✅ |
 | 4 | Logo דינמי | ✅ |
 | 5 | Theme fields | ✅ |

@@ -45,6 +45,7 @@ export const plugins: Plugin[] = [
   s3Storage({
     collections: {
       media: {
+        prefix: '',
         generateFileURL: ({ filename, prefix }) => generateS3MediaURL({ filename, prefix }),
       },
     },

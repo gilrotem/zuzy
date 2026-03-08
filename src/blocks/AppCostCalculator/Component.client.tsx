@@ -18,10 +18,20 @@ const APP_TYPES: { value: AppType; label: string; baseCost: number; baseHours: n
   { value: 'marketplace', label: 'מרקטפלייס (דו-צדדי)', baseCost: 120000, baseHours: 700 },
 ]
 
-const DESIGN_LEVELS: { value: DesignLevel; label: string; multiplier: number; description: string }[] = [
+const DESIGN_LEVELS: {
+  value: DesignLevel
+  label: string
+  multiplier: number
+  description: string
+}[] = [
   { value: 'basic', label: 'בסיסי', multiplier: 1.0, description: 'תבנית מוכנה עם התאמות' },
   { value: 'custom', label: 'מותאם אישית', multiplier: 1.4, description: 'עיצוב ייחודי מאפס' },
-  { value: 'premium', label: 'פרימיום', multiplier: 1.8, description: 'עיצוב יוקרתי + אנימציות + מיקרו-אינטראקציות' },
+  {
+    value: 'premium',
+    label: 'פרימיום',
+    multiplier: 1.8,
+    description: 'עיצוב יוקרתי + אנימציות + מיקרו-אינטראקציות',
+  },
 ]
 
 const FEATURES: Feature[] = [
@@ -84,7 +94,11 @@ export const AppCostCalculatorClient: React.FC<Props> = ({
   }, [appType, designLevel, selectedFeatures])
 
   const formatCurrency = (num: number) =>
-    new Intl.NumberFormat('he-IL', { style: 'currency', currency: 'ILS', maximumFractionDigits: 0 }).format(num)
+    new Intl.NumberFormat('he-IL', {
+      style: 'currency',
+      currency: 'ILS',
+      maximumFractionDigits: 0,
+    }).format(num)
 
   return (
     <div className="container my-16" dir="rtl">
@@ -219,13 +233,15 @@ export const AppCostCalculatorClient: React.FC<Props> = ({
                 </div>
                 <div className="flex justify-between py-2 border-b border-gray-700">
                   <span className="text-gray-400">עלות לשעה (ממוצע)</span>
-                  <span className="font-medium">{formatCurrency(calculation.hourlyEquivalent)}</span>
+                  <span className="font-medium">
+                    {formatCurrency(calculation.hourlyEquivalent)}
+                  </span>
                 </div>
               </div>
 
               <div className="bg-gray-700/50 rounded-lg p-4 mb-6 text-sm text-gray-300">
-                💡 ההערכה מבוססת על תעריפי שוק ממוצעים בישראל. העלות הסופית תלויה בדרישות
-                מדויקות, מורכבות טכנית, ולוח זמנים.
+                💡 ההערכה מבוססת על תעריפי שוק ממוצעים בישראל. העלות הסופית תלויה בדרישות מדויקות,
+                מורכבות טכנית, ולוח זמנים.
               </div>
 
               <a

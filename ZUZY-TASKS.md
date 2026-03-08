@@ -26,7 +26,7 @@
 - [x] `pnpm dev` עולה ללא שגיאות (port 3000)
 - [x] ממשק אדמין נטען תקין (HTTP 200)
 - [x] Media API עובד (`/api/media` → 200, URL ישיר ל-Supabase)
-- [ ] בדיקה ידנית: העלאת תמונה חדשה → קובץ נמצא בתיקיית `YYYY/MM/` ב-Supabase
+- [x] בדיקה ידנית: העלאת תמונה חדשה → קובץ נמצא בתיקיית `YYYY/MM/` ב-Supabase
 
 **קומיט:** `feat: migrate media storage to Supabase S3 + upgrade Payload to 3.79.0`
 

@@ -52,9 +52,10 @@
   --font-sans: var(--font-geist-sans);
 }
 
-/* Hebrew font override — MUST come after @theme so it takes precedence
+/* RTL font overrides — MUST come after @theme so they take precedence
    over the generic --font-sans set above. */
-html[lang='he'] {
+html[lang='he'],
+html[lang='ar'] {
   --font-sans: var(--font-zuzy), 'Arial', 'Helvetica Neue', sans-serif;
 }
 

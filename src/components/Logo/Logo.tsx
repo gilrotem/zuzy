@@ -35,7 +35,6 @@ export const Logo = (props: Props) => {
         'inline-flex items-center font-bold text-2xl tracking-tight select-none',
         className,
       )}
-      style={{ fontFamily: 'var(--font-zuzy), sans-serif' }}
     >
       {siteName}
     </span>

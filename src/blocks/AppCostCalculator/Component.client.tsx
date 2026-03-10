@@ -143,7 +143,7 @@ export const AppCostCalculatorClient: React.FC<Props> = ({
                       )}
                     </div>
                     <span className="font-medium">{type.label}</span>
-                    <span className="text-sm text-gray-400 mr-auto">
+                    <span className="text-sm text-gray-400 me-auto">
                       מ-{formatCurrency(type.baseCost)}
                     </span>
                   </label>
@@ -201,7 +201,7 @@ export const AppCostCalculatorClient: React.FC<Props> = ({
                       className="rounded border-gray-300 text-blue-500 focus:ring-blue-500"
                     />
                     <span>{feature.label}</span>
-                    <span className="text-gray-400 mr-auto">+{formatCurrency(feature.cost)}</span>
+                    <span className="text-gray-400 me-auto">+{formatCurrency(feature.cost)}</span>
                   </label>
                 ))}
               </div>

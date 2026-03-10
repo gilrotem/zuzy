@@ -12,13 +12,6 @@
 @custom-variant 2xl (@media (width >= theme(--breakpoint-2xl)));
 
 @layer base {
-  /* Hebrew: use ZUZY brand font (FB Coherenti Sans) loaded via next/font/local.
-     Fallback chain: Arial (similar metrics) → system sans-serif.
-     For all other languages, --font-sans stays as Geist Sans (set in @theme). */
-  html[lang='he'] {
-    --font-sans: var(--font-zuzy), 'Arial', 'Helvetica Neue', sans-serif;
-  }
-
   body {
     font-family: var(--font-sans);
   }
@@ -57,6 +50,12 @@
   --breakpoint-2xl: 86rem;
   --font-mono: var(--font-geist-mono);
   --font-sans: var(--font-geist-sans);
+}
+
+/* Hebrew font override — MUST come after @theme so it takes precedence
+   over the generic --font-sans set above. */
+html[lang='he'] {
+  --font-sans: var(--font-zuzy), 'Arial', 'Helvetica Neue', sans-serif;
 }
 
 @layer utilities {

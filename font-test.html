@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>ZUZY Font Test</title>
+<style>
+  @font-face {
+    font-family: 'FbCoherentiSans';
+    src: url('./src/fonts/subset-FbCoherentiSans-Regular.woff2') format('woff2'),
+         url('./src/fonts/FbCoherentiSans-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  body {
+    font-family: 'FbCoherentiSans', 'Arial', sans-serif;
+    padding: 2rem;
+    background: #f7f5fb;
+    color: #1F1B2E;
+  }
+
+  .test-block {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  h1 { font-size: 2.5rem; color: #6750A4; }
+  h2 { font-size: 1.5rem; color: #625B71; margin-bottom: 0.5rem; }
+  p { font-size: 1.125rem; line-height: 1.8; }
+
+  .with-font { font-family: 'FbCoherentiSans', sans-serif; }
+  .without-font { font-family: 'Arial', sans-serif; }
+
+  .label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #6750A4;
+    margin-bottom: 0.5rem;
+    font-family: monospace;
+  }
+</style>
+</head>
+<body>
+
+<h1>בדיקת פונט ZUZY</h1>
+
+<div class="test-block">
+  <div class="label">FB Coherenti Sans (הפונט שלך)</div>
+  <p class="with-font">שלום עולם! זוזי היא מערכת ניהול תוכן מתקדמת. הפונט הזה צריך להיראות שונה מ-Arial.</p>
+  <p class="with-font">אבגדהוזחטיכלמנסעפצקרשת</p>
+  <p class="with-font">0123456789 — סימנים: .,;:!?</p>
+</div>
+
+<div class="test-block">
+  <div class="label">Arial (fallback לצורך השוואה)</div>
+  <p class="without-font">שלום עולם! זוזי היא מערכת ניהול תוכן מתקדמת. הפונט הזה צריך להיראות שונה מ-Arial.</p>
+  <p class="without-font">אבגדהוזחטיכלמנסעפצקרשת</p>
+  <p class="without-font">0123456789 — סימנים: .,;:!?</p>
+</div>
+
+<div class="test-block">
+  <div class="label">English text (should fall back to Arial)</div>
+  <p class="with-font">The quick brown fox jumps over the lazy dog.</p>
+  <p class="without-font">The quick brown fox jumps over the lazy dog.</p>
+</div>
+
+</body>
+</html>

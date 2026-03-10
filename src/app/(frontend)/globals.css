@@ -13,7 +13,7 @@
 
 @layer base {
   body {
-    font-family: var(--font-sans);
+    font-family: var(--font-zuzy), var(--font-sans);
   }
 
   h1,
@@ -49,7 +49,7 @@
   --breakpoint-xl: 80rem;
   --breakpoint-2xl: 86rem;
   --font-mono: var(--font-geist-mono);
-  --font-sans: var(--font-zuzy), 'Heebo', 'Arial', 'Helvetica Neue', sans-serif;
+  --font-sans: 'Heebo', 'Arial', 'Helvetica Neue', sans-serif;
 }
 
 @layer utilities {

@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
+@import './zuzy-design-tokens.css';
 
 @config '../../../tailwind.config.mjs';
 
@@ -11,9 +12,11 @@
 @custom-variant 2xl (@media (width >= theme(--breakpoint-2xl)));
 
 @layer base {
-  /* Hebrew only: override --font-sans with the loaded ZUZY brand font */
+  /* Hebrew: use ZUZY brand font (FB Coherenti Sans) loaded via next/font/local.
+     Fallback chain: Arial (similar metrics) → system sans-serif.
+     For all other languages, --font-sans stays as Geist Sans (set in @theme). */
   html[lang='he'] {
-    --font-sans: var(--font-zuzy);
+    --font-sans: var(--font-zuzy), 'Arial', 'Helvetica Neue', sans-serif;
   }
 
   body {
@@ -155,15 +158,21 @@
 
   /* ===== Status ===== */
   --success: #2E7D32;
+  --success-foreground: #FFFFFF;
   --warning: #F9A825;
+  --warning-foreground: #000000;
   --error: #C62828;
+  --error-foreground: #FFFFFF;
+  --info: #3B82F6;
+  --info-foreground: #FFFFFF;
 
   /* ===== Extended brand tokens ===== */
   --accent-cyan: #4CA3C7;
   --state-layer: rgba(103, 80, 164, 0.08);
 
-  /* ===== Typography ===== */
-  --font-zuzy: 'FB Coherenti Sans', 'Roboto', 'Heebo', 'Arial', sans-serif;
+  /* ===== ZUZY Radii ===== */
+  --radius-zuzy: 2rem;
+  --radius-pill: 1.75rem;
 }
 
 /* =============================================================================
@@ -222,8 +231,13 @@
 
   /* ===== Status ===== */
   --success: #4ADE80;
+  --success-foreground: #000000;
   --warning: #FBBF24;
+  --warning-foreground: #000000;
   --error: #F87171;
+  --error-foreground: #1b1a24;
+  --info: #60A5FA;
+  --info-foreground: #000000;
 
   /* ===== Extended brand tokens ===== */
   --accent-cyan: #5BA3C0;
@@ -268,9 +282,16 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
   --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
   --color-error: var(--error);
+  --color-error-foreground: var(--error-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
   --color-accent-cyan: var(--accent-cyan);
+  --radius-zuzy: var(--radius-zuzy);
+  --radius-pill: var(--radius-pill);
   --font-zuzy: var(--font-zuzy);
 }
 
@@ -290,4 +311,109 @@ html {
 html[data-theme='dark'],
 html[data-theme='light'] {
   opacity: initial;
+}
+
+/* =============================================================================
+ * ZUZY Gradient Utilities
+ * ============================================================================= */
+.bg-gradient-zuzy {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent-cyan) 100%);
+}
+
+.bg-gradient-primary {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--primary) 85%, white) 0%, var(--primary) 100%);
+}
+
+.text-gradient-zuzy {
+  background: linear-gradient(to right, var(--primary), var(--accent-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* =============================================================================
+ * Scrollbar Styling
+ * ============================================================================= */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--muted);
+}
+
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--muted-foreground) 30%, transparent);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--muted-foreground) 50%, transparent);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--muted-foreground) 30%, transparent) var(--muted);
+}
+
+/* =============================================================================
+ * ZUZY Table Design System
+ * ============================================================================= */
+.zuzy-table th,
+.zuzy-th {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted-foreground);
+  height: 2.75rem;
+  padding: 0.75rem 1rem;
+  background: color-mix(in srgb, var(--muted) 30%, transparent);
+  border-bottom: 1px solid var(--border);
+  text-align: start;
+}
+
+.zuzy-table td,
+.zuzy-td {
+  font-size: 0.875rem;
+  color: var(--foreground);
+  height: 3.5rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 50%, transparent);
+  vertical-align: middle;
+}
+
+.zuzy-table tbody tr:hover {
+  background: color-mix(in srgb, var(--muted) 20%, transparent);
+  transition: background-color 150ms;
+}
+
+/* Number cells — tabular alignment */
+.zuzy-table .number,
+.zuzy-number {
+  font-variant-numeric: tabular-nums;
+  text-align: start;
+  font-weight: 500;
+}
+
+/* Change indicators */
+.zuzy-change-up { color: var(--success); font-weight: 500; }
+.zuzy-change-down { color: var(--error); font-weight: 500; }
+.zuzy-change-neutral { color: var(--muted-foreground); }
+
+/* Table variants */
+.zuzy-table-compact th { font-size: 0.6875rem; height: 2.25rem; }
+.zuzy-table-compact td { font-size: 0.8125rem; height: 2.75rem; }
+
+.zuzy-table-dense th { font-size: 0.625rem; height: 2rem; }
+.zuzy-table-dense td { font-size: 0.75rem; height: 2.25rem; }
+
+/* Sticky header */
+.zuzy-table-sticky thead { position: sticky; top: 0; z-index: 10; background: var(--background); }
+
+/* Zebra stripes */
+.zuzy-table-striped tbody tr:nth-child(even) {
+  background: color-mix(in srgb, var(--muted) 10%, transparent);
 }

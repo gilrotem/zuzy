@@ -1,11 +1,14 @@
 /* =============================================================================
- * ZUZY Design Tokens
- * ZUZY design tokens
- * These extend the base Tailwind/shadcn tokens with ZUZY brand values
+ * ZUZY Design Tokens — Extended Brand Values
+ * These extend the base Tailwind/shadcn tokens in globals.css with
+ * ZUZY-specific brand values for use in custom components.
+ *
+ * NOTE: Core tokens (--primary, --background, --foreground, etc.) are
+ * defined in globals.css. This file adds ZUZY branding extras only.
  * ============================================================================= */
 
 :root {
-  /* ===== ZUZY Brand Colors ===== */
+  /* ===== ZUZY Brand Colors (hex aliases) ===== */
   --zuzy-primary: #6750A4;
   --zuzy-on-primary: #FFFFFF;
   --zuzy-primary-container: #EADDFF;
@@ -35,9 +38,7 @@
   --zuzy-success: #2E7D32;
   --zuzy-warning: #F9A825;
   --zuzy-danger: #C62828;
-
-  /* ===== Typography ===== */
-  --font-zuzy: 'FB Coherenti Sans', 'Roboto', 'Heebo', 'Arial', sans-serif;
+  --zuzy-info: #3B82F6;
 
   /* ===== Spacing ===== */
   --zuzy-space-xs: 0.25rem;
@@ -76,4 +77,5 @@
   --zuzy-success: #4ADE80;
   --zuzy-warning: #FBBF24;
   --zuzy-danger: #F87171;
+  --zuzy-info: #60A5FA;
 }

@@ -18,6 +18,7 @@ import { ProcessStepsBlock } from '../../blocks/ProcessStepsBlock/config'
 import { RawHTML } from '../../blocks/RawHTML/config'
 import { Code } from '../../blocks/Code/config'
 import { AppCostCalculator } from '../../blocks/AppCostCalculator/config'
+import { AppGridBlock } from '../../blocks/AppGridBlock/config'
 import { hero } from '@/heros/config'
 import { slugField } from 'payload'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
@@ -100,6 +101,7 @@ export const Pages: CollectionConfig<'pages'> = {
                 RawHTML,
                 Code,
                 AppCostCalculator,
+                AppGridBlock,
               ],
               admin: {
                 initCollapsed: true,

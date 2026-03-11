@@ -17,6 +17,7 @@ import { RichContentBlockComponent } from '@/blocks/RichContentBlock/Component'
 import { ProcessStepsBlockComponent } from '@/blocks/ProcessStepsBlock/Component'
 import { RawHTMLBlock } from '@/blocks/RawHTML/Component'
 import { AppCostCalculatorComponent } from '@/blocks/AppCostCalculator/Component'
+import { AppGridBlockComponent } from '@/blocks/AppGridBlock/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -34,6 +35,7 @@ const blockComponents = {
   processStepsBlock: ProcessStepsBlockComponent,
   rawHtml: RawHTMLBlock,
   appCostCalculator: AppCostCalculatorComponent,
+  appGridBlock: AppGridBlockComponent,
 }
 
 export const RenderBlocks: React.FC<{
@@ -50,7 +52,9 @@ export const RenderBlocks: React.FC<{
           const { blockType } = block
 
           if (blockType && blockType in blockComponents) {
-            const Block = blockComponents[blockType as keyof typeof blockComponents] as React.FC<any>
+            const Block = blockComponents[
+              blockType as keyof typeof blockComponents
+            ] as React.FC<any>
 
             if (Block) {
               return (

@@ -29,6 +29,33 @@ const getUploadPrefix = () => {
   return `${getYearMonthPath()}/${uniqueId}`
 }
 
+const s3Endpoint = process.env.S3_ENDPOINT?.trim()
+const s3Bucket = process.env.S3_BUCKET?.trim()
+
+const s3PublicBaseURL =
+  s3Endpoint && s3Bucket
+    ? `${s3Endpoint.replace(/\/s3\/?$/, '/object/public')}/${s3Bucket}`
+    : undefined
+
+const buildSupabasePublicURL = ({
+  filename,
+  prefix,
+}: {
+  filename?: string | null
+  prefix?: string | null
+}) => {
+  if (!s3PublicBaseURL || !filename) {
+    return undefined
+  }
+
+  const normalizedPrefix = prefix?.replace(/^\/+|\/+$/g, '')
+  const encodedFilename = encodeURIComponent(filename)
+
+  return normalizedPrefix
+    ? `${s3PublicBaseURL}/${normalizedPrefix}/${encodedFilename}`
+    : `${s3PublicBaseURL}/${encodedFilename}`
+}
+
 export const Media: CollectionConfig = {
   slug: 'media',
   folders: true,
@@ -58,6 +85,51 @@ export const Media: CollectionConfig = {
         }
 
         return args
+      },
+    ],
+    afterRead: [
+      ({ doc }) => {
+        if (!s3PublicBaseURL || !doc || typeof doc !== 'object') {
+          return doc
+        }
+
+        const mediaDoc = doc as {
+          filename?: string | null
+          prefix?: string | null
+          url?: string | null
+          thumbnailURL?: string | null
+          sizes?: Record<string, { url?: string | null; filename?: string | null } | null> | null
+        }
+
+        if (typeof mediaDoc.url === 'string' && mediaDoc.url.startsWith('/api/media/file/')) {
+          mediaDoc.url =
+            buildSupabasePublicURL({ filename: mediaDoc.filename, prefix: mediaDoc.prefix }) ||
+            mediaDoc.url
+        }
+
+        if (
+          typeof mediaDoc.thumbnailURL === 'string' &&
+          mediaDoc.thumbnailURL.startsWith('/api/media/file/')
+        ) {
+          const thumbnail = mediaDoc.sizes?.thumbnail
+
+          mediaDoc.thumbnailURL =
+            buildSupabasePublicURL({ filename: thumbnail?.filename, prefix: mediaDoc.prefix }) ||
+            mediaDoc.thumbnailURL
+        }
+
+        if (mediaDoc.sizes && typeof mediaDoc.sizes === 'object') {
+          Object.values(mediaDoc.sizes).forEach((size) => {
+            if (!size || typeof size !== 'object') return
+            if (typeof size.url === 'string' && size.url.startsWith('/api/media/file/')) {
+              size.url =
+                buildSupabasePublicURL({ filename: size.filename, prefix: mediaDoc.prefix }) ||
+                size.url
+            }
+          })
+        }
+
+        return mediaDoc
       },
     ],
   },

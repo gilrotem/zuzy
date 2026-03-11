@@ -259,6 +259,7 @@ export interface Page {
             blockName?: string | null;
             blockType: 'appCostCalculator';
           }
+        | AppGridBlock
       )[]
     | null;
   meta?: {
@@ -1170,6 +1171,30 @@ export interface ProcessStepsBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AppGridBlock".
+ */
+export interface AppGridBlock {
+  heading?: string | null;
+  apps?:
+    | {
+        title: string;
+        /**
+         * Path to icon image, e.g. /media/app-icons/01_seo_rank_tracker.png
+         */
+        icon: string;
+        /**
+         * App URL
+         */
+        link: string;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'appGridBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "product-categories".
  */
 export interface ProductCategory {
@@ -1636,6 +1661,7 @@ export interface PagesSelect<T extends boolean = true> {
         rawHtml?: T | RawHTMLBlockSelect<T>;
         code?: T | CodeBlockSelect<T>;
         appCostCalculator?: T | AppCostCalculatorBlockSelect<T>;
+        appGridBlock?: T | AppGridBlockSelect<T>;
       };
   meta?:
     | T
@@ -1952,6 +1978,23 @@ export interface AppCostCalculatorBlockSelect<T extends boolean = true> {
   subtitle?: T;
   ctaText?: T;
   ctaLink?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AppGridBlock_select".
+ */
+export interface AppGridBlockSelect<T extends boolean = true> {
+  heading?: T;
+  apps?:
+    | T
+    | {
+        title?: T;
+        icon?: T;
+        link?: T;
+        id?: T;
+      };
   id?: T;
   blockName?: T;
 }

@@ -24,9 +24,15 @@ const generateURL: GenerateURL<Post | Page | Product | BrandDoc> = ({ doc }) => 
   return doc?.slug ? `${url}/${doc.slug}` : url
 }
 
+const s3Endpoint = process.env.S3_ENDPOINT?.trim()
+const s3Bucket = process.env.S3_BUCKET?.trim()
+const s3Region = process.env.S3_REGION?.trim()
+const s3AccessKeyId = process.env.S3_ACCESS_KEY_ID?.trim()
+const s3SecretAccessKey = process.env.S3_SECRET_ACCESS_KEY?.trim()
+
 const s3PublicBaseURL =
-  process.env.S3_ENDPOINT && process.env.S3_BUCKET
-    ? `${process.env.S3_ENDPOINT.replace(/\/s3\/?$/, '/object/public')}/${process.env.S3_BUCKET}`
+  s3Endpoint && s3Bucket
+    ? `${s3Endpoint.replace(/\/s3\/?$/, '/object/public')}/${s3Bucket}`
     : undefined
 
 const generateS3MediaURL = ({ filename, prefix }: { filename: string; prefix?: string }) => {
@@ -49,14 +55,14 @@ export const plugins: Plugin[] = [
         generateFileURL: ({ filename, prefix }) => generateS3MediaURL({ filename, prefix }),
       },
     },
-    bucket: process.env.S3_BUCKET || 'media',
+    bucket: s3Bucket || 'media',
     config: {
-      endpoint: process.env.S3_ENDPOINT,
+      endpoint: s3Endpoint,
       credentials: {
-        accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
-        secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
+        accessKeyId: s3AccessKeyId || '',
+        secretAccessKey: s3SecretAccessKey || '',
       },
-      region: process.env.S3_REGION || 'ap-northeast-1',
+      region: s3Region || 'ap-northeast-1',
       forcePathStyle: true,
     },
   }),

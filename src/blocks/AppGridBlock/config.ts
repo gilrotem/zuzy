@@ -25,13 +25,33 @@ export const AppGridBlock: Block = {
       },
       defaultValue: [
         { title: 'SEO Rank Tracker', icon: '/media/app-icons/01_seo_rank_tracker.png', link: '#' },
-        { title: 'Content Domination', icon: '/media/app-icons/02_content_domination.png', link: '#' },
-        { title: 'Geo Strategy Maker', icon: '/media/app-icons/03_geo_strategy_maker.png', link: '#' },
+        {
+          title: 'Content Domination',
+          icon: '/media/app-icons/02_content_domination.png',
+          link: '#',
+        },
+        {
+          title: 'Geo Strategy Maker',
+          icon: '/media/app-icons/03_geo_strategy_maker.png',
+          link: '#',
+        },
         { title: 'CRM', icon: '/media/app-icons/04_crm.png', link: '#' },
         { title: 'Smart Agent Bot', icon: '/media/app-icons/05_smart_agent_bot.png', link: '#' },
-        { title: 'Social Lead Generator', icon: '/media/app-icons/06_social_lead_generator.png', link: '#' },
-        { title: 'Business Strategy Planner', icon: '/media/app-icons/07_business_strategy_planner.png', link: '#' },
-        { title: 'Bottleneck Identifier', icon: '/media/app-icons/08_bottleneck_identifier.png', link: '#' },
+        {
+          title: 'Social Lead Generator',
+          icon: '/media/app-icons/06_social_lead_generator.png',
+          link: '#',
+        },
+        {
+          title: 'Business Strategy Planner',
+          icon: '/media/app-icons/07_business_strategy_planner.png',
+          link: '#',
+        },
+        {
+          title: 'Bottleneck Identifier',
+          icon: '/media/app-icons/08_bottleneck_identifier.png',
+          link: '#',
+        },
       ],
       fields: [
         {

@@ -41,6 +41,18 @@ const nextConfig = {
   },
   reactStrictMode: true,
   redirects,
+  async rewrites() {
+    return [
+      {
+        source: '/blog',
+        destination: 'https://wp.zuzy.co.il/',
+      },
+      {
+        source: '/blog/:path*',
+        destination: 'https://wp.zuzy.co.il/:path*',
+      },
+    ]
+  },
 }
 
 export default withPayload(nextConfig, { devBundleServerPackages: false })

@@ -1,172 +1,88 @@
-# ZUZY — תוכנית משימות פיתוח
+# ZUZY — Tasks & Progress
 
-> מסמך עבודה חי. כל משימה מסומנת בסטטוס: ⬜ לא התחיל | 🔄 בביצוע | ✅ הושלם ונבדק
-> עדכון אחרון: 2026-03-08
-
----
-
-## שלב א: תשתית — Supabase Media Storage
-
-### משימה 1: העברת אחסון מדיה ל-Supabase Storage
-**סטטוס:** ✅ (הושלם + שדרוג Payload 3.78→3.79.0 + ארגון תיקיות לפי תאריך)
-
-**מה:**
-- [x] התקנת `@payloadcms/storage-s3` via pnpm
-- [x] הוספת env vars ל-`.env` ול-`.env.example`: `S3_ENDPOINT`, `S3_BUCKET`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `S3_REGION`
-- [x] הוספת S3 storage plugin ל-`src/plugins/index.ts`
-- [x] עדכון `src/collections/Media.ts` — `disableLocalStorage: true` (conditional)
-- [x] עדכון `src/environment.d.ts` עם טיפוסי env חדשים
-- [x] שדרוג כל 14 חבילות Payload ל-3.79.0 (תיקון version mismatch)
-- [x] יצירת bucket `media` ב-Supabase Storage + RLS policies
-- [x] ארגון uploads לפי תיקיות `YYYY/MM/<uuid>/` (beforeOperation hook)
-- [x] `generateFileURL` → URL ישיר ל-Supabase (ללא `/api/media/file/`)
-- [x] `crypto.randomUUID()` במקום nanoid (ללא תלות חיצונית)
-
-**בדיקה:**
-- [x] `pnpm dev` עולה ללא שגיאות (port 3000)
-- [x] ממשק אדמין נטען תקין (HTTP 200)
-- [x] Media API עובד (`/api/media` → 200, URL ישיר ל-Supabase)
-- [x] בדיקה ידנית: העלאת תמונה חדשה → קובץ נמצא בתיקיית `YYYY/MM/` ב-Supabase
-
-**קומיט:** `feat: migrate media storage to Supabase S3 + upgrade Payload to 3.79.0`
+> Living document. Status: ⬜ Not started | 🔄 In progress | ✅ Complete
+> Phase history below. Find `🔜 Next Phase` for current work.
+> Last updated: 2026-03-27
 
 ---
 
-## שלב ב: SiteSettings Global — בנייה מדורגת
+## ✅ Phase 2 — Critical SEO Fixes (2026-03-27)
 
-### משימה 2: שלד SiteSettings Global
-**סטטוס:** ✅
+**Scope**: Fix template artifacts, remove conflicting configs, add missing canonical tags, fix known bugs.
 
-**מה:**
-- [x] יצירת `src/SiteSettings/config.ts` — Global עם 3 tabs ריקים (Branding, Theme & Colors, Custom Code)
-- [x] יצירת `src/SiteSettings/hooks/revalidateSiteSettings.ts`
-- [x] רישום ב-`src/payload.config.ts` — `globals: [Header, Footer, SiteSettings]`
+### 2.1 — Fix OG siteName default ✅
+- [x] Found `siteName: 'Payload Website Template'` in `src/utilities/mergeOpenGraph.ts` + 3 page files
+- [x] Replaced all with "ZUZY" branding (`mergeOpenGraph.ts`, `search/page.tsx`, `posts/page.tsx`, `posts/page/[pageNumber]/page.tsx`)
+- [x] `src/plugins/index.ts` SEO plugin `generateTitle` already uses `| ZUZY` suffix — correct
 
-**בדיקה:**
-- [x] `pnpm dev` עולה ללא שגיאות
-- [x] ממשק אדמין → "Site Settings" מופיע בתפריט
-- [x] נפתח עם 3 tabs
+### 2.2 — Delete dual sitemap ✅
+- [x] Deleted `next-sitemap.config.cjs` from project root
+- [x] Removed `next-sitemap` from `package.json` dependencies
+- [x] Removed `postbuild` script referencing `next-sitemap`
+- [x] Deleted legacy `src/app/(frontend)/(sitemaps)/` route handlers (pages-sitemap.xml, posts-sitemap.xml)
+- [x] `src/app/sitemap.ts` is now the ONLY sitemap source
 
-**קומיט:** `feat: add SiteSettings global skeleton`
+### 2.3 — Add self-referencing canonical tags ✅
+- [x] `src/lib/page-metadata.ts` already generates canonical URLs for all collection pages
+- [x] Added canonical URLs to search, posts index, and posts pagination pages
+- [x] Uses `getServerSideURL()` as canonical base
 
----
+### 2.4 — Fix RawHTML block rendering in Posts ✅
+- [x] Already implemented — `rawHtml` converter exists in `src/components/RichText/index.tsx` (line 58)
 
-### משימה 3: שדות Branding (Logo, Favicon, SiteName)
-**סטטוס:** ✅
+### 2.5 — Fix autosave interval ✅
+- [x] Already set to `interval: 5000` in all 4 collections (Posts, Pages, BrandDocs, Products)
 
-**מה:**
-- [x] הוספת שדה `logo` — upload מ-Media collection
-- [x] הוספת שדה `favicon` — upload מ-Media collection
-- [x] הוספת שדה `siteName` — text field
+### 2.6 — Fix version bloat ✅
+- [x] Already set to `maxPerDoc: 10` in all 4 collections
 
-**בדיקה:**
-- [x] ממשק אדמין → Site Settings → Branding → העלאת לוגו + favicon + כתיבת שם → שמירה ✓
-- [x] אין שגיאות TypeScript
-
-**קומיט:** `feat: SiteSettings branding fields`
-
----
-
-### משימה 4: חיבור Logo דינמי ל-Frontend
-**סטטוס:** ✅
-
-**מה:**
-- [x] עדכון `src/components/Logo/Logo.tsx` — קבלת `logoImage` + `siteName` props
-- [x] עדכון `src/Header/Component.tsx` — קריאת SiteSettings, העברת logo ל-component
-- [x] עדכון `src/Footer/Component.tsx` — אותו דבר
-
-**בדיקה:**
-- [x] אדמין → העלאת לוגו → שמירה → ריפרש דף הבית → הלוגו מופיע ב-Header וב-Footer
-- [x] בלי לוגו → fallback לטקסט siteName (או "ZUZY")
-- [x] `pnpm build` עובר
-
-**קומיט:** `feat: dynamic logo from SiteSettings`
+### Phase 2 Verification
+- [x] `tsc --noEmit` — zero errors
+- [ ] `pnpm build` — requires env vars (PAYLOAD_SECRET, DATABASE_URI), passes on Vercel
+- [x] Git commit + push
 
 ---
 
-### משימה 5: שדות Theme & Colors
-**סטטוס:** ✅
+## 🔜 Next Phase: Phase 3 — SEO System Build
+- **Spec**: `../zuzy-architecture/SEO-SYSTEM-SPEC.md` (7-step build plan)
+- **Scope**: Full RankMath-equivalent SEO control system
+- **Dependency**: Phase 2 ✅
 
-**מה:**
-- [x] הוספת שדה `defaultTheme` — select: light / dark / auto
-- [x] הוספת שדה `primaryColor` — text עם validation של hex color
-- [x] הוספת שדה `accentColor` — text עם validation של hex color
-
-**בדיקה:**
-- [x] ממשק אדמין → שינוי ערכים → שמירה ✓
-- [x] אין שגיאות TypeScript
-
-**קומיט:** `feat: SiteSettings theme fields`
+### Then: Phase 4 — Blog Architecture
+- **Decision D10 must be resolved first** (blog SEO meta ownership)
+- **Scope**: Replace `/blog` proxy with WP REST API fetch + Next.js rendering
+- **Dependency**: Phase 3 ✅ + D10 resolved
 
 ---
 
-### משימה 6: חיבור Theme & Colors ל-Frontend
-**סטטוס:** ✅
+## ✅ Phase 1 — Infrastructure & SiteSettings (2026-03-08)
 
-**מה:**
-- [x] עדכון `src/app/(frontend)/layout.tsx` — קריאת SiteSettings, הזרקת CSS variables override
-- [x] עדכון `src/providers/Theme/InitTheme/index.tsx` — קבלת `serverDefault` prop
-- [x] עדכון `src/providers/Theme/shared.ts` — הסרת hardcoded default
+### 1.1 — Supabase Media Storage ✅
+- [x] `@payloadcms/storage-s3` installed and configured
+- [x] Payload upgraded 3.78 → 3.79.0
+- [x] Media uploads organized by `YYYY/MM/<uuid>/` in Supabase Storage
+- [x] Direct URLs to Supabase (no `/api/media/file/` proxy)
 
-**בדיקה:**
-- [x] אדמין → defaultTheme=Dark → ריפרש → האתר נטען ב-Dark
-- [x] אדמין → primaryColor=#FF0000 → ריפרש → הצבע הראשי אדום
-- [x] מחיקת primaryColor → חוזר ל-default (#6750A4)
-- [x] `pnpm build` עובר
+### 1.2 — SiteSettings Global ✅
+- [x] `src/SiteSettings/config.ts` — Global with 3 tabs (Branding, Theme, Custom Code)
+- [x] Branding: logo, favicon, siteName fields — wired to Header + Footer
+- [x] Theme: defaultTheme, primaryColor, accentColor — wired to CSS variables
+- [x] Custom Code: customCSS, customJS — injected into frontend layout
 
-**קומיט:** `feat: dynamic theme from SiteSettings`
+### 1.3 — Design System ✅
+- [x] FbCoherentiSans as primary Hebrew font
+- [x] Design tokens and utilities
+- [x] AppGrid block with 8 app icons
 
----
-
-### משימה 7: שדות Custom Code
-**סטטוס:** ✅
-
-**מה:**
-- [x] הוספת שדה `customCSS` — textarea
-- [x] הוספת שדה `customJS` — textarea
-
-**בדיקה:**
-- [x] ממשק אדמין → כתיבת תוכן בשדות → שמירה ✓
-
-**קומיט:** `feat: SiteSettings custom code fields`
+### 1.4 — Blog Proxy ✅
+- [x] `/blog` rewrite to `wp.zuzy.co.il` in next.config.js
 
 ---
 
-### משימה 8: חיבור Custom CSS/JS ל-Frontend
-**סטטוס:** ✅
+## Architecture Notes
 
-**מה:**
-- [x] עדכון `src/app/(frontend)/layout.tsx` — הזרקת `<style>` מ-customCSS ל-`<head>`
-- [x] עדכון `src/app/(frontend)/layout.tsx` — הזרקת `<script>` מ-customJS לפני `</body>`
-
-**בדיקה:**
-- [x] אדמין → customCSS = `body { border: 5px solid red; }` → ריפרש → גבול אדום מופיע
-- [x] הסרת CSS → ריפרש → הגבול נעלם
-- [x] `pnpm build` עובר
-
-**קומיט:** `feat: inject custom CSS/JS from SiteSettings`
-
----
-
-## סיכום התקדמות
-
-| # | משימה | סטטוס |
-|---|---|---|
-| 1 | Supabase Storage | ✅ |
-| 2 | SiteSettings שלד | ✅ |
-| 3 | Branding fields | ✅ |
-| 4 | Logo דינמי | ✅ |
-| 5 | Theme fields | ✅ |
-| 6 | Theme ל-Frontend | ✅ |
-| 7 | Custom Code fields | ✅ |
-| 8 | Custom CSS/JS ל-Frontend | ✅ |
-
----
-
-## הערות ארכיטקטורה
-
-- **SiteSettings** הוא Payload Global (כמו Header/Footer) — פריט יחיד, לא collection
-- **קריאה:** `getCachedGlobal('site-settings')` מ-`src/utilities/getGlobals.ts`
-- **Cache:** `revalidateTag('global_site-settings')` ב-afterChange hook
-- **Media:** Supabase Storage דרך `@payloadcms/storage-s3` (S3-compatible API)
-- **ברירות מחדל:** primaryColor=#6750A4, accentColor=#4CA3C7, defaultTheme=light, siteName=ZUZY
+- **SiteSettings** is a Payload Global (singleton, not collection)
+- **Read via:** `getCachedGlobal('site-settings')` from `src/utilities/getGlobals.ts`
+- **Cache:** `revalidateTag('global_site-settings')` in afterChange hook
+- **Media:** Supabase Storage via `@payloadcms/storage-s3`
+- **Defaults:** primaryColor=#6750A4, accentColor=#4CA3C7, defaultTheme=light, siteName=ZUZY

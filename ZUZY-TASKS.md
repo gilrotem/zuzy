@@ -38,8 +38,22 @@
 
 ### Phase 2 Verification
 - [x] `tsc --noEmit` — zero errors
-- [ ] `pnpm build` — requires env vars (PAYLOAD_SECRET, DATABASE_URI), passes on Vercel
-- [x] Git commit + push
+- [x] Vercel production deploy — READY (`dpl_42aFm8fLccdCB86Et6zh1yoQKGVR`)
+- [x] Local `.env` created via `vercel env pull` (production vars)
+- [x] Git commit + push (811c242)
+- [ ] Local `pnpm build` — fails on `/brand/*` pages (pre-existing bug, see Bug #5 below)
+
+---
+
+## Known Bugs
+
+### Bug #5 — Local build fails on `/brand/*` static page generation
+- **Error**: `Failed query` on `brand_docs` table — Lexical `content` field schema mismatch
+- **Impact**: Local `pnpm build` fails at "Generating static pages" for `/brand/essence`, `/brand/process`
+- **Does NOT affect Vercel**: Production deploys successfully (uses ISR/SSR, not full static export)
+- **Root cause**: `brand_docs` collection schema expects localized `content` column structure that doesn't match the current DB state
+- **Fix**: Either run Payload migration to align schema, or republish brand_docs content in admin panel
+- **Priority**: Low (production works), but should fix before Phase 3
 
 ---
 
@@ -47,6 +61,7 @@
 - **Spec**: `../zuzy-architecture/SEO-SYSTEM-SPEC.md` (7-step build plan)
 - **Scope**: Full RankMath-equivalent SEO control system
 - **Dependency**: Phase 2 ✅
+- **Note**: Fix Bug #5 first or confirm it doesn't block Phase 3 work
 
 ### Then: Phase 4 — Blog Architecture
 - **Decision D10 must be resolved first** (blog SEO meta ownership)

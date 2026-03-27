@@ -32,6 +32,7 @@ import {
   OverviewField,
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
+import { seoAdvancedFields } from '../../fields/seoAdvanced'
 
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
@@ -135,6 +136,7 @@ export const Pages: CollectionConfig<'pages'> = {
               titlePath: 'meta.title',
               descriptionPath: 'meta.description',
             }),
+            ...seoAdvancedFields,
           ],
         },
       ],

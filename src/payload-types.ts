@@ -124,11 +124,13 @@ export interface Config {
     header: Header;
     footer: Footer;
     'site-settings': SiteSetting;
+    'seo-settings': SeoSetting;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+    'seo-settings': SeoSettingsSelect<false> | SeoSettingsSelect<true>;
   };
   locale: 'he' | 'en' | 'ru' | 'ar' | 'fr' | 'es';
   widgets: {
@@ -269,6 +271,24 @@ export interface Page {
      */
     image?: (number | null) | Media;
     description?: string | null;
+    /**
+     * Override robots directives for this page. Leave empty to use defaults (index, follow).
+     */
+    robotsOverride?: ('noindex' | 'nofollow' | 'noarchive' | 'nosnippet' | 'noimageindex')[] | null;
+    /**
+     * Override the auto-generated canonical URL. Use for duplicate content or cross-domain canonicals.
+     */
+    canonicalOverride?: string | null;
+    /**
+     * Override the auto-detected structured data type. Leave empty for automatic detection.
+     */
+    jsonLdType?:
+      | ('WebPage' | 'Article' | 'Product' | 'FAQPage' | 'AboutPage' | 'ContactPage' | 'CollectionPage')
+      | null;
+    /**
+     * Custom label shown in breadcrumbs. Falls back to page title.
+     */
+    breadcrumbLabel?: string | null;
   };
   publishedAt?: string | null;
   /**
@@ -312,6 +332,24 @@ export interface Post {
      */
     image?: (number | null) | Media;
     description?: string | null;
+    /**
+     * Override robots directives for this page. Leave empty to use defaults (index, follow).
+     */
+    robotsOverride?: ('noindex' | 'nofollow' | 'noarchive' | 'nosnippet' | 'noimageindex')[] | null;
+    /**
+     * Override the auto-generated canonical URL. Use for duplicate content or cross-domain canonicals.
+     */
+    canonicalOverride?: string | null;
+    /**
+     * Override the auto-detected structured data type. Leave empty for automatic detection.
+     */
+    jsonLdType?:
+      | ('WebPage' | 'Article' | 'Product' | 'FAQPage' | 'AboutPage' | 'ContactPage' | 'CollectionPage')
+      | null;
+    /**
+     * Custom label shown in breadcrumbs. Falls back to page title.
+     */
+    breadcrumbLabel?: string | null;
   };
   publishedAt?: string | null;
   authors?: (number | User)[] | null;
@@ -1260,6 +1298,24 @@ export interface Product {
      */
     image?: (number | null) | Media;
     description?: string | null;
+    /**
+     * Override robots directives for this page. Leave empty to use defaults (index, follow).
+     */
+    robotsOverride?: ('noindex' | 'nofollow' | 'noarchive' | 'nosnippet' | 'noimageindex')[] | null;
+    /**
+     * Override the auto-generated canonical URL. Use for duplicate content or cross-domain canonicals.
+     */
+    canonicalOverride?: string | null;
+    /**
+     * Override the auto-detected structured data type. Leave empty for automatic detection.
+     */
+    jsonLdType?:
+      | ('WebPage' | 'Article' | 'Product' | 'FAQPage' | 'AboutPage' | 'ContactPage' | 'CollectionPage')
+      | null;
+    /**
+     * Custom label shown in breadcrumbs. Falls back to page title.
+     */
+    breadcrumbLabel?: string | null;
   };
   updatedAt: string;
   createdAt: string;
@@ -1272,17 +1328,6 @@ export interface Product {
 export interface BrandDoc {
   id: number;
   title: string;
-  docType:
-    | 'essence'
-    | 'brand-voice'
-    | 'business-model'
-    | 'differentiation'
-    | 'process'
-    | 'sales'
-    | 'solutions'
-    | 'faq'
-    | 'case-studies';
-  icon?: ('dna' | 'mic' | 'briefcase' | 'target' | 'gear' | 'chart' | 'puzzle' | 'question' | 'clipboard') | null;
   /**
    * Short description of the document
    */
@@ -1302,6 +1347,43 @@ export interface BrandDoc {
     };
     [k: string]: unknown;
   } | null;
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    description?: string | null;
+    /**
+     * Override robots directives for this page. Leave empty to use defaults (index, follow).
+     */
+    robotsOverride?: ('noindex' | 'nofollow' | 'noarchive' | 'nosnippet' | 'noimageindex')[] | null;
+    /**
+     * Override the auto-generated canonical URL. Use for duplicate content or cross-domain canonicals.
+     */
+    canonicalOverride?: string | null;
+    /**
+     * Override the auto-detected structured data type. Leave empty for automatic detection.
+     */
+    jsonLdType?:
+      | ('WebPage' | 'Article' | 'Product' | 'FAQPage' | 'AboutPage' | 'ContactPage' | 'CollectionPage')
+      | null;
+    /**
+     * Custom label shown in breadcrumbs. Falls back to page title.
+     */
+    breadcrumbLabel?: string | null;
+  };
+  docType:
+    | 'essence'
+    | 'brand-voice'
+    | 'business-model'
+    | 'differentiation'
+    | 'process'
+    | 'sales'
+    | 'solutions'
+    | 'faq'
+    | 'case-studies';
+  icon?: ('dna' | 'mic' | 'briefcase' | 'target' | 'gear' | 'chart' | 'puzzle' | 'question' | 'clipboard') | null;
   sortOrder?: number | null;
   publishedAt?: string | null;
   /**
@@ -1669,6 +1751,10 @@ export interface PagesSelect<T extends boolean = true> {
         title?: T;
         image?: T;
         description?: T;
+        robotsOverride?: T;
+        canonicalOverride?: T;
+        jsonLdType?: T;
+        breadcrumbLabel?: T;
       };
   publishedAt?: T;
   generateSlug?: T;
@@ -2014,6 +2100,10 @@ export interface PostsSelect<T extends boolean = true> {
         title?: T;
         image?: T;
         description?: T;
+        robotsOverride?: T;
+        canonicalOverride?: T;
+        jsonLdType?: T;
+        breadcrumbLabel?: T;
       };
   publishedAt?: T;
   authors?: T;
@@ -2185,6 +2275,10 @@ export interface ProductsSelect<T extends boolean = true> {
         title?: T;
         image?: T;
         description?: T;
+        robotsOverride?: T;
+        canonicalOverride?: T;
+        jsonLdType?: T;
+        breadcrumbLabel?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -2196,10 +2290,21 @@ export interface ProductsSelect<T extends boolean = true> {
  */
 export interface BrandDocsSelect<T extends boolean = true> {
   title?: T;
-  docType?: T;
-  icon?: T;
   summary?: T;
   content?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+        robotsOverride?: T;
+        canonicalOverride?: T;
+        jsonLdType?: T;
+        breadcrumbLabel?: T;
+      };
+  docType?: T;
+  icon?: T;
   sortOrder?: T;
   publishedAt?: T;
   generateSlug?: T;
@@ -2595,6 +2700,103 @@ export interface SiteSetting {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "seo-settings".
+ */
+export interface SeoSetting {
+  id: number;
+  /**
+   * Used in Organization schema and as default site name
+   */
+  orgName?: string | null;
+  /**
+   * Default meta description when none is set per-page
+   */
+  orgDescription?: string | null;
+  /**
+   * Logo used in Organization JSON-LD schema
+   */
+  orgLogo?: (number | null) | Media;
+  orgEmail?: string | null;
+  /**
+   * International format, e.g. +972-3-1234567
+   */
+  orgPhone?: string | null;
+  orgAddress?: {
+    streetAddress?: string | null;
+    city?: string | null;
+    region?: string | null;
+    postalCode?: string | null;
+    /**
+     * ISO 3166-1 alpha-2 code (e.g. IL, US)
+     */
+    country?: string | null;
+  };
+  socialProfiles?:
+    | {
+        platform: 'facebook' | 'twitter' | 'linkedin' | 'instagram' | 'youtube' | 'github' | 'tiktok';
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * %s is replaced with the page title. e.g. "My Page | ZUZY"
+   */
+  titleTemplate?: string | null;
+  /**
+   * Character between page title and site name
+   */
+  titleSeparator?: string | null;
+  /**
+   * Default Open Graph image when none is set per-page
+   */
+  defaultOgImage?: (number | null) | Media;
+  /**
+   * e.g. @zuzy — used in Twitter card tags
+   */
+  twitterHandle?: string | null;
+  /**
+   * Extra paths to block in robots.txt (beyond /admin, /api, etc.)
+   */
+  additionalDisallowPaths?:
+    | {
+        /**
+         * e.g. /private, /internal
+         */
+        path: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Extra user agents to block entirely (beyond default malicious bots)
+   */
+  additionalBlockedBots?:
+    | {
+        userAgent: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * URL paths to exclude from sitemap.xml
+   */
+  sitemapExcludePaths?:
+    | {
+        path: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Content value from Google Search Console meta tag
+   */
+  googleVerification?: string | null;
+  /**
+   * Content value from Bing Webmaster Tools meta tag
+   */
+  bingVerification?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
@@ -2652,6 +2854,60 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   accentColor?: T;
   customCSS?: T;
   customJS?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "seo-settings_select".
+ */
+export interface SeoSettingsSelect<T extends boolean = true> {
+  orgName?: T;
+  orgDescription?: T;
+  orgLogo?: T;
+  orgEmail?: T;
+  orgPhone?: T;
+  orgAddress?:
+    | T
+    | {
+        streetAddress?: T;
+        city?: T;
+        region?: T;
+        postalCode?: T;
+        country?: T;
+      };
+  socialProfiles?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        id?: T;
+      };
+  titleTemplate?: T;
+  titleSeparator?: T;
+  defaultOgImage?: T;
+  twitterHandle?: T;
+  additionalDisallowPaths?:
+    | T
+    | {
+        path?: T;
+        id?: T;
+      };
+  additionalBlockedBots?:
+    | T
+    | {
+        userAgent?: T;
+        id?: T;
+      };
+  sitemapExcludePaths?:
+    | T
+    | {
+        path?: T;
+        id?: T;
+      };
+  googleVerification?: T;
+  bingVerification?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

@@ -25,7 +25,7 @@ export const generateMeta = async (args: {
   const { doc } = args
 
   // BrandDoc doesn't have meta field, use title/summary directly
-  const meta = doc && 'meta' in doc ? (doc as { meta?: { title?: string | null; description?: string | null; image?: unknown } }).meta : null
+  const meta = doc && 'meta' in doc ? (doc as { meta?: { title?: string | null; description?: string | null; image?: unknown; robotsOverride?: string[] | null; canonicalOverride?: string | null } }).meta : null
   const fallbackTitle = doc && 'title' in doc ? (doc as { title?: string }).title : undefined
 
   const ogImage = getImageURL(meta?.image as Media | Config['db']['defaultIDType'] | null | undefined)
@@ -35,6 +35,22 @@ export const generateMeta = async (args: {
     : fallbackTitle
       ? fallbackTitle + ' | ZUZY'
       : 'ZUZY'
+
+  // Build robots directive from override
+  const robotsOverride = meta?.robotsOverride
+  let robots: Metadata['robots'] = undefined
+  if (robotsOverride && robotsOverride.length > 0) {
+    robots = {
+      index: !robotsOverride.includes('noindex'),
+      follow: !robotsOverride.includes('nofollow'),
+      ...(robotsOverride.includes('noarchive') && { noarchive: true }),
+      ...(robotsOverride.includes('nosnippet') && { nosnippet: true }),
+      ...(robotsOverride.includes('noimageindex') && { noimageindex: true }),
+    }
+  }
+
+  // Canonical URL override
+  const canonicalOverride = meta?.canonicalOverride
 
   return {
     description: meta?.description,
@@ -51,5 +67,11 @@ export const generateMeta = async (args: {
       url: Array.isArray(doc?.slug) ? doc?.slug.join('/') : '/',
     }),
     title,
+    ...(robots && { robots }),
+    ...(canonicalOverride && {
+      alternates: {
+        canonical: canonicalOverride,
+      },
+    }),
   }
 }

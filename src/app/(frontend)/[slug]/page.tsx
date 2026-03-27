@@ -10,6 +10,10 @@ import { homeStatic } from '@/endpoints/seed/home-static'
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { RenderHero } from '@/heros/RenderHero'
 import { generateMeta } from '@/utilities/generateMeta'
+import { generateWebPageJsonLd, generateFAQJsonLd, JsonLd } from '@/lib/json-ld'
+import { getServerSideURL } from '@/utilities/getURL'
+import { lexicalToPlainText } from '@/lib/lexical-to-text'
+import { Breadcrumbs, buildBreadcrumbs } from '@/components/Breadcrumbs'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 
@@ -65,14 +69,58 @@ export default async function Page({ params: paramsPromise }: Args) {
   }
 
   const { hero, layout } = page
+  const siteUrl = getServerSideURL()
+  const pageUrl = slug === 'home' ? siteUrl : `${siteUrl}/${decodedSlug}`
+
+  // Detect JSON-LD type from advanced SEO field or auto-detect
+  const jsonLdType = (page.meta as any)?.jsonLdType || 'WebPage'
+
+  const webPageJsonLd = generateWebPageJsonLd({
+    title: page.title,
+    description: (page.meta as any)?.description || undefined,
+    url: pageUrl,
+    datePublished: page.publishedAt || page.createdAt,
+    dateModified: page.updatedAt,
+    jsonLdType,
+  })
+
+  // Extract FAQ items from FAQ blocks for FAQPage schema
+  const faqBlocks = (layout || []).filter(
+    (block) => block.blockType === 'faqBlock',
+  )
+  const faqItems = faqBlocks.flatMap((block: any) =>
+    (block.items || [])
+      .filter((item: any) => item.question)
+      .map((item: any) => ({
+        question: item.question,
+        answer: lexicalToPlainText(item.answer),
+      })),
+  )
+
+  const breadcrumbItems = buildBreadcrumbs({
+    collection: 'pages',
+    collectionLabel: 'Pages',
+    collectionPath: '',
+    title: page.title,
+    slug: decodedSlug,
+    breadcrumbLabel: (page.meta as any)?.breadcrumbLabel,
+  })
 
   return (
     <article className="pt-16 pb-24">
       <PageClient />
+      <JsonLd data={webPageJsonLd} />
+      {faqItems.length > 0 && <JsonLd data={generateFAQJsonLd(faqItems)} />}
       {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />
 
       {draft && <LivePreviewListener />}
+
+      {decodedSlug !== 'home' && (
+        <div className="container mb-4">
+          <Breadcrumbs items={breadcrumbItems} />
+        </div>
+      )}
 
       <RenderHero {...hero} />
       <RenderBlocks blocks={layout ?? []} />

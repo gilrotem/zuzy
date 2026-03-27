@@ -6,6 +6,9 @@ import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
 
 import { generateMeta } from '@/utilities/generateMeta'
+import { generateWebPageJsonLd, JsonLd } from '@/lib/json-ld'
+import { getServerSideURL } from '@/utilities/getURL'
+import { Breadcrumbs, buildBreadcrumbs } from '@/components/Breadcrumbs'
 import RichText from '@/components/RichText'
 import PageClient from './page.client'
 
@@ -42,10 +45,29 @@ export default async function BrandDocPage({ params: paramsPromise }: Args) {
     return <div className="container py-16">Not found</div>
   }
 
+  const siteUrl = getServerSideURL()
+  const webPageJsonLd = generateWebPageJsonLd({
+    title: brandDoc.title as string,
+    description: brandDoc.summary || undefined,
+    url: `${siteUrl}/brand/${decodedSlug}`,
+    dateModified: brandDoc.updatedAt,
+  })
+
+  const breadcrumbItems = buildBreadcrumbs({
+    collection: 'brand-docs',
+    collectionLabel: 'Brand',
+    collectionPath: '/brand',
+    title: brandDoc.title as string,
+    slug: decodedSlug,
+    breadcrumbLabel: (brandDoc as any).meta?.breadcrumbLabel,
+  })
+
   return (
     <article className="pt-16 pb-24">
       <PageClient />
+      <JsonLd data={webPageJsonLd} />
       <div className="container">
+        <Breadcrumbs items={breadcrumbItems} className="mb-4" />
         <div className="flex items-center gap-3 mb-6">
           {brandDoc.icon && <span className="text-4xl">{getIconEmoji(brandDoc.icon)}</span>}
           <h1 className="text-4xl md:text-5xl font-bold">{brandDoc.title}</h1>

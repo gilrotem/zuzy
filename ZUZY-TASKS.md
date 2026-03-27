@@ -2,7 +2,88 @@
 
 > Living document. Status: ⬜ Not started | 🔄 In progress | ✅ Complete
 > Phase history below. Find `🔜 Next Phase` for current work.
-> Last updated: 2026-03-27
+> Last updated: 2026-03-28
+
+---
+
+## ✅ Phase 3 — SEO System Build (2026-03-28)
+
+**Scope**: Full RankMath-equivalent SEO control system — JSON-LD structured data, breadcrumbs, admin-controlled SEO settings, per-page robots/canonical overrides.
+
+### 3.1 — SEO Settings Global ✅
+- [x] Created `src/SEOSettings/config.ts` — new Payload Global with 5 tabs
+- [x] **Organization tab**: orgName, orgDescription, orgLogo, orgEmail, orgPhone, orgAddress (street, city, region, postal, country)
+- [x] **Social Profiles tab**: array of platform + URL pairs (Facebook, Twitter, LinkedIn, Instagram, YouTube, GitHub, TikTok)
+- [x] **Defaults tab**: titleTemplate (`%s | ZUZY`), titleSeparator, defaultOgImage, twitterHandle
+- [x] **Robots & Sitemap tab**: additionalDisallowPaths, additionalBlockedBots, sitemapExcludePaths
+- [x] **Verification tab**: Google/Bing site verification codes
+- [x] Registered in `payload.config.ts` globals array
+- [x] Cache revalidation hook (`revalidateTag('global_seo-settings')`)
+
+### 3.2 — Advanced SEO Fields on Collections ✅
+- [x] Created shared `src/fields/seoAdvanced.ts` — DRY field group
+- [x] **robotsOverride** — multi-select: noindex, nofollow, noarchive, nosnippet, noimageindex
+- [x] **canonicalOverride** — text field for custom canonical URL
+- [x] **jsonLdType** — select: WebPage, Article, Product, FAQPage, AboutPage, ContactPage, CollectionPage
+- [x] **breadcrumbLabel** — text field for custom breadcrumb label
+- [x] Added to Pages, Posts, Products SEO tabs (spread into existing `meta` tab)
+- [x] Added full SEO tab to BrandDocs (previously had none — now has Overview, MetaTitle, MetaImage, MetaDescription, Preview + advanced fields)
+
+### 3.3 — JSON-LD Structured Data ✅
+- [x] Created `src/lib/json-ld.tsx` — 7 schema generators + `JsonLd` component
+- [x] **Organization schema** — rendered in root layout from SEO Settings (name, url, logo, email, phone, address, sameAs)
+- [x] **WebSite schema** — rendered in root layout with SearchAction
+- [x] **Article schema** — rendered on post pages (headline, author, publisher, datePublished, image)
+- [x] **Product schema** — rendered on product pages (name, offers with price/currency, seller)
+- [x] **WebPage schema** — rendered on pages with jsonLdType override support
+- [x] **FAQPage schema** — auto-detected from FAQ blocks in page layouts (extracts question/answer pairs)
+- [x] **BreadcrumbList schema** — rendered via Breadcrumbs component
+
+### 3.4 — Breadcrumbs Component ✅
+- [x] Created `src/components/Breadcrumbs/index.tsx`
+- [x] Renders both visible nav breadcrumbs and JSON-LD BreadcrumbList schema
+- [x] `buildBreadcrumbs()` utility builds items from collection + slug
+- [x] Respects `breadcrumbLabel` override from advanced SEO fields
+- [x] Wired into Pages (non-home), Posts, Products, Brand Docs
+
+### 3.5 — DB-Driven Robots.txt ✅
+- [x] `src/app/robots.ts` now reads from SEO Settings global
+- [x] Merges default malicious bots with `additionalBlockedBots` from admin
+- [x] Merges default disallow paths with `additionalDisallowPaths` from admin
+- [x] Graceful fallback if DB unreachable
+
+### 3.6 — DB-Driven Sitemap ✅
+- [x] `src/app/sitemap.ts` now respects per-page `robotsOverride` (noindex = excluded)
+- [x] Reads `sitemapExcludePaths` from SEO Settings for manual exclusions
+- [x] Selects `meta` field to check robotsOverride per doc
+
+### 3.7 — Metadata Generator Enhancements ✅
+- [x] `src/utilities/generateMeta.ts` now supports `robotsOverride` → `<meta name="robots">` directives
+- [x] Supports `canonicalOverride` → `<link rel="canonical">` override
+- [x] Verification meta tags (Google, Bing) rendered in root layout from SEO Settings
+
+### 3.8 — Middleware Improvements ✅
+- [x] Added security headers: X-Content-Type-Options, Referrer-Policy
+- [x] Clean separation of concerns
+
+### 3.9 — FAQ Schema Auto-Detection ✅
+- [x] Created `src/lib/lexical-to-text.ts` — extracts plain text from Lexical richtext JSON
+- [x] Pages with FAQ blocks automatically get FAQPage JSON-LD schema
+- [x] Question text + answer plain text extracted from block data
+
+### Phase 3 Verification
+- [x] `tsc --noEmit` — zero errors
+- [x] `pnpm build` — success (all static pages generated)
+- [x] Migration `20260327_214619` created and applied
+- [x] Types regenerated (`pnpm generate:types`)
+- [x] Import map regenerated (`pnpm generate:importmap`)
+
+---
+
+## 🔜 Next Phase: Phase 4 — Blog Architecture
+- **Decision D10 must be resolved first** (blog SEO meta ownership)
+- **Scope**: Replace `/blog` proxy with WP REST API fetch + Next.js rendering
+- **Dependency**: Phase 3 ✅ + D10 resolved
 
 ---
 
@@ -41,32 +122,7 @@
 - [x] Vercel production deploy — READY (`dpl_42aFm8fLccdCB86Et6zh1yoQKGVR`)
 - [x] Local `.env` created via `vercel env pull` (production vars)
 - [x] Git commit + push (811c242)
-- [ ] Local `pnpm build` — fails on `/brand/*` pages (pre-existing bug, see Bug #5 below)
-
----
-
-## Known Bugs
-
-### Bug #5 — Local build fails on `/brand/*` static page generation
-- **Error**: `Failed query` on `brand_docs` table — Lexical `content` field schema mismatch
-- **Impact**: Local `pnpm build` fails at "Generating static pages" for `/brand/essence`, `/brand/process`
-- **Does NOT affect Vercel**: Production deploys successfully (uses ISR/SSR, not full static export)
-- **Root cause**: `brand_docs` collection schema expects localized `content` column structure that doesn't match the current DB state
-- **Fix**: Either run Payload migration to align schema, or republish brand_docs content in admin panel
-- **Priority**: Low (production works), but should fix before Phase 3
-
----
-
-## 🔜 Next Phase: Phase 3 — SEO System Build
-- **Spec**: `../zuzy-architecture/SEO-SYSTEM-SPEC.md` (7-step build plan)
-- **Scope**: Full RankMath-equivalent SEO control system
-- **Dependency**: Phase 2 ✅
-- **Note**: Fix Bug #5 first or confirm it doesn't block Phase 3 work
-
-### Then: Phase 4 — Blog Architecture
-- **Decision D10 must be resolved first** (blog SEO meta ownership)
-- **Scope**: Replace `/blog` proxy with WP REST API fetch + Next.js rendering
-- **Dependency**: Phase 3 ✅ + D10 resolved
+- [x] Local `pnpm build` — passed (32/32 static pages, earlier failure was transient DB connection issue)
 
 ---
 

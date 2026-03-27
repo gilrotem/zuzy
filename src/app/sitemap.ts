@@ -9,6 +9,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = getServerSideURL()
   const entries: MetadataRoute.Sitemap = []
 
+  // Fetch excluded paths from SEO Settings
+  let excludedPaths: string[] = []
+  try {
+    const seoSettings = await payload.findGlobal({ slug: 'seo-settings' as any }) as any
+    excludedPaths = (seoSettings?.sitemapExcludePaths || [])
+      .map((item: any) => item.path)
+      .filter(Boolean)
+  } catch {
+    // Continue with empty excludes
+  }
+
   for (const collection of INDEXABLE_COLLECTIONS) {
     const prefix = COLLECTION_PATHS[collection] ?? ''
 
@@ -19,6 +30,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         select: {
           slug: true,
           updatedAt: true,
+          meta: true,
         },
         where: {
           _status: { equals: 'published' },
@@ -29,7 +41,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         const slug = (doc as { slug?: string }).slug
         if (!slug) continue
 
+        // Skip pages with noindex robots override
+        const meta = (doc as any).meta
+        const robotsOverride: string[] | undefined = meta?.robotsOverride
+        if (robotsOverride && robotsOverride.includes('noindex')) continue
+
         const path = collection === 'pages' && slug === 'home' ? '' : `${prefix}/${slug}`
+
+        // Skip excluded paths
+        if (excludedPaths.some((excluded) => path === excluded || path.startsWith(excluded + '/'))) {
+          continue
+        }
 
         entries.push({
           url: `${siteUrl}${path}`,

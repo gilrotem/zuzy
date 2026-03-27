@@ -3,6 +3,14 @@ import type { CollectionConfig } from 'payload'
 import { authenticated } from '../access/authenticated'
 import { authenticatedOrPublished } from '../access/authenticatedOrPublished'
 import { slugField } from 'payload'
+import {
+  MetaDescriptionField,
+  MetaImageField,
+  MetaTitleField,
+  OverviewField,
+  PreviewField,
+} from '@payloadcms/plugin-seo/fields'
+import { seoAdvancedFields } from '../fields/seoAdvanced'
 
 export const BrandDocs: CollectionConfig = {
   slug: 'brand-docs',
@@ -34,6 +42,55 @@ export const BrandDocs: CollectionConfig = {
       required: true,
       localized: true,
       label: { he: 'כותרת', en: 'Title' },
+    },
+    {
+      type: 'tabs',
+      tabs: [
+        {
+          label: { he: 'תוכן', en: 'Content' },
+          fields: [
+            {
+              name: 'summary',
+              type: 'textarea',
+              localized: true,
+              label: { he: 'תקציר', en: 'Summary' },
+              admin: {
+                description: { he: 'תיאור קצר של המסמך', en: 'Short description of the document' },
+              },
+            },
+            {
+              name: 'content',
+              type: 'richText',
+              localized: true,
+              label: { he: 'תוכן', en: 'Content' },
+            },
+          ],
+        },
+        {
+          name: 'meta',
+          label: 'SEO',
+          fields: [
+            OverviewField({
+              titlePath: 'meta.title',
+              descriptionPath: 'meta.description',
+              imagePath: 'meta.image',
+            }),
+            MetaTitleField({
+              hasGenerateFn: true,
+            }),
+            MetaImageField({
+              relationTo: 'media',
+            }),
+            MetaDescriptionField({}),
+            PreviewField({
+              hasGenerateFn: true,
+              titlePath: 'meta.title',
+              descriptionPath: 'meta.description',
+            }),
+            ...seoAdvancedFields,
+          ],
+        },
+      ],
     },
     {
       name: 'docType',
@@ -73,21 +130,6 @@ export const BrandDocs: CollectionConfig = {
       admin: {
         position: 'sidebar',
       },
-    },
-    {
-      name: 'summary',
-      type: 'textarea',
-      localized: true,
-      label: { he: 'תקציר', en: 'Summary' },
-      admin: {
-        description: { he: 'תיאור קצר של המסמך', en: 'Short description of the document' },
-      },
-    },
-    {
-      name: 'content',
-      type: 'richText',
-      localized: true,
-      label: { he: 'תוכן', en: 'Content' },
     },
     {
       name: 'sortOrder',

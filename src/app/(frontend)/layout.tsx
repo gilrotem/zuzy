@@ -14,6 +14,11 @@ import { InitTheme } from '@/providers/Theme/InitTheme'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { draftMode } from 'next/headers'
 import { getCachedGlobal } from '@/utilities/getGlobals'
+import {
+  generateOrganizationJsonLd,
+  generateWebSiteJsonLd,
+  JsonLd,
+} from '@/lib/json-ld'
 
 import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
@@ -30,6 +35,7 @@ const zuzyFont = localFont({
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { isEnabled } = await draftMode()
   const siteSettingsData: any = await getCachedGlobal('site-settings' as any, 0)()
+  const seoSettingsData: any = await getCachedGlobal('seo-settings' as any, 1)()
 
   const defaultTheme = siteSettingsData?.defaultTheme || 'light'
   const primaryColor = siteSettingsData?.primaryColor || '#6750A4'
@@ -53,6 +59,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         {customCSS && <style dangerouslySetInnerHTML={{ __html: customCSS }} />}
         <link href="/favicon.ico" rel="icon" sizes="32x32" />
         <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
+        {seoSettingsData?.googleVerification && (
+          <meta name="google-site-verification" content={seoSettingsData.googleVerification} />
+        )}
+        {seoSettingsData?.bingVerification && (
+          <meta name="msvalidate.01" content={seoSettingsData.bingVerification} />
+        )}
+        <JsonLd data={generateOrganizationJsonLd(seoSettingsData || {})} />
+        <JsonLd data={generateWebSiteJsonLd(seoSettingsData || {})} />
       </head>
       <body>
         <Providers>

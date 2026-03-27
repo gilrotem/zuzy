@@ -12,6 +12,9 @@ import type { Post } from '@/payload-types'
 
 import { PostHero } from '@/heros/PostHero'
 import { generateMeta } from '@/utilities/generateMeta'
+import { generateArticleJsonLd, JsonLd } from '@/lib/json-ld'
+import { getServerSideURL } from '@/utilities/getURL'
+import { Breadcrumbs, buildBreadcrumbs } from '@/components/Breadcrumbs'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 
@@ -51,14 +54,41 @@ export default async function Post({ params: paramsPromise }: Args) {
 
   if (!post) return <PayloadRedirects url={url} />
 
+  const siteUrl = getServerSideURL()
+  const ogImage = post.heroImage && typeof post.heroImage === 'object' ? post.heroImage.url : undefined
+
+  const articleJsonLd = generateArticleJsonLd({
+    title: post.title,
+    description: post.meta?.description || undefined,
+    url: `${siteUrl}/posts/${decodedSlug}`,
+    image: ogImage || undefined,
+    datePublished: post.publishedAt || post.createdAt,
+    dateModified: post.updatedAt,
+    authors: post.populatedAuthors?.filter((a) => a.name) || [],
+  })
+
+  const breadcrumbItems = buildBreadcrumbs({
+    collection: 'posts',
+    collectionLabel: 'Blog',
+    collectionPath: '/posts',
+    title: post.title,
+    slug: decodedSlug,
+    breadcrumbLabel: (post.meta as any)?.breadcrumbLabel,
+  })
+
   return (
     <article className="pt-16 pb-16">
       <PageClient />
+      <JsonLd data={articleJsonLd} />
 
       {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />
 
       {draft && <LivePreviewListener />}
+
+      <div className="container mb-4">
+        <Breadcrumbs items={breadcrumbItems} />
+      </div>
 
       <PostHero post={post} />
 

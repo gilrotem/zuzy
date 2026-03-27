@@ -9,6 +9,9 @@ import RichText from '@/components/RichText'
 
 import { Media } from '@/components/Media'
 import { generateMeta } from '@/utilities/generateMeta'
+import { generateProductJsonLd, JsonLd } from '@/lib/json-ld'
+import { getServerSideURL } from '@/utilities/getURL'
+import { Breadcrumbs, buildBreadcrumbs } from '@/components/Breadcrumbs'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 
@@ -54,13 +57,38 @@ export default async function ProductPage({ params: paramsPromise }: Args) {
   if (!product) return <PayloadRedirects url={url} />
 
   const { title, featuredImage, description, price, currency, productCategories } = product
+  const siteUrl = getServerSideURL()
+  const imageUrl = featuredImage && typeof featuredImage === 'object' ? featuredImage.url : undefined
+
+  const productJsonLd = generateProductJsonLd({
+    name: title,
+    description: product.meta?.description || undefined,
+    url: `${siteUrl}/products/${decodedSlug}`,
+    image: imageUrl || undefined,
+    price: price || undefined,
+    currency: currency || 'ILS',
+  })
 
   const hasCategories =
     productCategories && Array.isArray(productCategories) && productCategories.length > 0
 
+  const breadcrumbItems = buildBreadcrumbs({
+    collection: 'products',
+    collectionLabel: 'Products',
+    collectionPath: '/products',
+    title,
+    slug: decodedSlug,
+    breadcrumbLabel: (product.meta as any)?.breadcrumbLabel,
+  })
+
   return (
     <article className="pt-16 pb-16">
       <PageClient />
+      <JsonLd data={productJsonLd} />
+
+      <div className="container mb-4">
+        <Breadcrumbs items={breadcrumbItems} />
+      </div>
 
       {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />

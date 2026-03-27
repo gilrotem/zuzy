@@ -11,9 +11,14 @@ export function middleware(request: NextRequest) {
     return response
   }
 
-  // Add hreflang header for SEO
+  // Add Content-Language header for SEO
   const response = NextResponse.next()
   response.headers.set('Content-Language', 'he')
+
+  // Security headers
+  response.headers.set('X-Content-Type-Options', 'nosniff')
+  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
+
   return response
 }
 

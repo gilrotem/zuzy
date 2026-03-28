@@ -80,10 +80,90 @@
 
 ---
 
-## 🔜 Next Phase: Phase 4 — Blog Architecture
-- **Decision D10 must be resolved first** (blog SEO meta ownership)
-- **Scope**: Replace `/blog` proxy with WP REST API fetch + Next.js rendering
-- **Dependency**: Phase 3 ✅ + D10 resolved
+## ✅ Phase 4 — Blog Architecture (2026-03-28)
+
+**Dependencies**: Phase 3 ✅ + D10 resolved ✅ (Option B — Next.js manages all SEO meta)
+**Full spec**: `../dan-seo-hub/docs/design/ZUZY-SITEMAP-ARCHITECTURE.md` (Blog section)
+**Decisions**: D10 (meta ownership), D12 (flat URLs), D13 (topic categories)
+
+### 4.1 — WP REST API Client ✅
+- [x] Created `src/lib/wp-api.ts` — typed WP REST API client
+- [x] `fetchPosts()`, `fetchPost()`, `fetchAllPostSlugs()` — post queries with pagination
+- [x] `fetchCategories()`, `fetchCategory()` — category queries
+- [x] Helper utilities: `stripHtml()`, `getPostFeaturedImage()`, `getPostAuthor()`, `getPostCategories()`, `getPostPrimaryCategory()`
+- [x] ISR caching with `next: { revalidate: 3600, tags: ['wp-posts'] }`
+- [x] Base URL configurable via `WP_API_URL` env var (default: `https://wp.zuzy.co.il/wp-json/wp/v2`)
+
+### 4.2 — Gutenberg Block Mapper ✅
+- [x] Created `src/lib/wp-block-mapper.tsx` — `WPContent` component
+- [x] Renders WP `content.rendered` HTML with Tailwind prose classes
+- [x] Image optimization: extracts `<img>` tags and replaces with Next.js `<Image>` components
+- [x] Responsive sizing and lazy loading
+
+### 4.3 — Blog Routes ✅
+- [x] `/blog/` — Blog listing page with pagination (`src/app/(frontend)/blog/page.tsx`)
+- [x] `/blog/page/[n]/` — Blog pagination pages (redirects page/1 → /blog/)
+- [x] `/blog/[slug]/` — Individual post with hero, content, related posts
+- [x] `/blog/category/[name]/` — Category page with H1 + intro text + post grid
+- [x] `/blog/category/[name]/page/[n]/` — Category pagination
+- [x] All routes use `generateMetadata()` — Next.js controls all SEO (D10)
+
+### 4.4 — Blog SEO ✅
+- [x] Article JSON-LD on every blog post (via existing `generateArticleJsonLd()`)
+- [x] CollectionPage JSON-LD on category pages
+- [x] Breadcrumbs with Schema.org on every blog page (Home > Blog > [Category] > Post)
+- [x] Self-referencing canonical URLs on all blog pages
+- [x] Pagination pages set `noindex, follow` (SEO best practice)
+- [x] OG + Twitter Card meta on all blog pages
+- [x] Featured image from WP used as OG image
+
+### 4.5 — Blog Sitemap ✅
+- [x] Created `/blog/sitemap.xml` (`src/app/blog/sitemap.ts`)
+- [x] Includes blog listing, all 7 category pages, and all published posts
+- [x] Separate from main Payload sitemap for faster blog discovery
+- [x] Added to `robots.txt` output (both sitemaps now listed)
+
+### 4.6 — Revalidation Webhook ✅
+- [x] Created `POST /api/revalidate` (`src/app/(frontend)/api/revalidate/route.ts`)
+- [x] Secret-based authentication via `REVALIDATION_SECRET` env var
+- [x] Revalidates `wp-posts` cache tag + specific blog paths
+- [x] Supports both post and category revalidation
+- [x] GET endpoint for health check
+
+### 4.7 — Blog Category Config ✅
+- [x] Created `src/lib/blog-categories.ts` — 7 topic-based categories (D13)
+- [x] Categories: seo, digital-marketing, design-ux, productivity, ai, case-studies, news
+- [x] Each category has English + Hebrew names, descriptions, and related platform links
+
+### 4.8 — Infrastructure Updates ✅
+- [x] Removed `/blog` proxy rewrites from `next.config.js`
+- [x] Added `wp.zuzy.co.il` to `images.remotePatterns` for Next.js Image optimization
+- [x] `BlogCard` component (`src/components/BlogCard/`) — reusable post card
+- [x] `BlogPagination` component (`src/components/BlogPagination/`) — configurable pagination
+
+### Phase 4 Verification
+- [x] `tsc --noEmit` — zero errors
+- [x] `pnpm build` — success (blog routes + sitemap generated)
+- [x] Blog listing, post detail, category pages all built
+- [x] Blog sitemap generated at `/blog/sitemap.xml`
+
+### Required Environment Variables
+```
+WP_API_URL=https://wp.zuzy.co.il/wp-json/wp/v2    # (optional, this is the default)
+REVALIDATION_SECRET=<secure-secret>                  # Required for webhook
+```
+
+### WordPress Webhook Setup (Manual Step)
+Configure WP to call on post publish/update:
+```
+POST https://zuzy.co.il/api/revalidate?secret=<REVALIDATION_SECRET>&slug=<post-slug>&type=post
+```
+
+---
+
+## 🔜 Next Phase: Phase 5 — TBD
+
+---
 
 ---
 

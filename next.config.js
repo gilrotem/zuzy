@@ -28,6 +28,11 @@ const nextConfig = {
           protocol: url.protocol.replace(':', ''),
         }
       }),
+      // WordPress media (wp.zuzy.co.il blog images)
+      {
+        hostname: 'wp.zuzy.co.il',
+        protocol: 'https',
+      },
     ],
   },
   webpack: (webpackConfig) => {
@@ -41,18 +46,8 @@ const nextConfig = {
   },
   reactStrictMode: true,
   redirects,
-  async rewrites() {
-    return [
-      {
-        source: '/blog',
-        destination: 'https://wp.zuzy.co.il/',
-      },
-      {
-        source: '/blog/:path*',
-        destination: 'https://wp.zuzy.co.il/:path*',
-      },
-    ]
-  },
+  // Blog proxy rewrites removed in Phase 4 — /blog/* now handled by Next.js routes
+  // fetching from wp.zuzy.co.il via WP REST API
 }
 
 export default withPayload(nextConfig, { devBundleServerPackages: false })

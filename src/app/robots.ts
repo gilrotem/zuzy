@@ -55,6 +55,6 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
         disallow: '/',
       })),
     ],
-    sitemap: `${siteUrl}/sitemap.xml`,
+    sitemap: [`${siteUrl}/sitemap.xml`, `${siteUrl}/blog/sitemap.xml`],
   }
 }

@@ -280,7 +280,7 @@ export function getPostCategories(post: WPPost): WPCategory[] {
  */
 export function getPostPrimaryCategory(post: WPPost): WPCategory | null {
   const cats = getPostCategories(post)
-  // Filter out "Uncategorized" (WP default, id=1)
-  const filtered = cats.filter((c) => c.slug !== 'uncategorized')
+  // Filter out WP defaults that don't add value to breadcrumbs
+  const filtered = cats.filter((c) => c.slug !== 'uncategorized' && c.slug !== 'blog')
   return filtered[0] || cats[0] || null
 }

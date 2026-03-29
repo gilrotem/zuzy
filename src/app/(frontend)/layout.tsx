@@ -34,8 +34,18 @@ const zuzyFont = localFont({
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { isEnabled } = await draftMode()
-  const siteSettingsData: any = await getCachedGlobal('site-settings' as any, 0)()
-  const seoSettingsData: any = await getCachedGlobal('seo-settings' as any, 1)()
+  let siteSettingsData: any = {}
+  let seoSettingsData: any = {}
+  try {
+    siteSettingsData = (await getCachedGlobal('site-settings' as any, 0)()) || {}
+  } catch {
+    /* global may not exist yet */
+  }
+  try {
+    seoSettingsData = (await getCachedGlobal('seo-settings' as any, 1)()) || {}
+  } catch {
+    /* global may not exist yet */
+  }
 
   const defaultTheme = siteSettingsData?.defaultTheme || 'light'
   const primaryColor = siteSettingsData?.primaryColor || '#6750A4'

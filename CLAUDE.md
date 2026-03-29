@@ -1,4 +1,4 @@
-# ZUZY (zuzy.co.il) — Claude Instructions
+# zuzy-website (zuzy.co.il) — Claude Instructions
 
 > Claude reads this file automatically at the start of every session.
 
@@ -11,9 +11,9 @@
 See also: `../zuzy-architecture/ORCHESTRATION-PROTOCOL.md` for cross-workspace rules.
 
 ### Scope Boundary
-- This agent ONLY modifies files under `zuzy/` (this project).
+- This agent ONLY modifies files under `zuzy-website/` (this project).
 - `../zuzy-architecture/` is **READ-ONLY**. Never modify those files.
-- `../dan-seo-hub/` does **not exist** for this agent. Never touch it.
+- `../seohub/` does **not exist** for this agent. Never touch it.
 
 ### Missing References
 - If a spec file referenced in ZUZY-TASKS.md does not exist: **STOP and ask the user.**

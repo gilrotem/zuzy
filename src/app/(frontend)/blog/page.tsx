@@ -12,10 +12,21 @@ export const revalidate = 3600
 const POSTS_PER_PAGE = 12
 
 export default async function BlogListingPage() {
-  const { data: posts, totalPages, totalItems } = await fetchPosts({
-    page: 1,
-    perPage: POSTS_PER_PAGE,
-  })
+  let posts: Awaited<ReturnType<typeof fetchPosts>>['data'] = []
+  let totalPages = 0
+  let totalItems = 0
+
+  try {
+    const result = await fetchPosts({
+      page: 1,
+      perPage: POSTS_PER_PAGE,
+    })
+    posts = result.data
+    totalPages = result.totalPages
+    totalItems = result.totalItems
+  } catch {
+    // If WP is down, fall back to empty state instead of crashing with a 500
+  }
 
   const breadcrumbs = [
     { label: 'Home', href: '/' },
@@ -36,11 +47,13 @@ export default async function BlogListingPage() {
         </div>
       </div>
 
-      <div className="container mb-8">
-        <p className="text-sm text-muted-foreground">
-          Showing 1–{Math.min(POSTS_PER_PAGE, totalItems)} of {totalItems} posts
-        </p>
-      </div>
+      {totalItems > 0 && (
+        <div className="container mb-8">
+          <p className="text-sm text-muted-foreground">
+            Showing 1–{Math.min(POSTS_PER_PAGE, totalItems)} of {totalItems} posts
+          </p>
+        </div>
+      )}
 
       <div className="container">
         <div className="grid grid-cols-4 sm:grid-cols-8 lg:grid-cols-12 gap-y-4 gap-x-4 lg:gap-y-8 lg:gap-x-8">

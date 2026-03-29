@@ -111,8 +111,9 @@ core.zuzy.co.il     → dan-seo-hub app (noindex, separate project) — D1
 - **Header** — `src/Header/config.ts`
 - **Footer** — `src/Footer/config.ts`
 - **SiteSettings** — `src/SiteSettings/config.ts` (Branding, Theme, Custom Code)
+- **SEOSettings** — `src/SEOSettings/config.ts` (Organization, Social, Defaults, Robots/Sitemap, Verification)
 
-Globals are registered in `src/payload.config.ts` → `globals: [Header, Footer, SiteSettings]`
+Globals are registered in `src/payload.config.ts` → `globals: [Header, Footer, SiteSettings, SEOSettings]`
 
 ### Key Patterns
 - **Read globals**: `getCachedGlobal('slug')` from `src/utilities/getGlobals.ts`

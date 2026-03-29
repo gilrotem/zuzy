@@ -156,7 +156,7 @@ REVALIDATION_SECRET=<secure-secret>                  # Required for webhook
 ### WordPress Webhook Setup (Manual Step)
 Configure WP to call on post publish/update:
 ```
-POST https://zuzy.co.il/api/revalidate?secret=<REVALIDATION_SECRET>&slug=<post-slug>&type=post
+POST https://www.zuzy.co.il/api/revalidate?secret=<REVALIDATION_SECRET>&slug=<post-slug>&type=post
 ```
 
 ---

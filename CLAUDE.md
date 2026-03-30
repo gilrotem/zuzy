@@ -229,7 +229,11 @@ zuzy.co.il/
 │   ├── /services/technical-audit — ביקורת טכנית — ✅ BUILT
 │   ├── /services/local-seo    — SEO מקומי — ✅ BUILT
 │   └── /services/link-building — בניית קישורים — ✅ BUILT
-├── /solutions/*               — Audience pages
+├── /solutions/                — Solutions index — ✅ BUILT
+│   ├── /solutions/ecommerce   — חנויות אונליין — ✅ BUILT
+│   ├── /solutions/startups    — סטארטאפים — ✅ BUILT
+│   ├── /solutions/agencies    — סוכנויות — ✅ BUILT
+│   └── /solutions/enterprise  — ארגונים — ✅ BUILT
 ├── /pricing                   — Single page + 3 plans + FAQ — D14 — ✅ BUILT
 ├── /blog/*                    — WP-powered blog, flat URLs — D12, D13
 ├── /resources/*               — Guides, glossary, changelog

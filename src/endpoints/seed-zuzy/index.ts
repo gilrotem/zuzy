@@ -4,6 +4,7 @@ import { home } from '../seed/home'
 import { getAllPlatformPages } from '../seed/platform-pages'
 import { getAllPricingLegalPages } from '../seed/pricing-legal-pages'
 import { getAllServicesPages } from '../seed/services-pages'
+import { getAllSolutionsPages } from '../seed/solutions-pages'
 
 /**
  * Seeds ZUZY homepage, platform pages, pricing, and legal pages.
@@ -64,7 +65,7 @@ export const seedZuzy = async ({
   }
 
   // --- Seed all section pages (platform, pricing, legal) ---
-  const allPages = [...getAllPlatformPages(), ...getAllPricingLegalPages(), ...getAllServicesPages()]
+  const allPages = [...getAllPlatformPages(), ...getAllPricingLegalPages(), ...getAllServicesPages(), ...getAllSolutionsPages()]
 
   for (const pageData of allPages) {
     const existing = await payload.find({

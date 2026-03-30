@@ -317,7 +317,30 @@ POST https://www.zuzy.co.il/api/revalidate?secret=<REVALIDATION_SECRET>&slug=<po
 
 ---
 
-## 🔜 Next Phase: Phase 5e — W1-6: Solutions Pages
+## ✅ Phase 5e — W1-6: Solutions Pages (2026-03-30)
+
+**Scope**: 5 solutions pages (1 index + 4 vertical audience pages).
+
+### 5e.1 — Solutions Pages ✅
+- [x] Created `src/endpoints/seed/solutions-pages.ts`
+- [x] **Solutions Index** (`/solutions`) — Hero + 4-solution grid + CTA
+- [x] **4 Solution Pages** — each with Hero + 4 features + bold CTA:
+  - `/solutions/ecommerce` — חנויות אונליין
+  - `/solutions/startups` — סטארטאפים
+  - `/solutions/agencies` — סוכנויות
+  - `/solutions/enterprise` — ארגונים
+- [x] Routes: `src/app/(frontend)/solutions/page.tsx` + `[slug]/page.tsx`
+- [x] Breadcrumbs: Home > פתרונות > [Solution Title]
+
+### Phase 5e Verification
+- [x] `tsc --noEmit` — zero errors
+- [x] `pnpm build` — success (65/65 static pages)
+- [x] All 5 solutions routes return HTTP 200
+- [x] Sitemap includes all 5 solutions pages
+
+---
+
+## 🔜 Next Phase: Phase 5f — W1-8: Resources + W1-9: Support Pages
 
 ---
 

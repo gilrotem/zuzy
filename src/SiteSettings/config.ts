@@ -53,18 +53,18 @@ export const SiteSettings: GlobalConfig = {
               name: 'primaryColor',
               label: 'Primary Color',
               type: 'text',
-              defaultValue: '#6750A4',
+              defaultValue: '#7354C4',
               admin: {
-                description: 'Hex color code (e.g., #6750A4)',
+                description: 'Hex color code (e.g., #7354C4)',
               },
             },
             {
               name: 'accentColor',
               label: 'Accent Color',
               type: 'text',
-              defaultValue: '#4CA3C7',
+              defaultValue: '#06B6D4',
               admin: {
-                description: 'Hex color code (e.g., #4CA3C7)',
+                description: 'Hex color code (e.g., #06B6D4)',
               },
             },
           ],

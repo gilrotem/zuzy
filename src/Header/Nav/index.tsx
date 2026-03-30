@@ -18,6 +18,12 @@ export const HeaderNav: React.FC<{ data: any }> = ({ data }) => {
         <span className="sr-only">Search</span>
         <SearchIcon className="w-5 text-primary" />
       </Link>
+      <a
+        href="https://core.zuzy.co.il/login"
+        className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+      >
+        Login
+      </a>
     </nav>
   )
 }

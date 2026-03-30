@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { cn } from '@/utilities/ui'
 import { GeistMono } from 'geist/font/mono'
 import { GeistSans } from 'geist/font/sans'
-import localFont from 'next/font/local'
+import { IBM_Plex_Sans_Hebrew } from 'next/font/google'
 import React from 'react'
 
 import { AdminBar } from '@/components/AdminBar'
@@ -23,11 +23,9 @@ import {
 import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
 
-const zuzyFont = localFont({
-  src: [
-    { path: '../../fonts/subset-FbCoherentiSans-Regular.woff2', weight: '400', style: 'normal' },
-    { path: '../../fonts/FbCoherentiSans-Regular.woff', weight: '400', style: 'normal' },
-  ],
+const zuzyFont = IBM_Plex_Sans_Hebrew({
+  subsets: ['hebrew', 'latin'],
+  weight: ['300', '400', '500', '600', '700'],
   variable: '--font-zuzy',
   display: 'swap',
 })
@@ -48,8 +46,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   }
 
   const defaultTheme = siteSettingsData?.defaultTheme || 'light'
-  const primaryColor = siteSettingsData?.primaryColor || '#6750A4'
-  const accentColor = siteSettingsData?.accentColor || '#4CA3C7'
+  const primaryColor = siteSettingsData?.primaryColor || '#7354C4'
+  const accentColor = siteSettingsData?.accentColor || '#06B6D4'
   const customCSS = siteSettingsData?.customCSS
   const customJS = siteSettingsData?.customJS
 

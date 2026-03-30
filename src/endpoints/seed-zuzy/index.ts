@@ -1,72 +1,102 @@
 import type { Payload, PayloadRequest } from 'payload'
 
+import { home } from '../seed/home'
+import { getAllPlatformPages } from '../seed/platform-pages'
+
 /**
- * Zuzy seed — creates the 4 core pages if they don't already exist.
- * Safe to call multiple times (idempotent).
+ * Seeds ZUZY homepage and platform pages with marketing content blocks.
+ * Safe to call multiple times — updates existing pages or creates new ones.
  */
 export const seedZuzy = async ({
   payload,
-  req,
+  req: _req,
 }: {
   payload: Payload
   req: PayloadRequest
-}): Promise<{ created: string[]; skipped: string[] }> => {
-  const created: string[] = []
+}): Promise<{ updated: string[]; skipped: string[] }> => {
+  const updated: string[] = []
   const skipped: string[] = []
 
-  const pages = [
-    {
-      slug: 'home',
-      titles: { he: 'דף הבית', en: 'Home', ru: 'Главная', ar: 'الرئيسية', fr: 'Accueil', es: 'Inicio' },
-    },
-    {
-      slug: 'services',
-      titles: { he: 'שירותים', en: 'Services', ru: 'Услуги', ar: 'الخدمات', fr: 'Services', es: 'Servicios' },
-    },
-    {
-      slug: 'about',
-      titles: { he: 'אודות', en: 'About', ru: 'О нас', ar: 'من نحن', fr: 'À propos', es: 'Acerca de' },
-    },
-    {
-      slug: 'contact',
-      titles: { he: 'צור קשר', en: 'Contact', ru: 'Контакты', ar: 'اتصل بنا', fr: 'Contact', es: 'Contacto' },
-    },
-  ]
+  payload.logger.info('Seeding ZUZY pages...')
 
-  for (const page of pages) {
-    // Check if it already exists
+  // Get any existing media to use as OG image (optional)
+  const existingMedia = await payload.find({
+    collection: 'media',
+    limit: 1,
+    depth: 0,
+  })
+
+  const metaImage = existingMedia.docs[0] || null
+
+  // --- Seed Homepage ---
+  const existingHome = await payload.find({
+    collection: 'pages',
+    where: { slug: { equals: 'home' } },
+    limit: 1,
+    depth: 0,
+  })
+
+  const homeData = home({ metaImage: metaImage as any })
+
+  if (existingHome.docs.length > 0) {
+    await payload.update({
+      collection: 'pages',
+      id: existingHome.docs[0].id,
+      data: {
+        hero: homeData.hero,
+        layout: homeData.layout,
+        meta: metaImage ? homeData.meta : { ...homeData.meta, image: undefined },
+      },
+      context: { disableRevalidate: true },
+    })
+    payload.logger.info('— Updated existing homepage with ZUZY content')
+    updated.push('home')
+  } else {
+    await payload.create({
+      collection: 'pages',
+      data: metaImage ? homeData : { ...homeData, meta: { ...homeData.meta, image: undefined } },
+      context: { disableRevalidate: true },
+    })
+    payload.logger.info('— Created homepage with ZUZY content')
+    updated.push('home')
+  }
+
+  // --- Seed Platform Pages (index + 8 module pages) ---
+  const platformPages = getAllPlatformPages()
+
+  for (const pageData of platformPages) {
     const existing = await payload.find({
       collection: 'pages',
-      where: { slug: { equals: page.slug } },
+      where: { slug: { equals: pageData.slug } },
       limit: 1,
       depth: 0,
     })
 
-    if (existing.totalDocs > 0) {
-      skipped.push(page.slug)
-      payload.logger.info(`  — Page "${page.slug}" already exists, skipping`)
-      continue
+    if (existing.docs.length > 0) {
+      await payload.update({
+        collection: 'pages',
+        id: existing.docs[0].id,
+        data: {
+          title: pageData.title,
+          hero: pageData.hero,
+          layout: pageData.layout,
+          meta: pageData.meta,
+        },
+        context: { disableRevalidate: true },
+      })
+      payload.logger.info(`— Updated platform page: ${pageData.slug}`)
+      updated.push(pageData.slug)
+    } else {
+      await payload.create({
+        collection: 'pages',
+        data: pageData,
+        context: { disableRevalidate: true },
+      })
+      payload.logger.info(`— Created platform page: ${pageData.slug}`)
+      updated.push(pageData.slug)
     }
-
-    // Create with default (he) locale first
-    const created_page = await payload.create({
-      collection: 'pages',
-      locale: 'he',
-      data: {
-        title: page.titles.he,
-        slug: page.slug,
-        hero: { type: 'none' },
-        layout: [],
-        _status: 'published',
-      },
-      req,
-    })
-
-    // title is NOT localized — no need to update per locale
-
-    created.push(page.slug)
-    payload.logger.info(`  — Page "${page.slug}" created (id: ${created_page.id})`)
   }
 
-  return { created, skipped }
+  payload.logger.info(`ZUZY page seeding complete! Updated: ${updated.length}, Skipped: ${skipped.length}`)
+  return { updated, skipped }
 }

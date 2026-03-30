@@ -51,8 +51,8 @@ export const seed = async ({
         data: (global === 'site-settings'
           ? {
               siteName: 'ZUZY',
-              primaryColor: '#6750A4',
-              accentColor: '#4CA3C7',
+              primaryColor: '#7354C4',
+              accentColor: '#06B6D4',
               defaultTheme: 'light',
             }
           : {
@@ -213,7 +213,7 @@ export const seed = async ({
     payload.create({
       collection: 'pages',
       depth: 0,
-      data: home({ heroImage: imageHomeDoc, metaImage: image2Doc }),
+      data: home({ metaImage: image2Doc }),
     }),
     payload.create({
       collection: 'pages',

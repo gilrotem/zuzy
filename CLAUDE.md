@@ -60,7 +60,7 @@ These shared docs define how this project fits into the ecosystem (READ-ONLY):
 
 - `ZUZY-PROJECT-BRIEF.md` — Project structure, known bugs, architecture notes (do not modify)
 - `ZUZY-TASKS.md` — Current phase and progress (find `🔜 Next Phase` for what to do next)
-- `../dan-seo-hub/docs/design/ZUZY-SITEMAP-ARCHITECTURE.md` — Complete sitemap architecture, URL structure, inter-domain relationships (READ-ONLY)
+- URL architecture is documented in the "URL Architecture" section below
 
 ## Domain Architecture
 
@@ -68,7 +68,7 @@ These shared docs define how this project fits into the ecosystem (READ-ONLY):
 zuzy.co.il          → THIS PROJECT (Payload CMS + Next.js) — ALL marketing, ALL SEO
 www.zuzy.co.il      → 308 redirect target (canonical with www) — D9
 wp.zuzy.co.il       → WordPress headless backend (blog only, noindex) — D2
-core.zuzy.co.il     → dan-seo-hub app (noindex, separate project) — D1
+core.zuzy.co.il     → seohub app (noindex, separate project) — D1
 ```
 
 **Core principle:** zuzy.co.il = the brand, the authority, the SEO machine. Subdomains = app shells, invisible to Google (D1).
@@ -80,7 +80,7 @@ core.zuzy.co.il     → dan-seo-hub app (noindex, separate project) — D1
 - **Don't create new migrations** unless you actually change collection schemas
 - Fixing component rendering, adding SEO metadata logic, etc. does NOT require migrations
 - New Payload Globals (like SEO Settings) WILL need a migration — let Payload auto-generate it via `pnpm payload migrate:create`
-- This database is **completely separate** from dan-seo-hub's ~72 tables
+- This database is **completely separate** from seohub's ~72 tables
 
 ## Tech Stack
 
@@ -98,7 +98,7 @@ core.zuzy.co.il     → dan-seo-hub app (noindex, separate project) — D1
 ## Payload CMS Structure
 
 ### Collections
-- **Pages** — Static pages with `layout` blocks field (15 block types) — `src/collections/Pages/index.ts`
+- **Pages** — Static pages with `layout` blocks field (18 block types) — `src/collections/Pages/index.ts`
 - **Posts** — Blog content with Lexical richtext + inline blocks — `src/collections/Posts/index.ts`
 - **Products** — Product catalog (localized) — `src/collections/Products.ts`
 - **BrandDocs** — Brand knowledge base (localized) — `src/collections/BrandDocs.ts`
@@ -187,6 +187,15 @@ All SEO meta controlled by Next.js `generateMetadata()` — NOT Yoast/RankMath (
 ### Blog Categories (D13 — topic-based)
 `seo`, `digital-marketing`, `design-ux`, `productivity`, `ai`, `case-studies`, `news`
 
+### Platform Pages (D15 — mirror pages, Phase 5b ✅)
+| File | Purpose |
+|------|---------|
+| `src/endpoints/seed/platform-pages.ts` | Platform page definitions + seed builders (8 modules + index) |
+| `src/app/(frontend)/platform/page.tsx` | Platform index route `/platform` |
+| `src/app/(frontend)/platform/[slug]/page.tsx` | Platform module route `/platform/[slug]` |
+
+**Slug convention**: Platform pages stored in Payload with `platform--[module]` slug (e.g., `platform--rank-tracker`). Routes convert `--` to `/` for URLs. Sitemap does the same conversion.
+
 ### Revalidation Flow
 ```
 WP post publish/update → functions.php webhook
@@ -201,11 +210,19 @@ WP post publish/update → functions.php webhook
 
 ## URL Architecture (D12-D18)
 
-Full spec: `../dan-seo-hub/docs/design/ZUZY-SITEMAP-ARCHITECTURE.md`
+Full URL structure below:
 
 ```
 zuzy.co.il/
-├── /platform/*                — SaaS product marketing (SoftwareApplication schema) — D15
+├── /platform/                 — Platform index (all 8 modules) — ✅ BUILT
+│   ├── /platform/rank-tracker — Rank Tracker mirror page — ✅ BUILT
+│   ├── /platform/site-audit   — Site Audit mirror page — ✅ BUILT
+│   ├── /platform/copilot      — SEO Copilot mirror page — ✅ BUILT
+│   ├── /platform/content-editor — Content Editor mirror page — ✅ BUILT
+│   ├── /platform/keyword-research — Keyword Research mirror page — ✅ BUILT
+│   ├── /platform/analytics    — Analytics mirror page — ✅ BUILT
+│   ├── /platform/reports      — Reports mirror page — ✅ BUILT
+│   └── /platform/pages        — Page Manager mirror page — ✅ BUILT
 ├── /services/*                — Professional services (Service schema) — D16
 ├── /solutions/*               — Audience pages
 ├── /pricing/                  — Single page + hash fragments — D14
@@ -217,6 +234,17 @@ zuzy.co.il/
 ├── /brand-docs/*              — Brand knowledge base
 └── /[page-slug]               — Static pages
 ```
+
+## Workspace Boundaries
+
+- **Supabase MCP**: NO — Payload manages its own DB via migrations. Never run raw SQL here.
+- **Chrome automation**: NO
+- **Desktop Commander**: NO
+- **Vercel MCP**: YES — for deployments, logs, environment variables
+- **Claude Preview**: YES — for visual testing
+- **PDF**: YES
+- For seohub database work → open `seohub/` workspace
+- For brand/design tokens → open `zuzy-brand-hub/` workspace
 
 ## How To Work
 

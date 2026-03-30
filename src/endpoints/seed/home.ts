@@ -2,673 +2,265 @@ import type { RequiredDataFromCollectionSlug } from 'payload'
 import type { Media } from '@/payload-types'
 
 type HomeArgs = {
-  heroImage: Media
   metaImage: Media
 }
 
+// Helper to create a Lexical richText node with a single paragraph
+function richTextParagraph(text: string) {
+  return {
+    root: {
+      type: 'root',
+      children: [
+        {
+          type: 'paragraph',
+          children: [
+            {
+              type: 'text',
+              detail: 0,
+              format: 0,
+              mode: 'normal',
+              style: '',
+              text,
+              version: 1,
+            },
+          ],
+          direction: 'rtl' as const,
+          format: '' as const,
+          indent: 0,
+          textFormat: 0,
+          version: 1,
+        },
+      ],
+      direction: 'rtl' as const,
+      format: '' as const,
+      indent: 0,
+      version: 1,
+    },
+  }
+}
+
 export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> = ({
-  heroImage,
   metaImage,
 }) => {
   return {
     slug: 'home',
     _status: 'published',
     hero: {
-      type: 'highImpact',
-      links: [
-        {
-          link: {
-            type: 'custom',
-            appearance: 'default',
-            label: 'All posts',
-            url: '/posts',
-          },
-        },
-        {
-          link: {
-            type: 'custom',
-            appearance: 'outline',
-            label: 'Contact',
-            url: '/contact',
-          },
-        },
-      ],
-      media: heroImage.id,
-      richText: {
-        root: {
-          type: 'root',
-          children: [
-            {
-              type: 'heading',
-              children: [
-                {
-                  type: 'text',
-                  detail: 0,
-                  format: 0,
-                  mode: 'normal',
-                  style: '',
-                  text: 'Payload Website Template',
-                  version: 1,
-                },
-              ],
-              direction: 'ltr',
-              format: '',
-              indent: 0,
-              tag: 'h1',
-              version: 1,
-            },
-            {
-              type: 'paragraph',
-              children: [
-                {
-                  type: 'link',
-                  children: [
-                    {
-                      type: 'text',
-                      detail: 0,
-                      format: 0,
-                      mode: 'normal',
-                      style: '',
-                      text: 'Visit the admin dashboard',
-                      version: 1,
-                    },
-                  ],
-                  direction: 'ltr',
-                  fields: {
-                    linkType: 'custom',
-                    newTab: false,
-                    url: '/admin',
-                  },
-                  format: '',
-                  indent: 0,
-                  version: 3,
-                },
-                {
-                  type: 'text',
-                  detail: 0,
-                  format: 0,
-                  mode: 'normal',
-                  style: '',
-                  text: " to begin managing this site's content. The code for this template is completely open-source and can be found ",
-                  version: 1,
-                },
-                {
-                  type: 'link',
-                  children: [
-                    {
-                      type: 'text',
-                      detail: 0,
-                      format: 0,
-                      mode: 'normal',
-                      style: '',
-                      text: 'on our Github',
-                      version: 1,
-                    },
-                  ],
-                  direction: 'ltr',
-                  fields: {
-                    linkType: 'custom',
-                    newTab: true,
-                    url: 'https://github.com/payloadcms/payload/tree/main/templates/website',
-                  },
-                  format: '',
-                  indent: 0,
-                  version: 3,
-                },
-                {
-                  type: 'text',
-                  detail: 0,
-                  format: 0,
-                  mode: 'normal',
-                  style: '',
-                  text: '. ',
-                  version: 1,
-                },
-              ],
-              direction: 'ltr',
-              format: '',
-              indent: 0,
-              textFormat: 0,
-              version: 1,
-            },
-          ],
-          direction: 'ltr',
-          format: '',
-          indent: 0,
-          version: 1,
-        },
-      },
+      type: 'none',
     },
     layout: [
+      // 1. HeroBlock — centered, Hebrew heading with 2 CTAs
       {
-        blockName: 'Content Block',
-        blockType: 'content',
-        columns: [
-          {
-            richText: {
-              root: {
-                type: 'root',
-                children: [
-                  {
-                    type: 'heading',
-                    children: [
-                      {
-                        type: 'text',
-                        detail: 0,
-                        format: 0,
-                        mode: 'normal',
-                        style: '',
-                        text: 'Core features',
-                        version: 1,
-                      },
-                    ],
-                    direction: 'ltr',
-                    format: '',
-                    indent: 0,
-                    tag: 'h2',
-                    version: 1,
-                  },
-                ],
-                direction: 'ltr',
-                format: '',
-                indent: 0,
-                version: 1,
-              },
-            },
-            size: 'full',
-          },
-          {
-            enableLink: false,
-            richText: {
-              root: {
-                type: 'root',
-                children: [
-                  {
-                    type: 'heading',
-                    children: [
-                      {
-                        type: 'text',
-                        detail: 0,
-                        format: 0,
-                        mode: 'normal',
-                        style: '',
-                        text: 'Admin Dashboard',
-                        version: 1,
-                      },
-                    ],
-                    direction: 'ltr',
-                    format: '',
-                    indent: 0,
-                    tag: 'h3',
-                    version: 1,
-                  },
-                  {
-                    type: 'paragraph',
-                    children: [
-                      {
-                        type: 'text',
-                        detail: 0,
-                        format: 0,
-                        mode: 'normal',
-                        style: '',
-                        text: "Manage this site's pages and posts from the ",
-                        version: 1,
-                      },
-                      {
-                        type: 'link',
-                        children: [
-                          {
-                            type: 'text',
-                            detail: 0,
-                            format: 0,
-                            mode: 'normal',
-                            style: '',
-                            text: 'admin dashboard',
-                            version: 1,
-                          },
-                        ],
-                        direction: 'ltr',
-                        fields: {
-                          linkType: 'custom',
-                          newTab: false,
-                          url: '/admin',
-                        },
-                        format: '',
-                        indent: 0,
-                        version: 2,
-                      },
-                      {
-                        type: 'text',
-                        detail: 0,
-                        format: 0,
-                        mode: 'normal',
-                        style: '',
-                        text: '.',
-                        version: 1,
-                      },
-                    ],
-                    direction: 'ltr',
-                    format: '',
-                    indent: 0,
-                    textFormat: 0,
-                    version: 1,
-                  },
-                ],
-                direction: 'ltr',
-                format: '',
-                indent: 0,
-                version: 1,
-              },
-            },
-            size: 'oneThird',
-          },
-          {
-            enableLink: false,
-            richText: {
-              root: {
-                type: 'root',
-                children: [
-                  {
-                    type: 'heading',
-                    children: [
-                      {
-                        type: 'text',
-                        detail: 0,
-                        format: 0,
-                        mode: 'normal',
-                        style: '',
-                        text: 'Preview',
-                        version: 1,
-                      },
-                    ],
-                    direction: 'ltr',
-                    format: '',
-                    indent: 0,
-                    tag: 'h3',
-                    version: 1,
-                  },
-                  {
-                    type: 'paragraph',
-                    children: [
-                      {
-                        type: 'text',
-                        detail: 0,
-                        format: 0,
-                        mode: 'normal',
-                        style: '',
-                        text: 'Using versions, drafts, and preview, editors can review and share their changes before publishing them.',
-                        version: 1,
-                      },
-                    ],
-                    direction: 'ltr',
-                    format: '',
-                    indent: 0,
-                    textFormat: 0,
-                    version: 1,
-                  },
-                ],
-                direction: 'ltr',
-                format: '',
-                indent: 0,
-                version: 1,
-              },
-            },
-            size: 'oneThird',
-          },
-          {
-            enableLink: false,
-            richText: {
-              root: {
-                type: 'root',
-                children: [
-                  {
-                    type: 'heading',
-                    children: [
-                      {
-                        type: 'text',
-                        detail: 0,
-                        format: 0,
-                        mode: 'normal',
-                        style: '',
-                        text: 'Page Builder',
-                        version: 1,
-                      },
-                    ],
-                    direction: 'ltr',
-                    format: '',
-                    indent: 0,
-                    tag: 'h3',
-                    version: 1,
-                  },
-                  {
-                    type: 'paragraph',
-                    children: [
-                      {
-                        type: 'text',
-                        detail: 0,
-                        format: 0,
-                        mode: 'normal',
-                        style: '',
-                        text: 'Custom page builder allows you to create unique page, post, and project layouts for any type of content.',
-                        version: 1,
-                      },
-                    ],
-                    direction: 'ltr',
-                    format: '',
-                    indent: 0,
-                    textFormat: 0,
-                    version: 1,
-                  },
-                ],
-                direction: 'ltr',
-                format: '',
-                indent: 0,
-                version: 1,
-              },
-            },
-            size: 'oneThird',
-          },
-          {
-            enableLink: false,
-            richText: {
-              root: {
-                type: 'root',
-                children: [
-                  {
-                    type: 'heading',
-                    children: [
-                      {
-                        type: 'text',
-                        detail: 0,
-                        format: 0,
-                        mode: 'normal',
-                        style: '',
-                        text: 'SEO',
-                        version: 1,
-                      },
-                    ],
-                    direction: 'ltr',
-                    format: '',
-                    indent: 0,
-                    tag: 'h3',
-                    version: 1,
-                  },
-                  {
-                    type: 'paragraph',
-                    children: [
-                      {
-                        type: 'text',
-                        detail: 0,
-                        format: 0,
-                        mode: 'normal',
-                        style: '',
-                        text: 'Editors have complete control over SEO data and site content directly from the ',
-                        version: 1,
-                      },
-                      {
-                        type: 'link',
-                        children: [
-                          {
-                            type: 'text',
-                            detail: 0,
-                            format: 0,
-                            mode: 'normal',
-                            style: '',
-                            text: 'admin dashboard',
-                            version: 1,
-                          },
-                        ],
-                        direction: 'ltr',
-                        fields: {
-                          linkType: 'custom',
-                          newTab: false,
-                          url: '/admin',
-                        },
-                        format: '',
-                        indent: 0,
-                        version: 2,
-                      },
-                      {
-                        type: 'text',
-                        detail: 0,
-                        format: 0,
-                        mode: 'normal',
-                        style: '',
-                        text: '.',
-                        version: 1,
-                      },
-                    ],
-                    direction: 'ltr',
-                    format: '',
-                    indent: 0,
-                    textFormat: 0,
-                    version: 1,
-                  },
-                ],
-                direction: 'ltr',
-                format: '',
-                indent: 0,
-                version: 1,
-              },
-            },
-            size: 'oneThird',
-          },
-          {
-            enableLink: false,
-            richText: {
-              root: {
-                type: 'root',
-                children: [
-                  {
-                    type: 'heading',
-                    children: [
-                      {
-                        type: 'text',
-                        detail: 0,
-                        format: 0,
-                        mode: 'normal',
-                        style: '',
-                        text: 'Dark Mode',
-                        version: 1,
-                      },
-                    ],
-                    direction: 'ltr',
-                    format: '',
-                    indent: 0,
-                    tag: 'h3',
-                    version: 1,
-                  },
-                  {
-                    type: 'paragraph',
-                    children: [
-                      {
-                        type: 'text',
-                        detail: 0,
-                        format: 0,
-                        mode: 'normal',
-                        style: '',
-                        text: 'Users will experience this site in their preferred color scheme and each block can be inverted.',
-                        version: 1,
-                      },
-                    ],
-                    direction: 'ltr',
-                    format: '',
-                    indent: 0,
-                    textFormat: 0,
-                    version: 1,
-                  },
-                ],
-                direction: 'ltr',
-                format: '',
-                indent: 0,
-                version: 1,
-              },
-            },
-            size: 'oneThird',
-          },
-        ],
-      },
-      {
-        blockName: 'Media Block',
-        blockType: 'mediaBlock',
-        media: metaImage.id,
-      },
-      {
-        blockName: 'Archive Block',
-        blockType: 'archive',
-        categories: [],
-        introContent: {
-          root: {
-            type: 'root',
-            children: [
-              {
-                type: 'heading',
-                children: [
-                  {
-                    type: 'text',
-                    detail: 0,
-                    format: 0,
-                    mode: 'normal',
-                    style: '',
-                    text: 'Recent posts',
-                    version: 1,
-                  },
-                ],
-                direction: 'ltr',
-                format: '',
-                indent: 0,
-                tag: 'h3',
-                version: 1,
-              },
-              {
-                type: 'paragraph',
-                children: [
-                  {
-                    type: 'text',
-                    detail: 0,
-                    format: 0,
-                    mode: 'normal',
-                    style: '',
-                    text: 'The posts below are displayed in an "Archive" layout building block which is an extremely powerful way to display documents on a page. It can be auto-populated by collection or by category, or posts can be individually selected. Pagination controls will automatically appear if the number of results exceeds the number of items per page.',
-                    version: 1,
-                  },
-                ],
-                direction: 'ltr',
-                format: '',
-                indent: 0,
-                textFormat: 0,
-                version: 1,
-              },
-            ],
-            direction: 'ltr',
-            format: '',
-            indent: 0,
-            version: 1,
-          },
-        },
-        populateBy: 'collection',
-        relationTo: 'posts',
-      },
-      {
-        blockName: 'CTA',
-        blockType: 'cta',
+        blockType: 'heroBlock',
+        blockName: 'Hero',
+        heading: 'הכל במקום אחד, מלוטש כמו יהלום',
+        subheading: 'פלטפורמת SEO, שיווק דיגיטלי וניהול לקוחות — בכלי אחד חכם',
+        style: 'centered',
         links: [
           {
             link: {
               type: 'custom',
+              url: 'https://core.zuzy.co.il/auth/signup',
+              label: 'התחל בחינם',
               appearance: 'default',
-              label: 'All posts',
-              url: '/posts',
+            },
+          },
+          {
+            link: {
+              type: 'custom',
+              url: '/platform',
+              label: 'גלה את הפלטפורמה',
+              appearance: 'outline',
             },
           },
         ],
-        richText: {
-          root: {
-            type: 'root',
-            children: [
-              {
-                type: 'heading',
-                children: [
-                  {
-                    type: 'text',
-                    detail: 0,
-                    format: 0,
-                    mode: 'normal',
-                    style: '',
-                    text: 'This is a call to action',
-                    version: 1,
-                  },
-                ],
-                direction: 'ltr',
-                format: '',
-                indent: 0,
-                tag: 'h3',
-                version: 1,
-              },
-              {
-                type: 'paragraph',
-                children: [
-                  {
-                    type: 'text',
-                    detail: 0,
-                    format: 0,
-                    mode: 'normal',
-                    style: '',
-                    text: 'This is a custom layout building block ',
-                    version: 1,
-                  },
-                  {
-                    type: 'link',
-                    children: [
-                      {
-                        type: 'text',
-                        detail: 0,
-                        format: 0,
-                        mode: 'normal',
-                        style: '',
-                        text: 'configured in the admin dashboard',
-                        version: 1,
-                      },
-                    ],
-                    direction: 'ltr',
-                    fields: {
-                      linkType: 'custom',
-                      newTab: false,
-                      url: '/admin',
-                    },
-                    format: '',
-                    indent: 0,
-                    version: 2,
-                  },
-                  {
-                    type: 'text',
-                    detail: 0,
-                    format: 0,
-                    mode: 'normal',
-                    style: '',
-                    text: '.',
-                    version: 1,
-                  },
-                ],
-                direction: 'ltr',
-                format: '',
-                indent: 0,
-                textFormat: 0,
-                version: 1,
-              },
-            ],
-            direction: 'ltr',
-            format: '',
-            indent: 0,
-            version: 1,
+      },
+      // 2. FeaturesBlock — 6 features, 3 columns, cards style
+      {
+        blockType: 'featuresBlock',
+        blockName: 'Features',
+        heading: 'הכלים שיעשו את ההבדל',
+        subheading: 'כל מה שצריך כדי לשלוט בנוכחות הדיגיטלית שלך',
+        columns: '3',
+        style: 'cards',
+        features: [
+          {
+            icon: '🔍',
+            title: 'SEO מתקדם',
+            description: richTextParagraph(
+              'ניתוח מילות מפתח, מעקב דירוגים ואופטימיזציה טכנית — הכל אוטומטי',
+            ),
           },
-        },
+          {
+            icon: '🔎',
+            title: 'מעקב דירוגים',
+            description: richTextParagraph(
+              'מעקב יומי אחרי דירוגי מילות מפתח בגוגל — עם היסטוריה ומגמות',
+            ),
+          },
+          {
+            icon: '🛠️',
+            title: 'בדיקת אתר טכנית',
+            description: richTextParagraph(
+              'סריקת האתר לבעיות טכניות, מהירות ונגישות — עם המלצות תיקון',
+            ),
+          },
+          {
+            icon: '✍️',
+            title: 'עורך תוכן',
+            description: richTextParagraph(
+              'כתיבת ועריכת תוכן אופטימלי ל-SEO עם ניקוד והמלצות בזמן אמת',
+            ),
+          },
+          {
+            icon: '📈',
+            title: 'אנליטיקס ודוחות',
+            description: richTextParagraph(
+              'דשבורדים מותאמים אישית ודוחות שעוזרים לקבל החלטות מבוססות דאטה',
+            ),
+          },
+          {
+            icon: '🤖',
+            title: 'עוזר AI חכם',
+            description: richTextParagraph(
+              'המלצות SEO חכמות, מחקר מילות מפתח אוטומטי ותובנות שחוסכות שעות',
+            ),
+          },
+        ],
+      },
+      // 3. ProcessStepsBlock — 3 numbered steps
+      {
+        blockType: 'processStepsBlock',
+        blockName: 'Process Steps',
+        heading: 'שלושה צעדים להצלחה',
+        subheading: 'ככה פשוט להתחיל',
+        style: 'numbered',
+        steps: [
+          {
+            stepNumber: 1,
+            title: 'הרשמה',
+            description: richTextParagraph('פותחים חשבון בחינם תוך דקה'),
+          },
+          {
+            stepNumber: 2,
+            title: 'חיבור האתר',
+            description: richTextParagraph('מקשרים את האתר ומקבלים ניתוח ראשוני מיידי'),
+          },
+          {
+            stepNumber: 3,
+            title: 'קבלת תובנות',
+            description: richTextParagraph('מקבלים המלצות מותאמות אישית ומתחילים לצמוח'),
+          },
+        ],
+      },
+      // 4. TestimonialsBlock — 3 founder quotes, cards style
+      {
+        blockType: 'testimonialsBlock',
+        blockName: 'Testimonials',
+        heading: 'מה אומרים עלינו',
+        style: 'cards',
+        testimonials: [
+          {
+            quote:
+              'בנינו את ZUZY כי התעייפנו מלקפוץ בין עשרה כלים שונים. עכשיו הכל במקום אחד.',
+            authorName: 'גיל',
+            authorTitle: 'מייסד',
+            authorCompany: 'ZUZY',
+          },
+          {
+            quote: 'הגישה שלנו היא פשטות — כלי אחד שעושה הכל, בלי מורכבות מיותרת.',
+            authorName: 'תאיר',
+            authorTitle: 'אסטרטגיה ושיווק',
+            authorCompany: 'ZUZY',
+          },
+          {
+            quote:
+              'כל פיצ\'ר שהוספנו עבר את המבחן: האם זה באמת עוזר לבעל עסק? אם לא — החוצה.',
+            authorName: 'גיל',
+            authorTitle: 'מייסד',
+            authorCompany: 'ZUZY',
+          },
+        ],
+      },
+      // 5. CTABlock — bold style, richText body, 1 pricing link
+      {
+        blockType: 'ctaBlock',
+        blockName: 'CTA',
+        heading: 'מוכנים להתחיל לצמוח?',
+        richText: richTextParagraph(
+          'הצטרפו לאלפי בעלי עסקים שכבר משתמשים ב-ZUZY כדי לשלוט בנוכחות הדיגיטלית שלהם.',
+        ),
+        style: 'bold',
+        links: [
+          {
+            link: {
+              type: 'custom',
+              url: 'https://core.zuzy.co.il/auth/signup',
+              label: 'התחל בחינם',
+              appearance: 'default',
+            },
+          },
+          {
+            link: {
+              type: 'custom',
+              url: '/pricing',
+              label: 'ראה תמחור',
+              appearance: 'outline',
+            },
+          },
+        ],
+      },
+      // 6. FAQBlock — 6 Q&A items, accordion style
+      {
+        blockType: 'faqBlock',
+        blockName: 'FAQ',
+        heading: 'שאלות נפוצות',
+        style: 'accordion',
+        items: [
+          {
+            question: 'מה זה ZUZY?',
+            answer: richTextParagraph(
+              'ZUZY היא פלטפורמה דיגיטלית שמאחדת SEO, שיווק דיגיטלי, ניהול תוכן ו-CRM בכלי אחד — במקום לעבוד עם עשרות כלים שונים.',
+            ),
+          },
+          {
+            question: 'למי ZUZY מתאימה?',
+            answer: richTextParagraph(
+              'לבעלי עסקים, משווקים דיגיטליים, סוכנויות ופרילנסרים שרוצים לנהל את כל הנוכחות הדיגיטלית שלהם ממקום אחד.',
+            ),
+          },
+          {
+            question: 'האם יש תקופת ניסיון חינם?',
+            answer: richTextParagraph(
+              'כן, ניתן להתחיל עם תקופת ניסיון חינם ללא צורך בכרטיס אשראי.',
+            ),
+          },
+          {
+            question: 'האם ZUZY מתאימה לאתרים בעברית?',
+            answer: richTextParagraph(
+              'בהחלט. ZUZY נבנתה מהיסוד עם תמיכה מלאה בעברית ו-RTL, כולל ניתוח SEO למילות מפתח בעברית.',
+            ),
+          },
+          {
+            question: 'איך ZUZY שונה מכלים כמו Semrush או Ahrefs?',
+            answer: richTextParagraph(
+              'ZUZY משלבת SEO עם CRM, ניהול תוכן ואוטומציות שיווק — כלומר אתה מקבל יותר ערך בכלי אחד, במקום לשלם על ארבעה כלים נפרדים.',
+            ),
+          },
+          {
+            question: 'האם יש תמיכה טכנית?',
+            answer: richTextParagraph(
+              'כן, אנחנו מספקים תמיכה מלאה בעברית ובאנגלית דרך צ\'אט, אימייל וטלפון.',
+            ),
+          },
+        ],
       },
     ],
     meta: {
-      description: 'An open-source website built with Payload and Next.js.',
-      image: heroImage.id,
-      title: 'Payload Website Template',
+      description: 'פלטפורמת SEO, שיווק דיגיטלי וניהול לקוחות — בכלי אחד חכם',
+      image: metaImage.id,
+      title: 'ZUZY — הכל במקום אחד',
+      jsonLdType: 'WebPage',
     },
     title: 'Home',
   }

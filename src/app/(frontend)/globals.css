@@ -93,7 +93,7 @@
 
 /* =============================================================================
  * ZUZY Design Tokens – Light Mode
- * Brand: #6750A4 purple · #4CA3C7 cyan · Material Design 3 inspired
+ * Brand: #7354C4 purple · #06B6D4 cyan
  * ============================================================================= */
 :root {
   /* ===== Core surfaces ===== */
@@ -105,7 +105,7 @@
   --popover-foreground: #1F1B2E;
 
   /* ===== Brand primary — ZUZY purple ===== */
-  --primary: #6750A4;
+  --primary: #7354C4;
   --primary-foreground: #FFFFFF;
 
   /* ===== Secondary ===== */
@@ -127,27 +127,27 @@
   /* ===== Borders & inputs ===== */
   --border: #C9C5D4;
   --input: #D8D4E3;
-  --ring: #6750A4;
+  --ring: #7354C4;
 
   /* ===== Charts — brand palette ===== */
-  --chart-1: #6750A4;
-  --chart-2: #4CA3C7;
+  --chart-1: #7354C4;
+  --chart-2: #06B6D4;
   --chart-3: #625B71;
   --chart-4: #D0BCFF;
   --chart-5: #EADDFF;
 
   /* ===== Radii — rounded brand feel ===== */
-  --radius: 0.75rem;
+  --radius: 0.5rem;
 
   /* ===== Sidebar ===== */
   --sidebar: #F7F5FB;
   --sidebar-foreground: #1F1B2E;
-  --sidebar-primary: #6750A4;
+  --sidebar-primary: #7354C4;
   --sidebar-primary-foreground: #FFFFFF;
   --sidebar-accent: #EADDFF;
   --sidebar-accent-foreground: #1F1B2E;
   --sidebar-border: #C9C5D4;
-  --sidebar-ring: #6750A4;
+  --sidebar-ring: #7354C4;
 
   /* ===== Status ===== */
   --success: #2E7D32;
@@ -160,8 +160,8 @@
   --info-foreground: #FFFFFF;
 
   /* ===== Extended brand tokens ===== */
-  --accent-cyan: #4CA3C7;
-  --state-layer: rgba(103, 80, 164, 0.08);
+  --accent-cyan: #06B6D4;
+  --state-layer: rgba(115, 84, 196, 0.08);
 
   /* ===== ZUZY Radii ===== */
   --radius-zuzy: 2rem;

@@ -18,6 +18,7 @@ import { ProcessStepsBlockComponent } from '@/blocks/ProcessStepsBlock/Component
 import { RawHTMLBlock } from '@/blocks/RawHTML/Component'
 import { AppCostCalculatorComponent } from '@/blocks/AppCostCalculator/Component'
 import { AppGridBlockComponent } from '@/blocks/AppGridBlock/Component'
+import { ComparisonTableBlockComponent } from '@/blocks/ComparisonTableBlock/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -36,6 +37,7 @@ const blockComponents = {
   rawHtml: RawHTMLBlock,
   appCostCalculator: AppCostCalculatorComponent,
   appGridBlock: AppGridBlockComponent,
+  comparisonTableBlock: ComparisonTableBlockComponent,
 }
 
 export const RenderBlocks: React.FC<{

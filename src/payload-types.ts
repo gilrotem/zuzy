@@ -262,6 +262,7 @@ export interface Page {
             blockType: 'appCostCalculator';
           }
         | AppGridBlock
+        | ComparisonTableBlock
       )[]
     | null;
   meta?: {
@@ -1233,6 +1234,49 @@ export interface AppGridBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ComparisonTableBlock".
+ */
+export interface ComparisonTableBlock {
+  heading?: string | null;
+  subheading?: string | null;
+  columns?:
+    | {
+        label: string;
+        /**
+         * Highlight this column as recommended
+         */
+        highlighted?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  rows?:
+    | {
+        feature: string;
+        /**
+         * Display as a category header row
+         */
+        isCategory?: boolean | null;
+        /**
+         * One value per column, in order
+         */
+        values?:
+          | {
+              /**
+               * Text, ✓, ✗, or empty
+               */
+              value?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'comparisonTableBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "product-categories".
  */
 export interface ProductCategory {
@@ -1744,6 +1788,7 @@ export interface PagesSelect<T extends boolean = true> {
         code?: T | CodeBlockSelect<T>;
         appCostCalculator?: T | AppCostCalculatorBlockSelect<T>;
         appGridBlock?: T | AppGridBlockSelect<T>;
+        comparisonTableBlock?: T | ComparisonTableBlockSelect<T>;
       };
   meta?:
     | T
@@ -2079,6 +2124,36 @@ export interface AppGridBlockSelect<T extends boolean = true> {
         title?: T;
         icon?: T;
         link?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ComparisonTableBlock_select".
+ */
+export interface ComparisonTableBlockSelect<T extends boolean = true> {
+  heading?: T;
+  subheading?: T;
+  columns?:
+    | T
+    | {
+        label?: T;
+        highlighted?: T;
+        id?: T;
+      };
+  rows?:
+    | T
+    | {
+        feature?: T;
+        isCategory?: T;
+        values?:
+          | T
+          | {
+              value?: T;
+              id?: T;
+            };
         id?: T;
       };
   id?: T;
@@ -2680,11 +2755,11 @@ export interface SiteSetting {
   siteName?: string | null;
   defaultTheme?: ('light' | 'dark' | 'auto') | null;
   /**
-   * Hex color code (e.g., #6750A4)
+   * Hex color code (e.g., #7354C4)
    */
   primaryColor?: string | null;
   /**
-   * Hex color code (e.g., #4CA3C7)
+   * Hex color code (e.g., #06B6D4)
    */
   accentColor?: string | null;
   /**

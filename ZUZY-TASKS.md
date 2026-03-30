@@ -83,7 +83,7 @@
 ## ✅ Phase 4 — Blog Architecture (2026-03-28)
 
 **Dependencies**: Phase 3 ✅ + D10 resolved ✅ (Option B — Next.js manages all SEO meta)
-**Full spec**: `../dan-seo-hub/docs/design/ZUZY-SITEMAP-ARCHITECTURE.md` (Blog section)
+**Full spec**: URL architecture documented in CLAUDE.md (Blog section)
 **Decisions**: D10 (meta ownership), D12 (flat URLs), D13 (topic categories)
 
 ### 4.1 — WP REST API Client ✅
@@ -161,9 +161,90 @@ POST https://www.zuzy.co.il/api/revalidate?secret=<REVALIDATION_SECRET>&slug=<po
 
 ---
 
-## 🔜 Next Phase: Phase 5 — TBD
+## ✅ Phase 5 — Recovery Plan: Track W2 + W1-1 (2026-03-30)
+
+**Source**: `RECOVERY-PLAN.md` Phase 2 — zuzy-website recovery
+**Scope**: Brand token alignment, font replacement, Login CTA, page block foundation
+
+### 5.1 — W2-1: Token Alignment ✅
+- [x] Replaced primary color `#6750A4` → `#7354C4` across all CSS, config, and fallback values
+- [x] Replaced accent color `#4CA3C7` → `#06B6D4` across all CSS, config, and fallback values
+- [x] Updated `--radius` from `0.75rem` → `0.5rem` (12px → 8px)
+- [x] Updated `--state-layer` rgba values to match new primary
+- [x] Files modified: `globals.css`, `zuzy-design-tokens.css`, `SiteSettings/config.ts`, `layout.tsx`, `InitTheme/index.tsx`, `seed/index.ts`, `.docs/brand/zuzy-design-tokens.css`
+- [x] Source of truth: `zuzy-brand-hub/CLAUDE.md` — Primary #7354C4, Cyan #06B6D4
+
+### 5.2 — W2-2: Font Replacement ✅
+- [x] Replaced FbCoherentiSans (local font) → IBM Plex Sans Hebrew (Google Fonts)
+- [x] Using `next/font/google` with subsets `hebrew` + `latin`, weights 300-700
+- [x] Updated `.docs/brand/zuzy-design-tokens.css` font reference
+- [x] Old font files remain in `src/fonts/` (can be deleted in cleanup phase)
+
+### 5.3 — W2-3: Login CTA Button ✅
+- [x] Added Login button to Header nav (`src/Header/Nav/index.tsx`)
+- [x] Links to `https://core.zuzy.co.il/login`
+- [x] Styled as primary button with brand colors
+
+### 5.4 — W1-1: Reusable Page Blocks ✅
+- [x] **7 blocks already exist**: HeroBlock, FeaturesBlock, PricingBlock, FAQBlock, CTABlock, TestimonialsBlock, FormBlock (Contact Form)
+- [x] **Created ComparisonTableBlock** — new block with columns/rows structure, category headers, ✓/✗ value rendering, highlighted column support
+- [x] Registered in `RenderBlocks.tsx` and `Pages` collection config
+- [x] Migration `20260330_005511_add_comparison_table_block` created and applied
+- [x] Types regenerated (`pnpm generate:types`)
+
+### Phase 5 Verification
+- [x] `tsc --noEmit` — zero errors
+- [x] `pnpm build` — success (all pages generated)
+- [x] Migration applied successfully
+- [x] Types regenerated
+
+**Total blocks available for page building: 18** (Archive, CallToAction, Content, MediaBlock, FormBlock, HeroBlock, FeaturesBlock, CTABlock, TestimonialsBlock, FAQBlock, PricingBlock, RichContentBlock, ProcessStepsBlock, RawHTML, Code, AppCostCalculator, AppGridBlock, ComparisonTableBlock)
 
 ---
+
+## ✅ Phase 5b — W1-2: Homepage + W1-3: Platform Pages (2026-03-30)
+
+**Scope**: Rebuild homepage seed with polished marketing content + create 9 platform pages (1 index + 8 module pages).
+
+### 5b.1 — Homepage Seed Update ✅
+- [x] Updated hero CTAs: "התחל בחינם" → `core.zuzy.co.il/auth/signup`, "גלה את הפלטפורמה" → `/platform`
+- [x] Updated features to match actual platform modules (Rank Tracker, Site Audit, Content Editor, etc.)
+- [x] Updated CTA block with signup + pricing CTAs
+- [x] Added `jsonLdType: 'WebPage'` to homepage meta
+
+### 5b.2 — Platform Pages Seed ✅
+- [x] Created `src/endpoints/seed/platform-pages.ts` — 8 module definitions + page builder functions
+- [x] **Platform Index** (`/platform`) — Hero + 8-module feature grid (4 columns) + ComparisonTableBlock (ZUZY vs Semrush vs Ahrefs) + CTA
+- [x] **8 Module Pages** — each with Hero + 4 features (2 columns) + CTA
+  - `/platform/rank-tracker`, `/platform/site-audit`, `/platform/copilot`, `/platform/content-editor`
+  - `/platform/keyword-research`, `/platform/analytics`, `/platform/reports`, `/platform/pages`
+- [x] CTA deep-link pattern: `core.zuzy.co.il/auth/signup?redirect=/[module]/` (D15)
+- [x] All pages use `jsonLdType: 'WebPage'`, custom `breadcrumbLabel`
+
+### 5b.3 — Platform Routes ✅
+- [x] Created `src/app/(frontend)/platform/page.tsx` — platform index route
+- [x] Created `src/app/(frontend)/platform/[slug]/page.tsx` — module detail route
+- [x] Slug convention: `platform--rank-tracker` in Payload DB → `/platform/rank-tracker` URL
+- [x] Breadcrumbs: Home > הפלטפורמה > [Module Name]
+- [x] `generateStaticParams()` for build-time generation
+- [x] `generateMetadata()` for SEO on all platform pages
+
+### 5b.4 — Sitemap & Routing Fixes ✅
+- [x] Updated `src/app/sitemap.ts` — converts `--` slugs to `/` for correct URLs
+- [x] Updated `src/app/(frontend)/[slug]/page.tsx` — excludes `--` slugs from `generateStaticParams`
+- [x] Updated `src/endpoints/seed-zuzy/index.ts` — seeds all platform pages with upsert pattern
+
+### Phase 5b Verification
+- [x] `tsc --noEmit` — zero errors
+- [x] `pnpm build` — success (45/45 static pages, platform routes registered)
+- [x] All 9 platform pages return HTTP 200
+- [x] SEO verified: title, description, JSON-LD (4 schemas per page), breadcrumbs
+- [x] Sitemap includes all 9 platform URLs with correct paths
+- [x] Existing pages (homepage, blog, contact) unaffected
+
+---
+
+## 🔜 Next Phase: Phase 5c — W1-4: Pricing + W1-7: Legal Pages
 
 ---
 
@@ -221,7 +302,7 @@ POST https://www.zuzy.co.il/api/revalidate?secret=<REVALIDATION_SECRET>&slug=<po
 - [x] Custom Code: customCSS, customJS — injected into frontend layout
 
 ### 1.3 — Design System ✅
-- [x] FbCoherentiSans as primary Hebrew font
+- [x] ~~FbCoherentiSans~~ IBM Plex Sans Hebrew as primary Hebrew font (updated Phase 5)
 - [x] Design tokens and utilities
 - [x] AppGrid block with 8 app icons
 
@@ -236,4 +317,4 @@ POST https://www.zuzy.co.il/api/revalidate?secret=<REVALIDATION_SECRET>&slug=<po
 - **Read via:** `getCachedGlobal('site-settings')` from `src/utilities/getGlobals.ts`
 - **Cache:** `revalidateTag('global_site-settings')` in afterChange hook
 - **Media:** Supabase Storage via `@payloadcms/storage-s3`
-- **Defaults:** primaryColor=#6750A4, accentColor=#4CA3C7, defaultTheme=light, siteName=ZUZY
+- **Defaults:** primaryColor=#7354C4, accentColor=#06B6D4, defaultTheme=light, siteName=ZUZY

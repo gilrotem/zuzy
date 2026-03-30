@@ -5,7 +5,6 @@ import configPromise from '@payload-config'
 import { getPayload, type RequiredDataFromCollectionSlug } from 'payload'
 import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
-import { homeStatic } from '@/endpoints/seed/home-static'
 
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { RenderHero } from '@/heros/RenderHero'
@@ -13,7 +12,7 @@ import { generateMeta } from '@/utilities/generateMeta'
 import { generateWebPageJsonLd, generateFAQJsonLd, JsonLd } from '@/lib/json-ld'
 import { getServerSideURL } from '@/utilities/getURL'
 import { lexicalToPlainText } from '@/lib/lexical-to-text'
-import { Breadcrumbs, buildBreadcrumbs } from '@/components/Breadcrumbs'
+import { Breadcrumbs } from '@/components/Breadcrumbs'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 
@@ -28,16 +27,16 @@ export async function generateStaticParams() {
     select: {
       slug: true,
     },
+    where: {
+      slug: {
+        like: 'platform--%',
+      },
+    },
   })
 
-  const params = pages.docs
-    ?.filter((doc) => {
-      // Exclude home page (handled by page.tsx) and platform pages (handled by /platform/ routes)
-      return doc.slug !== 'home' && !doc.slug?.includes('--')
-    })
-    .map(({ slug }) => {
-      return { slug }
-    })
+  const params = pages.docs.map(({ slug }) => ({
+    slug: slug!.replace('platform--', ''),
+  }))
 
   return params
 }
@@ -48,22 +47,14 @@ type Args = {
   }>
 }
 
-export default async function Page({ params: paramsPromise }: Args) {
+export default async function PlatformModulePage({ params: paramsPromise }: Args) {
   const { isEnabled: draft } = await draftMode()
-  const { slug = 'home' } = await paramsPromise
-  // Decode to support slugs with special characters
+  const { slug = '' } = await paramsPromise
   const decodedSlug = decodeURIComponent(slug)
-  const url = '/' + decodedSlug
-  let page: RequiredDataFromCollectionSlug<'pages'> | null
+  const payloadSlug = `platform--${decodedSlug}`
+  const url = `/platform/${decodedSlug}`
 
-  page = await queryPageBySlug({
-    slug: decodedSlug,
-  })
-
-  // Remove this code once your website is seeded
-  if (!page && slug === 'home') {
-    page = homeStatic
-  }
+  const page: RequiredDataFromCollectionSlug<'pages'> | null = await queryPageBySlug({ slug: payloadSlug })
 
   if (!page) {
     return <PayloadRedirects url={url} />
@@ -71,9 +62,8 @@ export default async function Page({ params: paramsPromise }: Args) {
 
   const { hero, layout } = page
   const siteUrl = getServerSideURL()
-  const pageUrl = slug === 'home' ? siteUrl : `${siteUrl}/${decodedSlug}`
+  const pageUrl = `${siteUrl}/platform/${decodedSlug}`
 
-  // Detect JSON-LD type from advanced SEO field or auto-detect
   const jsonLdType = (page.meta as any)?.jsonLdType || 'WebPage'
 
   const webPageJsonLd = generateWebPageJsonLd({
@@ -98,30 +88,26 @@ export default async function Page({ params: paramsPromise }: Args) {
       })),
   )
 
-  const breadcrumbItems = buildBreadcrumbs({
-    collection: 'pages',
-    collectionLabel: 'Pages',
-    collectionPath: '',
-    title: page.title,
-    slug: decodedSlug,
-    breadcrumbLabel: (page.meta as any)?.breadcrumbLabel,
-  })
+  // Build breadcrumbs: Home > Platform > [Module Name]
+  const breadcrumbLabel = (page.meta as any)?.breadcrumbLabel || page.title
+  const breadcrumbItems = [
+    { label: 'Home', href: '/' },
+    { label: 'הפלטפורמה', href: '/platform' },
+    { label: breadcrumbLabel, href: `/platform/${decodedSlug}` },
+  ]
 
   return (
     <article className="pt-16 pb-24">
       <PageClient />
       <JsonLd data={webPageJsonLd} />
       {faqItems.length > 0 && <JsonLd data={generateFAQJsonLd(faqItems)} />}
-      {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />
 
       {draft && <LivePreviewListener />}
 
-      {decodedSlug !== 'home' && (
-        <div className="container mb-4">
-          <Breadcrumbs items={breadcrumbItems} />
-        </div>
-      )}
+      <div className="container mb-4">
+        <Breadcrumbs items={breadcrumbItems} />
+      </div>
 
       <RenderHero {...hero} />
       <RenderBlocks blocks={layout ?? []} />
@@ -130,12 +116,10 @@ export default async function Page({ params: paramsPromise }: Args) {
 }
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
-  const { slug = 'home' } = await paramsPromise
-  // Decode to support slugs with special characters
+  const { slug = '' } = await paramsPromise
   const decodedSlug = decodeURIComponent(slug)
-  const page = await queryPageBySlug({
-    slug: decodedSlug,
-  })
+  const payloadSlug = `platform--${decodedSlug}`
+  const page = await queryPageBySlug({ slug: payloadSlug })
 
   return generateMeta({ doc: page })
 }

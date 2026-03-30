@@ -9,8 +9,8 @@ interface InitThemeProps {
 
 export const InitTheme: React.FC<InitThemeProps> = ({
   serverDefaultTheme = 'light',
-  primaryColor = '#6750A4',
-  accentColor = '#4CA3C7',
+  primaryColor = '#7354C4',
+  accentColor = '#06B6D4',
 }) => {
   return (
     <>

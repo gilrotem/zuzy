@@ -19,6 +19,7 @@ import { RawHTML } from '../../blocks/RawHTML/config'
 import { Code } from '../../blocks/Code/config'
 import { AppCostCalculator } from '../../blocks/AppCostCalculator/config'
 import { AppGridBlock } from '../../blocks/AppGridBlock/config'
+import { ComparisonTableBlock } from '../../blocks/ComparisonTableBlock/config'
 import { hero } from '@/heros/config'
 import { slugField } from 'payload'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
@@ -103,6 +104,7 @@ export const Pages: CollectionConfig<'pages'> = {
                 Code,
                 AppCostCalculator,
                 AppGridBlock,
+                ComparisonTableBlock,
               ],
               admin: {
                 initCollapsed: true,

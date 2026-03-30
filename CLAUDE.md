@@ -223,7 +223,12 @@ zuzy.co.il/
 │   ├── /platform/analytics    — Analytics mirror page — ✅ BUILT
 │   ├── /platform/reports      — Reports mirror page — ✅ BUILT
 │   └── /platform/pages        — Page Manager mirror page — ✅ BUILT
-├── /services/*                — Professional services (Service schema) — D16
+├── /services/                 — Services index — ✅ BUILT
+│   ├── /services/seo-strategy — אסטרטגיית SEO — ✅ BUILT
+│   ├── /services/content-optimization — אופטימיזציית תוכן — ✅ BUILT
+│   ├── /services/technical-audit — ביקורת טכנית — ✅ BUILT
+│   ├── /services/local-seo    — SEO מקומי — ✅ BUILT
+│   └── /services/link-building — בניית קישורים — ✅ BUILT
 ├── /solutions/*               — Audience pages
 ├── /pricing                   — Single page + 3 plans + FAQ — D14 — ✅ BUILT
 ├── /blog/*                    — WP-powered blog, flat URLs — D12, D13

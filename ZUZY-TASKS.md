@@ -288,7 +288,36 @@ POST https://www.zuzy.co.il/api/revalidate?secret=<REVALIDATION_SECRET>&slug=<po
 
 ---
 
-## 🔜 Next Phase: Phase 5d — W1-5: Services Pages
+## ✅ Phase 5d — W1-5: Services Pages (2026-03-30)
+
+**Scope**: 6 services pages (1 index + 5 done-for-you services per D16).
+
+### 5d.1 — Services Pages Seed ✅
+- [x] Created `src/endpoints/seed/services-pages.ts` — 5 service definitions + index builder
+- [x] **Services Index** (`/services`) — Hero + 5-service grid (3 columns) + CTA
+- [x] **5 Service Pages** — each with Hero + 4 features + 3-step process + bold CTA:
+  - `/services/seo-strategy` — אסטרטגיית SEO
+  - `/services/content-optimization` — אופטימיזציית תוכן
+  - `/services/technical-audit` — ביקורת טכנית
+  - `/services/local-seo` — SEO מקומי
+  - `/services/link-building` — בניית קישורים
+- [x] Each service page uses HeroBlock + FeaturesBlock + ProcessStepsBlock + CTABlock
+
+### 5d.2 — Services Routes ✅
+- [x] Created `src/app/(frontend)/services/page.tsx` — services index route
+- [x] Created `src/app/(frontend)/services/[slug]/page.tsx` — service detail route
+- [x] Breadcrumbs: Home > שירותים > [Service Title]
+- [x] Same `services--` slug convention
+
+### Phase 5d Verification
+- [x] `tsc --noEmit` — zero errors
+- [x] `pnpm build` — success (59/59 static pages)
+- [x] All 6 services routes return HTTP 200
+- [x] Sitemap includes all 6 services pages
+
+---
+
+## 🔜 Next Phase: Phase 5e — W1-6: Solutions Pages
 
 ---
 

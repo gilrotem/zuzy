@@ -3,6 +3,7 @@ import type { Payload, PayloadRequest } from 'payload'
 import { home } from '../seed/home'
 import { getAllPlatformPages } from '../seed/platform-pages'
 import { getAllPricingLegalPages } from '../seed/pricing-legal-pages'
+import { getAllServicesPages } from '../seed/services-pages'
 
 /**
  * Seeds ZUZY homepage, platform pages, pricing, and legal pages.
@@ -63,7 +64,7 @@ export const seedZuzy = async ({
   }
 
   // --- Seed all section pages (platform, pricing, legal) ---
-  const allPages = [...getAllPlatformPages(), ...getAllPricingLegalPages()]
+  const allPages = [...getAllPlatformPages(), ...getAllPricingLegalPages(), ...getAllServicesPages()]
 
   for (const pageData of allPages) {
     const existing = await payload.find({

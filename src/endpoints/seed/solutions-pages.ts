@@ -116,7 +116,7 @@ function buildSolutionPage(sol: SolutionDef): RequiredDataFromCollectionSlug<'pa
           {
             link: {
               type: 'custom',
-              url: 'https://core.zuzy.co.il/auth/signup',
+              url: 'https://core.zuzy.co.il/signup',
               label: 'התחל בחינם',
               appearance: 'default',
             },
@@ -155,7 +155,7 @@ function buildSolutionPage(sol: SolutionDef): RequiredDataFromCollectionSlug<'pa
           {
             link: {
               type: 'custom',
-              url: 'https://core.zuzy.co.il/auth/signup',
+              url: 'https://core.zuzy.co.il/signup',
               label: 'התחל בחינם',
               appearance: 'default',
             },

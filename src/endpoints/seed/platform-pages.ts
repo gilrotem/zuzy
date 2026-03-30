@@ -198,7 +198,7 @@ function buildPlatformModulePage(
           {
             link: {
               type: 'custom',
-              url: `https://core.zuzy.co.il/auth/signup?redirect=${mod.appPath}`,
+              url: `https://core.zuzy.co.il/signup?redirect=${mod.appPath}`,
               label: 'התחל בחינם',
               appearance: 'default',
             },
@@ -237,7 +237,7 @@ function buildPlatformModulePage(
           {
             link: {
               type: 'custom',
-              url: `https://core.zuzy.co.il/auth/signup?redirect=${mod.appPath}`,
+              url: `https://core.zuzy.co.il/signup?redirect=${mod.appPath}`,
               label: 'התחל עכשיו',
               appearance: 'default',
             },
@@ -273,7 +273,7 @@ export function buildPlatformIndexPage(): RequiredDataFromCollectionSlug<'pages'
           {
             link: {
               type: 'custom',
-              url: 'https://core.zuzy.co.il/auth/signup',
+              url: 'https://core.zuzy.co.il/signup',
               label: 'התחל בחינם',
               appearance: 'default',
             },
@@ -358,7 +358,7 @@ export function buildPlatformIndexPage(): RequiredDataFromCollectionSlug<'pages'
           {
             link: {
               type: 'custom',
-              url: 'https://core.zuzy.co.il/auth/signup',
+              url: 'https://core.zuzy.co.il/signup',
               label: 'התחל בחינם',
               appearance: 'default',
             },

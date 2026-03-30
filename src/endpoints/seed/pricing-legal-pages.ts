@@ -85,7 +85,7 @@ export function buildPricingPage(): RequiredDataFromCollectionSlug<'pages'> {
           {
             link: {
               type: 'custom',
-              url: 'https://core.zuzy.co.il/auth/signup',
+              url: 'https://core.zuzy.co.il/signup',
               label: 'התחל בחינם',
               appearance: 'default',
             },
@@ -115,7 +115,7 @@ export function buildPricingPage(): RequiredDataFromCollectionSlug<'pages'> {
               {
                 link: {
                   type: 'custom',
-                  url: 'https://core.zuzy.co.il/auth/signup',
+                  url: 'https://core.zuzy.co.il/signup',
                   label: 'התחל בחינם',
                   appearance: 'outline',
                 },
@@ -139,7 +139,7 @@ export function buildPricingPage(): RequiredDataFromCollectionSlug<'pages'> {
               {
                 link: {
                   type: 'custom',
-                  url: 'https://core.zuzy.co.il/auth/signup?plan=pro',
+                  url: 'https://core.zuzy.co.il/signup?plan=pro',
                   label: 'התחל ניסיון חינם',
                   appearance: 'default',
                 },
@@ -163,7 +163,7 @@ export function buildPricingPage(): RequiredDataFromCollectionSlug<'pages'> {
               {
                 link: {
                   type: 'custom',
-                  url: 'https://core.zuzy.co.il/auth/signup?plan=agency',
+                  url: 'https://core.zuzy.co.il/signup?plan=agency',
                   label: 'התחל ניסיון חינם',
                   appearance: 'outline',
                 },
@@ -228,7 +228,7 @@ export function buildPricingPage(): RequiredDataFromCollectionSlug<'pages'> {
           {
             link: {
               type: 'custom',
-              url: 'https://core.zuzy.co.il/auth/signup',
+              url: 'https://core.zuzy.co.il/signup',
               label: 'התחל בחינם',
               appearance: 'default',
             },

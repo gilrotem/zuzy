@@ -60,7 +60,7 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
           {
             link: {
               type: 'custom',
-              url: 'https://core.zuzy.co.il/auth/signup',
+              url: 'https://core.zuzy.co.il/signup',
               label: 'התחל בחינם',
               appearance: 'default',
             },
@@ -195,7 +195,7 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
           {
             link: {
               type: 'custom',
-              url: 'https://core.zuzy.co.il/auth/signup',
+              url: 'https://core.zuzy.co.il/signup',
               label: 'התחל בחינם',
               appearance: 'default',
             },

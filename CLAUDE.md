@@ -236,8 +236,17 @@ zuzy.co.il/
 │   └── /solutions/enterprise  — ארגונים — ✅ BUILT
 ├── /pricing                   — Single page + 3 plans + FAQ — D14 — ✅ BUILT
 ├── /blog/*                    — WP-powered blog, flat URLs — D12, D13
-├── /resources/*               — Guides, glossary, changelog
-├── /support/*                 — Knowledge base, status — D18
+├── /resources/                — Resources index — ✅ BUILT
+│   ├── /resources/guides      — מדריכים — ✅ BUILT
+│   ├── /resources/glossary    — מילון מונחים — ✅ BUILT
+│   ├── /resources/webinars    — וובינרים — ✅ BUILT
+│   ├── /resources/api-docs    — תיעוד API — ✅ BUILT
+│   └── /resources/changelog   — יומן שינויים — ✅ BUILT
+├── /support/                  — Support index — D18 — ✅ BUILT
+│   ├── /support/help-center   — מרכז עזרה — ✅ BUILT
+│   ├── /support/docs          — תיעוד — ✅ BUILT
+│   ├── /support/status        — סטטוס מערכת — ✅ BUILT
+│   └── /support/contact       — יצירת קשר — ✅ BUILT
 ├── /legal/                    — Legal index — ✅ BUILT
 │   ├── /legal/terms           — תנאי שימוש — ✅ BUILT
 │   ├── /legal/privacy         — מדיניות פרטיות — ✅ BUILT

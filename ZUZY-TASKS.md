@@ -340,7 +340,40 @@ POST https://www.zuzy.co.il/api/revalidate?secret=<REVALIDATION_SECRET>&slug=<po
 
 ---
 
-## 🔜 Next Phase: Phase 5f — W1-8: Resources + W1-9: Support Pages
+## ✅ Phase 5f — W1-8: Resources + W1-9: Support Pages (2026-03-30)
+
+**Scope**: 11 pages — 6 resources + 5 support (D18: subdirectory, not subdomain).
+
+### 5f.1 — Resources Pages (W1-8) ✅
+- [x] Created `src/endpoints/seed/resources-support-pages.ts`
+- [x] **Resources Index** (`/resources`) — Hero + 5-resource grid
+- [x] **5 Resource Pages**: guides, glossary, webinars, api-docs, changelog
+- [x] Routes: `src/app/(frontend)/resources/page.tsx` + `[slug]/page.tsx`
+
+### 5f.2 — Support Pages (W1-9, D18) ✅
+- [x] **Support Index** (`/support`) — Hero + 4-support grid
+- [x] **4 Support Pages**: help-center, docs, status, contact
+- [x] Routes: `src/app/(frontend)/support/page.tsx` + `[slug]/page.tsx`
+
+### Phase 5f Verification
+- [x] `tsc --noEmit` — zero errors
+- [x] `pnpm build` — success (71/71 static pages)
+- [x] All 11 routes return HTTP 200
+- [x] Sitemap includes all resources + support pages
+
+---
+
+## ✅ RECOVERY-PLAN W1 Complete — All ~29 Marketing Pages Built
+
+**Total pages built across Phases 5-5f**: 38 pages seeded in Payload CMS
+- Homepage (updated) + 9 platform + 1 pricing + 6 legal + 6 services + 5 solutions + 6 resources + 5 support
+
+**All pages render correctly** with: breadcrumbs, JSON-LD, SEO metadata, block-based content.
+**Sitemap** includes all pages with correct URLs.
+
+---
+
+## 🔜 Next Phase: W3-2 (Verify www canonical) or RECOVERY-PLAN Phase 1 (seohub stability)
 
 ---
 

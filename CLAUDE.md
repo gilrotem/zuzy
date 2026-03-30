@@ -225,11 +225,16 @@ zuzy.co.il/
 │   └── /platform/pages        — Page Manager mirror page — ✅ BUILT
 ├── /services/*                — Professional services (Service schema) — D16
 ├── /solutions/*               — Audience pages
-├── /pricing/                  — Single page + hash fragments — D14
+├── /pricing                   — Single page + 3 plans + FAQ — D14 — ✅ BUILT
 ├── /blog/*                    — WP-powered blog, flat URLs — D12, D13
 ├── /resources/*               — Guides, glossary, changelog
 ├── /support/*                 — Knowledge base, status — D18
-├── /legal/*                   — Privacy, terms, accessibility — D17
+├── /legal/                    — Legal index — ✅ BUILT
+│   ├── /legal/terms           — תנאי שימוש — ✅ BUILT
+│   ├── /legal/privacy         — מדיניות פרטיות — ✅ BUILT
+│   ├── /legal/cookies         — מדיניות עוגיות — ✅ BUILT
+│   └── /legal/security        — אבטחה — ✅ BUILT
+│   Redirects: /privacy→/legal/privacy, /terms→/legal/terms, /accessibility→/legal/security
 ├── /products/*                — Product catalog (Payload collection)
 ├── /brand-docs/*              — Brand knowledge base
 └── /[page-slug]               — Static pages

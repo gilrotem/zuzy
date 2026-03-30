@@ -2,9 +2,10 @@ import type { Payload, PayloadRequest } from 'payload'
 
 import { home } from '../seed/home'
 import { getAllPlatformPages } from '../seed/platform-pages'
+import { getAllPricingLegalPages } from '../seed/pricing-legal-pages'
 
 /**
- * Seeds ZUZY homepage and platform pages with marketing content blocks.
+ * Seeds ZUZY homepage, platform pages, pricing, and legal pages.
  * Safe to call multiple times — updates existing pages or creates new ones.
  */
 export const seedZuzy = async ({
@@ -61,10 +62,10 @@ export const seedZuzy = async ({
     updated.push('home')
   }
 
-  // --- Seed Platform Pages (index + 8 module pages) ---
-  const platformPages = getAllPlatformPages()
+  // --- Seed all section pages (platform, pricing, legal) ---
+  const allPages = [...getAllPlatformPages(), ...getAllPricingLegalPages()]
 
-  for (const pageData of platformPages) {
+  for (const pageData of allPages) {
     const existing = await payload.find({
       collection: 'pages',
       where: { slug: { equals: pageData.slug } },
@@ -84,19 +85,21 @@ export const seedZuzy = async ({
         },
         context: { disableRevalidate: true },
       })
-      payload.logger.info(`— Updated platform page: ${pageData.slug}`)
+      payload.logger.info(`— Updated page: ${pageData.slug}`)
       updated.push(pageData.slug)
     } else {
       await payload.create({
         collection: 'pages',
-        data: pageData,
+        data: pageData as any,
         context: { disableRevalidate: true },
       })
-      payload.logger.info(`— Created platform page: ${pageData.slug}`)
+      payload.logger.info(`— Created page: ${pageData.slug}`)
       updated.push(pageData.slug)
     }
   }
 
-  payload.logger.info(`ZUZY page seeding complete! Updated: ${updated.length}, Skipped: ${skipped.length}`)
+  // D17 Legal redirects are handled in redirects.js (next.config.js), not via Payload redirects collection
+
+  payload.logger.info(`ZUZY seeding complete! Updated: ${updated.length}, Skipped: ${skipped.length}`)
   return { updated, skipped }
 }

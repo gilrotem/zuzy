@@ -244,7 +244,51 @@ POST https://www.zuzy.co.il/api/revalidate?secret=<REVALIDATION_SECRET>&slug=<po
 
 ---
 
-## 🔜 Next Phase: Phase 5c — W1-4: Pricing + W1-7: Legal Pages
+## ✅ Phase 5c — W1-4: Pricing + W1-7: Legal Pages (2026-03-30)
+
+**Scope**: Pricing page with 3 plans + FAQ, 5 legal pages (index + 4 detail), D17 short URL redirects.
+
+### 5c.1 — Pricing Page (D14) ✅
+- [x] Created `/pricing` page with 4 blocks: HeroBlock + PricingBlock (3 plans) + FAQBlock (6 Q&A) + CTABlock
+- [x] Plans: Free (₪0), Pro (₪199, highlighted), Agency (₪499)
+- [x] FAQ covers billing, upgrades, refunds, annual discount
+- [x] SEO: `jsonLdType: 'WebPage'`, 5 JSON-LD schemas (incl. FAQ auto-detection)
+- [x] Single page with hash fragments per D14 — no per-product split
+
+### 5c.2 — Legal Pages (D17) ✅
+- [x] Created `src/endpoints/seed/pricing-legal-pages.ts` — all pricing + legal page definitions
+- [x] **Legal Index** (`/legal`) — Hero + FeaturesBlock linking to 4 legal pages
+- [x] **4 Legal Detail Pages** — each with RichContentBlock placeholder content:
+  - `/legal/terms` — תנאי שימוש
+  - `/legal/privacy` — מדיניות פרטיות
+  - `/legal/cookies` — מדיניות עוגיות
+  - `/legal/security` — אבטחה
+- [x] SEO: `robotsOverride: ['noarchive']` on all legal pages
+- [x] Same `legal--` slug convention as platform pages
+
+### 5c.3 — Legal Routes ✅
+- [x] Created `src/app/(frontend)/legal/page.tsx` — legal index route
+- [x] Created `src/app/(frontend)/legal/[slug]/page.tsx` — legal detail route
+- [x] Breadcrumbs: Home > מידע משפטי > [Page Title]
+
+### 5c.4 — D17 Short URL Redirects ✅
+- [x] Added 3 permanent redirects in `redirects.js` (next.config.js):
+  - `/privacy` → 308 → `/legal/privacy`
+  - `/terms` → 308 → `/legal/terms`
+  - `/accessibility` → 308 → `/legal/security`
+- [x] Both with and without trailing slash handled
+
+### Phase 5c Verification
+- [x] `tsc --noEmit` — zero errors
+- [x] `pnpm build` — success (59/59 static pages)
+- [x] All 6 new routes return HTTP 200
+- [x] All 3 redirects return 308 with correct destination
+- [x] Sitemap includes pricing + 5 legal pages
+- [x] SEO verified: title, description, JSON-LD (5 schemas on pricing incl. FAQ)
+
+---
+
+## 🔜 Next Phase: Phase 5d — W1-5: Services Pages
 
 ---
 

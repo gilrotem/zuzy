@@ -46,8 +46,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   }
 
   const defaultTheme = siteSettingsData?.defaultTheme || 'light'
-  const primaryColor = siteSettingsData?.primaryColor || '#7354C4'
-  const accentColor = siteSettingsData?.accentColor || '#06B6D4'
+  const primaryColor = siteSettingsData?.primaryColor || '#7C3AED'
+  const accentColor = siteSettingsData?.accentColor || '#0D9488'
   const customCSS = siteSettingsData?.customCSS
   const customJS = siteSettingsData?.customJS
 

@@ -51,8 +51,8 @@ export const seed = async ({
         data: (global === 'site-settings'
           ? {
               siteName: 'ZUZY',
-              primaryColor: '#7354C4',
-              accentColor: '#06B6D4',
+              primaryColor: '#7C3AED',
+              accentColor: '#0D9488',
               defaultTheme: 'light',
             }
           : {

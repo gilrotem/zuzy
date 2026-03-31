@@ -2,7 +2,81 @@
 
 > Living document. Status: ⬜ Not started | 🔄 In progress | ✅ Complete
 > Phase history below. Find `🔜 Next Phase` for current work.
-> Last updated: 2026-03-28
+> Last updated: 2026-03-31
+
+---
+
+## ✅ Phase 6 — Brand Alignment Update: Colors + SVG Logo Kit (2026-03-31)
+
+**Source**: Brand Hub `specs/DESIGN-ALIGNMENT-PLAN.md` (2026-03-31)
+**Context**: seohub confirmed as color authority. Brand Hub updated. zuzy-website needs to follow.
+
+### 6.1 — Color Token Update ✅
+> Primary: `#7354C4` → `#7C3AED` | Accent: `#06B6D4` → `#0D9488`
+
+- [x] Update `globals.css` — all `#7354C4` → `#7C3AED`, all `#06B6D4` → `#0D9488`
+- [x] Update `.docs/brand/zuzy-design-tokens.css` — same replacements
+- [x] Update `src/app/(frontend)/zuzy-design-tokens.css` — same replacements
+- [x] Update `SiteSettings/config.ts` — default color fallback values
+- [x] Update `layout.tsx` / `InitTheme/index.tsx` — any hardcoded fallbacks
+- [x] Update `seed/index.ts` — seed data color values
+- [x] Update `--state-layer` rgba values to match new primary (`rgba(124, 58, 237, 0.08)`)
+- [x] `tsc --noEmit` — zero errors
+- [x] `pnpm build` — success
+
+### 6.2 — SVG Logo Migration ✅
+> Professional SVG kit delivered 2026-03-31. Files already in `public/brand/`.
+
+**Available SVGs (15 files):**
+- `logo-horizontal-purple.svg` / `logo-horizontal-white.svg` — header, footer, nav
+- `icon-dark.svg` / `icon-white.svg` — favicons
+- `logo-vertical-purple.svg` / `logo-vertical-white.svg` — full page contexts
+- Plus: gradient, cyan, black variants
+
+- [x] Update Logo component (`src/components/Logo/Logo.tsx`) — uses SVGs from `public/brand/` (purple for light, white for dark), CMS upload as override
+- [x] Replace `favicon.svg` — Payload CMS default bolt icon → ZUZY brand icon with light/dark mode support
+- [x] JSON-LD logo — uses `orgLogo` from SEO Settings (CMS-managed, no code change needed)
+- [x] `tsc --noEmit` — zero errors
+- [x] `pnpm build` — success
+
+### Phase 6 Verification (2026-03-31)
+- [x] `tsc --noEmit` — zero errors
+- [x] `pnpm build` — success (all static pages generated)
+- [x] No migration needed — SiteSettings defaults are code-level only, existing DB values preserved
+
+---
+
+## 🔜 Phase 7 — Brand Portal: Design System Showcase
+
+**Depends on**: Phase 6 ✅ (colors + SVGs)
+**Source**: Brand Hub app (`zuzy-brand-hub/app/src/`), brand strategy docs (`zuzy-brand-hub/brand/`)
+**Scope**: Transform basic BrandDocs collection into a professional, public-facing brand portal at `/brand-docs/`
+
+### 7.1 — New BrandDocs docTypes + Visual Blocks
+- [ ] Add new `docType` options: `design-tokens`, `logo-usage`, `typography`, `color-palette`, `motion`
+- [ ] Create `LogoGrid` block — renders all SVG variants from `public/brand/` with download links
+- [ ] Create `ColorPalette` block — shows primary (#7C3AED), accent (#0D9488), neutrals with hex/rgb values
+- [ ] Create `TypographySpecimen` block — IBM Plex Sans Hebrew showcase (weights, sizes, scale)
+- [ ] Create `SpacingScale` block — radius tokens, spacing system
+
+### 7.2 — Brand Strategy Content
+- [ ] Seed brand docs from Brand Hub `brand/` markdown files:
+  - Brand Philosophy → BrandDoc (essence)
+  - Brand Voice → BrandDoc (brand-voice)
+  - Products → BrandDoc (solutions)
+  - Competitive → BrandDoc (differentiation)
+  - Avatars → BrandDoc (sales)
+- [ ] Design system overview page → BrandDoc (design-tokens)
+- [ ] Logo usage guidelines → BrandDoc (logo-usage)
+
+### 7.3 — Brand Portal Landing Page
+- [ ] `/brand-docs/` index page with category grid (strategy docs + design system docs)
+- [ ] Visual card layout with icons, summaries, docType grouping
+- [ ] Professional presentation matching seohub design language
+
+### 7.4 — Premium Components (optional)
+- [ ] Port Brand Hub motion assets (ContentPipelineInfographic, PremiumMotionAssets) as page blocks
+- [ ] Port UI Kit showcase components for interactive demos
 
 ---
 
@@ -373,7 +447,15 @@ POST https://www.zuzy.co.il/api/revalidate?secret=<REVALIDATION_SECRET>&slug=<po
 
 ---
 
-## 🔜 Next Phase: W3-2 (Verify www canonical) or RECOVERY-PLAN Phase 1 (seohub stability)
+## ✅ W3-2 — Verify www Canonical (D9) (2026-03-30)
+
+- [x] `zuzy.co.il` → 308 → `https://www.zuzy.co.il/` confirmed via curl
+- [x] `www.zuzy.co.il` → 200 OK confirmed
+- [x] Redirect handled by Vercel (not Next.js middleware) — correct architecture
+
+---
+
+## ✅ Recovery Phase (seohub stability) — completed in seohub/ workspace (2026-03-30)
 
 ---
 
@@ -446,4 +528,4 @@ POST https://www.zuzy.co.il/api/revalidate?secret=<REVALIDATION_SECRET>&slug=<po
 - **Read via:** `getCachedGlobal('site-settings')` from `src/utilities/getGlobals.ts`
 - **Cache:** `revalidateTag('global_site-settings')` in afterChange hook
 - **Media:** Supabase Storage via `@payloadcms/storage-s3`
-- **Defaults:** primaryColor=#7354C4, accentColor=#06B6D4, defaultTheme=light, siteName=ZUZY
+- **Defaults:** primaryColor=#7C3AED, accentColor=#0D9488, defaultTheme=light, siteName=ZUZY

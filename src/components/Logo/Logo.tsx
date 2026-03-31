@@ -1,5 +1,4 @@
 import clsx from 'clsx'
-import Image from 'next/image'
 import React from 'react'
 
 interface Props {
@@ -17,7 +16,7 @@ interface Props {
 export const Logo = (props: Props) => {
   const { className, logoObject, siteName = 'ZUZY' } = props
 
-  // If logo image exists, show it
+  // If CMS logo image exists, use it as override
   if (logoObject?.url) {
     return (
       <img
@@ -28,16 +27,19 @@ export const Logo = (props: Props) => {
     )
   }
 
-  // Fallback to site name text
+  // Default: use brand SVG kit (purple for light, white for dark)
   return (
-    <span
-      className={clsx(
-        'inline-flex items-center font-bold text-2xl tracking-tight select-none',
-        className,
-      )}
-      style={{ fontFamily: 'var(--font-zuzy), sans-serif' }}
-    >
-      {siteName}
+    <span className={clsx('inline-flex items-center h-8', className)}>
+      <img
+        src="/brand/logo-horizontal-purple.svg"
+        alt={siteName}
+        className="h-full object-contain dark:hidden"
+      />
+      <img
+        src="/brand/logo-horizontal-white.svg"
+        alt={siteName}
+        className="h-full object-contain hidden dark:block"
+      />
     </span>
   )
 }

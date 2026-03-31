@@ -9,7 +9,7 @@
 
 :root {
   /* ===== ZUZY Brand Colors (hex aliases) ===== */
-  --zuzy-primary: #7354C4;
+  --zuzy-primary: #7C3AED;
   --zuzy-on-primary: #FFFFFF;
   --zuzy-primary-container: #EADDFF;
   --zuzy-secondary: #625B71;
@@ -26,14 +26,14 @@
 
   --zuzy-accent-purple: var(--zuzy-primary);
   --zuzy-accent-purple-muted: #D0BCFF;
-  --zuzy-accent-cyan: #06B6D4;
+  --zuzy-accent-cyan: #0D9488;
 
   --zuzy-border: var(--zuzy-outline);
   --zuzy-border-light: #D8D4E3;
 
   --zuzy-radius-card: 32px;
   --zuzy-radius-pill: 24px;
-  --zuzy-state-layer: rgba(115, 84, 196, 0.08);
+  --zuzy-state-layer: rgba(124, 58, 237, 0.08);
 
   --zuzy-success: #2E7D32;
   --zuzy-warning: #F9A825;

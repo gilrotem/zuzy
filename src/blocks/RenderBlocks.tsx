@@ -22,6 +22,9 @@ import { ComparisonTableBlockComponent } from '@/blocks/ComparisonTableBlock/Com
 import { LogoGridComponent } from '@/blocks/LogoGrid/Component'
 import { ColorPaletteComponent } from '@/blocks/ColorPalette/Component'
 import { TypographySpecimenComponent } from '@/blocks/TypographySpecimen/Component'
+import { ContentPipelineComponent } from '@/blocks/ContentPipeline/Component'
+import { MotionShowcaseComponent } from '@/blocks/MotionShowcase/Component'
+import { InteractiveDemoComponent } from '@/blocks/InteractiveDemo/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -44,6 +47,9 @@ const blockComponents = {
   logoGrid: LogoGridComponent,
   colorPalette: ColorPaletteComponent,
   typographySpecimen: TypographySpecimenComponent,
+  contentPipeline: ContentPipelineComponent,
+  motionShowcase: MotionShowcaseComponent,
+  interactiveDemo: InteractiveDemoComponent,
 }
 
 export const RenderBlocks: React.FC<{

@@ -23,6 +23,9 @@ import { ComparisonTableBlock } from '../../blocks/ComparisonTableBlock/config'
 import { LogoGrid } from '../../blocks/LogoGrid/config'
 import { ColorPalette } from '../../blocks/ColorPalette/config'
 import { TypographySpecimen } from '../../blocks/TypographySpecimen/config'
+import { ContentPipeline } from '../../blocks/ContentPipeline/config'
+import { MotionShowcase } from '../../blocks/MotionShowcase/config'
+import { InteractiveDemo } from '../../blocks/InteractiveDemo/config'
 import { hero } from '@/heros/config'
 import { slugField } from 'payload'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
@@ -111,6 +114,9 @@ export const Pages: CollectionConfig<'pages'> = {
                 LogoGrid,
                 ColorPalette,
                 TypographySpecimen,
+                ContentPipeline,
+                MotionShowcase,
+                InteractiveDemo,
               ],
               admin: {
                 initCollapsed: true,

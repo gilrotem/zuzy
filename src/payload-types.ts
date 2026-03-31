@@ -266,6 +266,9 @@ export interface Page {
         | LogoGridBlock
         | ColorPaletteBlock
         | TypographySpecimenBlock
+        | ContentPipelineBlock
+        | MotionShowcaseBlock
+        | InteractiveDemoBlock
       )[]
     | null;
   meta?: {
@@ -1311,6 +1314,36 @@ export interface TypographySpecimenBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContentPipelineBlock".
+ */
+export interface ContentPipelineBlock {
+  heading?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'contentPipeline';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MotionShowcaseBlock".
+ */
+export interface MotionShowcaseBlock {
+  heading?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'motionShowcase';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "InteractiveDemoBlock".
+ */
+export interface InteractiveDemoBlock {
+  heading?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'interactiveDemo';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "product-categories".
  */
 export interface ProductCategory {
@@ -1848,6 +1881,9 @@ export interface PagesSelect<T extends boolean = true> {
         logoGrid?: T | LogoGridBlockSelect<T>;
         colorPalette?: T | ColorPaletteBlockSelect<T>;
         typographySpecimen?: T | TypographySpecimenBlockSelect<T>;
+        contentPipeline?: T | ContentPipelineBlockSelect<T>;
+        motionShowcase?: T | MotionShowcaseBlockSelect<T>;
+        interactiveDemo?: T | InteractiveDemoBlockSelect<T>;
       };
   meta?:
     | T
@@ -2242,6 +2278,33 @@ export interface ColorPaletteBlockSelect<T extends boolean = true> {
  * via the `definition` "TypographySpecimenBlock_select".
  */
 export interface TypographySpecimenBlockSelect<T extends boolean = true> {
+  heading?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContentPipelineBlock_select".
+ */
+export interface ContentPipelineBlockSelect<T extends boolean = true> {
+  heading?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MotionShowcaseBlock_select".
+ */
+export interface MotionShowcaseBlockSelect<T extends boolean = true> {
+  heading?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "InteractiveDemoBlock_select".
+ */
+export interface InteractiveDemoBlockSelect<T extends boolean = true> {
   heading?: T;
   id?: T;
   blockName?: T;

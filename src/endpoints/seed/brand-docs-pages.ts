@@ -310,6 +310,18 @@ function buildDesignSystemPage(): RequiredDataFromCollectionSlug<'pages'> {
         blockType: 'typographySpecimen',
         heading: 'טיפוגרפיה',
       },
+      {
+        blockType: 'contentPipeline',
+        heading: 'Content Pipeline',
+      },
+      {
+        blockType: 'motionShowcase',
+        heading: 'Motion Assets',
+      },
+      {
+        blockType: 'interactiveDemo',
+        heading: 'Interactive Demos',
+      },
     ] as any,
     meta: {
       title: 'מערכת עיצוב | ZUZY Brand',

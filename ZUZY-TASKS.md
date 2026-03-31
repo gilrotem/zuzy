@@ -80,9 +80,11 @@
 - [x] `/brand-docs/design-system` — HeroBlock + LogoGrid + ColorPalette + TypographySpecimen blocks
 - [x] All pages include JSON-LD WebPage schema + breadcrumbs + generateMetadata
 
-### 7.4 — Premium Components (deferred)
-- [ ] Port Brand Hub motion assets (ContentPipelineInfographic, PremiumMotionAssets) as page blocks
-- [ ] Port UI Kit showcase components for interactive demos
+### 7.4 — Premium Components 🔄 In Progress (2026-04-01)
+- [x] Port Brand Hub motion assets (ContentPipelineInfographic, PremiumMotionAssets) as page blocks
+- [x] Port UI Kit showcase components for interactive demos
+- [ ] Visual verification on dev server (pending)
+- [ ] Seed `/brand-docs/design-system` via `/next/seed-brand-docs` endpoint in production
 
 ### Phase 7 Verification (2026-03-31)
 - [x] `tsc --noEmit` — zero errors

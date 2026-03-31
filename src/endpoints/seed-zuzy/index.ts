@@ -6,6 +6,7 @@ import { getAllPricingLegalPages } from '../seed/pricing-legal-pages'
 import { getAllServicesPages } from '../seed/services-pages'
 import { getAllSolutionsPages } from '../seed/solutions-pages'
 import { getAllResourcesPages, getAllSupportPages } from '../seed/resources-support-pages'
+import { getAllBrandDocs, getAllBrandDocsPages } from '../seed/brand-docs-pages'
 
 /**
  * Seeds ZUZY homepage, platform pages, pricing, and legal pages.
@@ -73,6 +74,7 @@ export const seedZuzy = async ({
     ...getAllSolutionsPages(),
     ...getAllResourcesPages(),
     ...getAllSupportPages(),
+    ...getAllBrandDocsPages(),
   ]
 
   for (const pageData of allPages) {
@@ -105,6 +107,44 @@ export const seedZuzy = async ({
       })
       payload.logger.info(`— Created page: ${pageData.slug}`)
       updated.push(pageData.slug)
+    }
+  }
+
+  // --- Seed BrandDocs ---
+  const brandDocs = getAllBrandDocs()
+  for (const docData of brandDocs) {
+    const existing = await payload.find({
+      collection: 'brand-docs',
+      where: { slug: { equals: docData.slug } },
+      limit: 1,
+      depth: 0,
+    })
+
+    if (existing.docs.length > 0) {
+      await payload.update({
+        collection: 'brand-docs',
+        id: existing.docs[0].id,
+        data: {
+          title: docData.title,
+          summary: docData.summary,
+          content: docData.content,
+          docType: docData.docType,
+          icon: docData.icon,
+          sortOrder: docData.sortOrder,
+          meta: docData.meta,
+        },
+        context: { disableRevalidate: true },
+      })
+      payload.logger.info(`— Updated brand doc: ${docData.slug}`)
+      updated.push(`brand-doc:${docData.slug}`)
+    } else {
+      await payload.create({
+        collection: 'brand-docs',
+        data: docData as any,
+        context: { disableRevalidate: true },
+      })
+      payload.logger.info(`— Created brand doc: ${docData.slug}`)
+      updated.push(`brand-doc:${docData.slug}`)
     }
   }
 

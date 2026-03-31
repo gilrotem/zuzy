@@ -107,6 +107,11 @@ export const BrandDocs: CollectionConfig = {
         { label: { he: 'פתרונות', en: 'Solutions' }, value: 'solutions' },
         { label: { he: 'שאלות נפוצות', en: 'FAQ' }, value: 'faq' },
         { label: { he: 'מקרי בוחן', en: 'Case Studies' }, value: 'case-studies' },
+        { label: { he: 'טוקנים עיצוביים', en: 'Design Tokens' }, value: 'design-tokens' },
+        { label: { he: 'שימוש בלוגו', en: 'Logo Usage' }, value: 'logo-usage' },
+        { label: { he: 'טיפוגרפיה', en: 'Typography' }, value: 'typography' },
+        { label: { he: 'פלטת צבעים', en: 'Color Palette' }, value: 'color-palette' },
+        { label: { he: 'מוֹשֵׁן', en: 'Motion' }, value: 'motion' },
       ],
       admin: {
         position: 'sidebar',
@@ -126,6 +131,11 @@ export const BrandDocs: CollectionConfig = {
         { label: '🧩', value: 'puzzle' },
         { label: '❓', value: 'question' },
         { label: '📋', value: 'clipboard' },
+        { label: '🎨', value: 'palette' },
+        { label: '🖼️', value: 'frame' },
+        { label: '🔤', value: 'typography' },
+        { label: '🌈', value: 'rainbow' },
+        { label: '✨', value: 'sparkles' },
       ],
       admin: {
         position: 'sidebar',

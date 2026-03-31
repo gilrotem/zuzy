@@ -263,6 +263,9 @@ export interface Page {
           }
         | AppGridBlock
         | ComparisonTableBlock
+        | LogoGridBlock
+        | ColorPaletteBlock
+        | TypographySpecimenBlock
       )[]
     | null;
   meta?: {
@@ -1277,6 +1280,37 @@ export interface ComparisonTableBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LogoGridBlock".
+ */
+export interface LogoGridBlock {
+  heading?: string | null;
+  description?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'logoGrid';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ColorPaletteBlock".
+ */
+export interface ColorPaletteBlock {
+  heading?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'colorPalette';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TypographySpecimenBlock".
+ */
+export interface TypographySpecimenBlock {
+  heading?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'typographySpecimen';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "product-categories".
  */
 export interface ProductCategory {
@@ -1426,8 +1460,30 @@ export interface BrandDoc {
     | 'sales'
     | 'solutions'
     | 'faq'
-    | 'case-studies';
-  icon?: ('dna' | 'mic' | 'briefcase' | 'target' | 'gear' | 'chart' | 'puzzle' | 'question' | 'clipboard') | null;
+    | 'case-studies'
+    | 'design-tokens'
+    | 'logo-usage'
+    | 'typography'
+    | 'color-palette'
+    | 'motion';
+  icon?:
+    | (
+        | 'dna'
+        | 'mic'
+        | 'briefcase'
+        | 'target'
+        | 'gear'
+        | 'chart'
+        | 'puzzle'
+        | 'question'
+        | 'clipboard'
+        | 'palette'
+        | 'frame'
+        | 'typography'
+        | 'rainbow'
+        | 'sparkles'
+      )
+    | null;
   sortOrder?: number | null;
   publishedAt?: string | null;
   /**
@@ -1789,6 +1845,9 @@ export interface PagesSelect<T extends boolean = true> {
         appCostCalculator?: T | AppCostCalculatorBlockSelect<T>;
         appGridBlock?: T | AppGridBlockSelect<T>;
         comparisonTableBlock?: T | ComparisonTableBlockSelect<T>;
+        logoGrid?: T | LogoGridBlockSelect<T>;
+        colorPalette?: T | ColorPaletteBlockSelect<T>;
+        typographySpecimen?: T | TypographySpecimenBlockSelect<T>;
       };
   meta?:
     | T
@@ -2156,6 +2215,34 @@ export interface ComparisonTableBlockSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LogoGridBlock_select".
+ */
+export interface LogoGridBlockSelect<T extends boolean = true> {
+  heading?: T;
+  description?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ColorPaletteBlock_select".
+ */
+export interface ColorPaletteBlockSelect<T extends boolean = true> {
+  heading?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TypographySpecimenBlock_select".
+ */
+export interface TypographySpecimenBlockSelect<T extends boolean = true> {
+  heading?: T;
   id?: T;
   blockName?: T;
 }
@@ -2755,11 +2842,11 @@ export interface SiteSetting {
   siteName?: string | null;
   defaultTheme?: ('light' | 'dark' | 'auto') | null;
   /**
-   * Hex color code (e.g., #7354C4)
+   * Hex color code (e.g., #7C3AED)
    */
   primaryColor?: string | null;
   /**
-   * Hex color code (e.g., #06B6D4)
+   * Hex color code (e.g., #0D9488)
    */
   accentColor?: string | null;
   /**

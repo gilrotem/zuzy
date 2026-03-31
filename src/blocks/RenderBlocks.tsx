@@ -19,6 +19,9 @@ import { RawHTMLBlock } from '@/blocks/RawHTML/Component'
 import { AppCostCalculatorComponent } from '@/blocks/AppCostCalculator/Component'
 import { AppGridBlockComponent } from '@/blocks/AppGridBlock/Component'
 import { ComparisonTableBlockComponent } from '@/blocks/ComparisonTableBlock/Component'
+import { LogoGridComponent } from '@/blocks/LogoGrid/Component'
+import { ColorPaletteComponent } from '@/blocks/ColorPalette/Component'
+import { TypographySpecimenComponent } from '@/blocks/TypographySpecimen/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -38,6 +41,9 @@ const blockComponents = {
   appCostCalculator: AppCostCalculatorComponent,
   appGridBlock: AppGridBlockComponent,
   comparisonTableBlock: ComparisonTableBlockComponent,
+  logoGrid: LogoGridComponent,
+  colorPalette: ColorPaletteComponent,
+  typographySpecimen: TypographySpecimenComponent,
 }
 
 export const RenderBlocks: React.FC<{

@@ -1,6 +1,7 @@
 import * as migration_20260311_085325_initial from './20260311_085325_initial';
 import * as migration_20260327_214619 from './20260327_214619';
 import * as migration_20260330_005511_add_comparison_table_block from './20260330_005511_add_comparison_table_block';
+import * as migration_20260331_182150_add_brand_docs_design_types from './20260331_182150_add_brand_docs_design_types';
 
 export const migrations = [
   {
@@ -16,6 +17,11 @@ export const migrations = [
   {
     up: migration_20260330_005511_add_comparison_table_block.up,
     down: migration_20260330_005511_add_comparison_table_block.down,
-    name: '20260330_005511_add_comparison_table_block'
+    name: '20260330_005511_add_comparison_table_block',
+  },
+  {
+    up: migration_20260331_182150_add_brand_docs_design_types.up,
+    down: migration_20260331_182150_add_brand_docs_design_types.down,
+    name: '20260331_182150_add_brand_docs_design_types'
   },
 ];

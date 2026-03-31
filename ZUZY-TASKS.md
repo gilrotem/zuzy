@@ -46,37 +46,63 @@
 
 ---
 
-## 🔜 Phase 7 — Brand Portal: Design System Showcase
+## ✅ Phase 7 — Brand Portal: Design System Showcase (2026-03-31)
 
 **Depends on**: Phase 6 ✅ (colors + SVGs)
 **Source**: Brand Hub app (`zuzy-brand-hub/app/src/`), brand strategy docs (`zuzy-brand-hub/brand/`)
 **Scope**: Transform basic BrandDocs collection into a professional, public-facing brand portal at `/brand-docs/`
 
-### 7.1 — New BrandDocs docTypes + Visual Blocks
-- [ ] Add new `docType` options: `design-tokens`, `logo-usage`, `typography`, `color-palette`, `motion`
-- [ ] Create `LogoGrid` block — renders all SVG variants from `public/brand/` with download links
-- [ ] Create `ColorPalette` block — shows primary (#7C3AED), accent (#0D9488), neutrals with hex/rgb values
-- [ ] Create `TypographySpecimen` block — IBM Plex Sans Hebrew showcase (weights, sizes, scale)
-- [ ] Create `SpacingScale` block — radius tokens, spacing system
+### 7.1 — New BrandDocs docTypes + Visual Blocks ✅
+- [x] Add new `docType` options: `design-tokens`, `logo-usage`, `typography`, `color-palette`, `motion`
+- [x] Add new `icon` options: `palette`, `frame`, `typography`, `rainbow`, `sparkles`
+- [x] Create `LogoGrid` block — renders all 15 SVG variants from `public/brand/` grouped by type with download overlays
+- [x] Create `ColorPalette` block — shows primary (#7C3AED), accent (#0D9488), neutrals with hex/rgb/cssVar values
+- [x] Create `TypographySpecimen` block — IBM Plex Sans Hebrew showcase (5 weights, 7-step size scale, Hebrew + Latin samples)
+- [x] Registered all 3 blocks in Pages collection config + RenderBlocks
+- [x] SpacingScale block deferred — marginal value for brand portal
+- [x] Migration `20260331_182150_add_brand_docs_design_types` created and applied
 
-### 7.2 — Brand Strategy Content
-- [ ] Seed brand docs from Brand Hub `brand/` markdown files:
+### 7.2 — Brand Strategy Content ✅
+- [x] Seed 7 brand docs from Brand Hub markdown files:
   - Brand Philosophy → BrandDoc (essence)
   - Brand Voice → BrandDoc (brand-voice)
-  - Products → BrandDoc (solutions)
-  - Competitive → BrandDoc (differentiation)
-  - Avatars → BrandDoc (sales)
-- [ ] Design system overview page → BrandDoc (design-tokens)
-- [ ] Logo usage guidelines → BrandDoc (logo-usage)
+  - Products Overview → BrandDoc (solutions)
+  - Competitive Landscape → BrandDoc (differentiation)
+  - Customer Avatars → BrandDoc (sales)
+  - Design System Overview → BrandDoc (design-tokens)
+  - Logo Usage Guidelines → BrandDoc (logo-usage)
+- [x] Seed file: `src/endpoints/seed/brand-docs-pages.ts`
+- [x] Wired into main seed script (`src/endpoints/seed-zuzy/index.ts`)
 
-### 7.3 — Brand Portal Landing Page
-- [ ] `/brand-docs/` index page with category grid (strategy docs + design system docs)
-- [ ] Visual card layout with icons, summaries, docType grouping
-- [ ] Professional presentation matching seohub design language
+### 7.3 — Brand Portal Landing Page ✅
+- [x] `/brand-docs/` index page — HeroBlock + 2 FeaturesBlock grids (strategy 5-card + design system 3-card)
+- [x] `/brand-docs/[slug]/` detail pages — title, summary, richText content with breadcrumbs
+- [x] `/brand-docs/design-system` — HeroBlock + LogoGrid + ColorPalette + TypographySpecimen blocks
+- [x] All pages include JSON-LD WebPage schema + breadcrumbs + generateMetadata
 
-### 7.4 — Premium Components (optional)
+### 7.4 — Premium Components (deferred)
 - [ ] Port Brand Hub motion assets (ContentPipelineInfographic, PremiumMotionAssets) as page blocks
 - [ ] Port UI Kit showcase components for interactive demos
+
+### Phase 7 Verification (2026-03-31)
+- [x] `tsc --noEmit` — zero errors
+- [x] `pnpm build` — success (91/91 static pages)
+- [x] Migration applied successfully
+- [x] Types regenerated (`pnpm generate:types`)
+- [x] `seo-config.ts` updated: `brand-docs` path changed from `/brand` to `/brand-docs`
+
+### New Files Created
+- `src/blocks/LogoGrid/config.ts` + `Component.tsx`
+- `src/blocks/ColorPalette/config.ts` + `Component.tsx`
+- `src/blocks/TypographySpecimen/config.ts` + `Component.tsx`
+- `src/endpoints/seed/brand-docs-pages.ts`
+- `src/app/(frontend)/brand-docs/page.tsx` + `page.client.tsx`
+- `src/app/(frontend)/brand-docs/[slug]/page.tsx` + `page.client.tsx`
+- `src/app/(frontend)/brand-docs/design-system/page.tsx`
+
+---
+
+## 🔜 Phase 8 — (TBD)
 
 ---
 

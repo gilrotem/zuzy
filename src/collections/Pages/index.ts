@@ -20,6 +20,9 @@ import { Code } from '../../blocks/Code/config'
 import { AppCostCalculator } from '../../blocks/AppCostCalculator/config'
 import { AppGridBlock } from '../../blocks/AppGridBlock/config'
 import { ComparisonTableBlock } from '../../blocks/ComparisonTableBlock/config'
+import { LogoGrid } from '../../blocks/LogoGrid/config'
+import { ColorPalette } from '../../blocks/ColorPalette/config'
+import { TypographySpecimen } from '../../blocks/TypographySpecimen/config'
 import { hero } from '@/heros/config'
 import { slugField } from 'payload'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
@@ -105,6 +108,9 @@ export const Pages: CollectionConfig<'pages'> = {
                 AppCostCalculator,
                 AppGridBlock,
                 ComparisonTableBlock,
+                LogoGrid,
+                ColorPalette,
+                TypographySpecimen,
               ],
               admin: {
                 initCollapsed: true,

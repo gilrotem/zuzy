@@ -22,7 +22,7 @@ export const COLLECTION_PATHS: Partial<Record<CollectionSlug, string>> = {
   categories: '/categories',
   products: '/products',
   'product-categories': '/product-categories',
-  'brand-docs': '/brand',
+  'brand-docs': '/brand-docs',
 }
 
 /** Paths that should always be blocked from indexing */

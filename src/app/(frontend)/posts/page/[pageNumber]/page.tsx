@@ -8,7 +8,6 @@ import { getPayload } from 'payload'
 import React from 'react'
 import PageClient from './page.client'
 import { notFound } from 'next/navigation'
-import { getServerSideURL } from '@/utilities/getURL'
 
 export const revalidate = 600
 
@@ -67,9 +66,7 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   const { pageNumber } = await paramsPromise
   return {
     title: `Posts Page ${pageNumber || ''} | ZUZY`,
-    alternates: {
-      canonical: `${getServerSideURL()}/posts/page/${pageNumber}`,
-    },
+    robots: { index: false, follow: false },
   }
 }
 

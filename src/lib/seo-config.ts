@@ -8,20 +8,14 @@ import type { CollectionSlug } from 'payload'
 /** Collections that should be included in sitemap and indexed by search engines */
 export const INDEXABLE_COLLECTIONS: CollectionSlug[] = [
   'pages',
-  'posts',
-  'categories',
   'products',
-  'product-categories',
   'brand-docs',
 ]
 
 /** Maps collection slugs to their public URL path prefix */
 export const COLLECTION_PATHS: Partial<Record<CollectionSlug, string>> = {
   pages: '',
-  posts: '/posts',
-  categories: '/categories',
   products: '/products',
-  'product-categories': '/product-categories',
   'brand-docs': '/brand-docs',
 }
 
@@ -33,6 +27,8 @@ export const BLOCKED_PATHS = [
   '/_vercel',
   '/next/preview',
   '/next/seed',
+  '/posts',
+  '/search',
 ]
 
 /** Check if a collection should be indexed */

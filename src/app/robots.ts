@@ -5,7 +5,6 @@ import { getServerSideURL } from '@/utilities/getURL'
 
 const DEFAULT_MALICIOUS_BOTS = [
   'AhrefsBot',
-  'SemrushBot',
   'MJ12bot',
   'DotBot',
   'BLEXBot',
@@ -16,7 +15,18 @@ const DEFAULT_MALICIOUS_BOTS = [
   'CCBot',
 ]
 
-const DEFAULT_DISALLOW = ['/admin', '/admin/*', '/api', '/api/*', '/_next', '/_vercel']
+const DEFAULT_DISALLOW = [
+  '/admin',
+  '/admin/*',
+  '/api',
+  '/api/*',
+  '/_next',
+  '/_vercel',
+  '/posts',
+  '/posts/*',
+  '/posts/page/*',
+  '/search',
+]
 
 export default async function robots(): Promise<MetadataRoute.Robots> {
   const siteUrl = getServerSideURL()

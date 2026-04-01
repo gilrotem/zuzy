@@ -7,6 +7,8 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React from 'react'
 import PageClient from './page.client'
+import { getServerSideURL } from '@/utilities/getURL'
+import { Breadcrumbs } from '@/components/Breadcrumbs'
 
 export const dynamic = 'force-static'
 export const revalidate = 600
@@ -32,6 +34,12 @@ export default async function Page() {
   return (
     <div className="pt-24 pb-24">
       <PageClient />
+      <div className="container mb-4">
+        <Breadcrumbs items={[
+          { label: 'Home', href: '/' },
+          { label: 'מוצרים', href: '/products' },
+        ]} />
+      </div>
       <div className="container mb-16">
         <div className="prose dark:prose-invert max-w-none">
           <h1>מוצרים</h1>
@@ -59,7 +67,7 @@ export default async function Page() {
 
       <div className="container">
         {products.totalPages > 1 && products.page && (
-          <Pagination page={products.page} totalPages={products.totalPages} />
+          <Pagination page={products.page} totalPages={products.totalPages} basePath="/products" />
         )}
       </div>
     </div>
@@ -67,7 +75,19 @@ export default async function Page() {
 }
 
 export function generateMetadata(): Metadata {
+  const siteUrl = getServerSideURL()
   return {
     title: 'מוצרים | ZUZY',
+    description: 'כל המוצרים והפתרונות של ZUZY לשיווק דיגיטלי וקידום אתרים.',
+    alternates: {
+      canonical: `${siteUrl}/products`,
+    },
+    openGraph: {
+      title: 'מוצרים | ZUZY',
+      description: 'כל המוצרים והפתרונות של ZUZY לשיווק דיגיטלי וקידום אתרים.',
+      url: `${siteUrl}/products`,
+      siteName: 'ZUZY',
+      type: 'website',
+    },
   }
 }

@@ -245,7 +245,7 @@ export const AppCostCalculatorClient: React.FC<Props> = ({
               </div>
 
               <a
-                href={ctaLink || '/contact'}
+                href={ctaLink || '/support/contact'}
                 className="block w-full text-center py-3 px-6 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-xl transition-all"
               >
                 {ctaText}

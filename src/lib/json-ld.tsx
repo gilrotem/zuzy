@@ -62,7 +62,7 @@ export function generateOrganizationJsonLd(seoSettings: SEOSettingsData) {
   if (logoUrl) {
     schema.logo = {
       '@type': 'ImageObject',
-      url: logoUrl,
+      url: logoUrl.startsWith('http') ? logoUrl : `${siteUrl}${logoUrl}`,
     }
   }
 

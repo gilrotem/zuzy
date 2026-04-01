@@ -149,7 +149,7 @@ const services: ServiceDef[] = [
 
 function buildServicePage(svc: ServiceDef): RequiredDataFromCollectionSlug<'pages'> {
   return {
-    slug: `services--${svc.slug}`,
+    slug: svc.slug,
     _status: 'published',
     title: svc.heTitle,
     hero: { type: 'none' },

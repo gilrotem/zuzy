@@ -31,6 +31,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           slug: true,
           updatedAt: true,
           meta: true,
+          breadcrumbs: true,
         },
         where: {
           _status: { equals: 'published' },
@@ -46,9 +47,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         const robotsOverride: string[] | undefined = meta?.robotsOverride
         if (robotsOverride && robotsOverride.includes('noindex')) continue
 
-        // Convert platform--slug to platform/slug for URL
-        const urlSlug = slug.includes('--') ? slug.replace('--', '/') : slug
-        const path = collection === 'pages' && slug === 'home' ? '' : `${prefix}/${urlSlug}`
+        // Use breadcrumbs URL if available (nested-docs), otherwise fall back to prefix/slug
+        const breadcrumbs = (doc as any).breadcrumbs as Array<{ url?: string }> | undefined
+        const breadcrumbUrl = breadcrumbs?.length ? breadcrumbs[breadcrumbs.length - 1]?.url : null
+        const path = collection === 'pages' && slug === 'home' ? '' : (breadcrumbUrl || `${prefix}/${slug}`)
 
         // Skip excluded paths
         if (excludedPaths.some((excluded) => path === excluded || path.startsWith(excluded + '/'))) {

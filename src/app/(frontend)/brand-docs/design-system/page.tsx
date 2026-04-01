@@ -15,7 +15,7 @@ import { Breadcrumbs } from '@/components/Breadcrumbs'
 import PageClient from '../page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 
-const PAYLOAD_SLUG = 'brand-docs--design-system'
+const PAYLOAD_SLUG = 'design-system'
 
 export default async function DesignSystemPage() {
   const { isEnabled: draft } = await draftMode()
@@ -83,6 +83,9 @@ const queryPageBySlug = cache(async ({ slug }: { slug: string }) => {
     where: {
       slug: {
         equals: slug,
+      },
+      'parent.slug': {
+        equals: 'brand-docs',
       },
     },
   })

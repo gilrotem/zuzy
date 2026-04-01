@@ -314,7 +314,7 @@ const legalPages: LegalPageDef[] = [
 
 function buildLegalPage(def: LegalPageDef): RequiredDataFromCollectionSlug<'pages'> {
   return {
-    slug: `legal--${def.slug}`,
+    slug: def.slug,
     _status: 'published',
     title: def.title,
     hero: { type: 'none' },

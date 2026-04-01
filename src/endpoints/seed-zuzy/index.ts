@@ -1,4 +1,4 @@
-import type { Payload, PayloadRequest } from 'payload'
+import type { Payload, PayloadRequest, RequiredDataFromCollectionSlug } from 'payload'
 
 import { home } from '../seed/home'
 import { getAllPlatformPages } from '../seed/platform-pages'
@@ -66,47 +66,85 @@ export const seedZuzy = async ({
     updated.push('home')
   }
 
-  // --- Seed all section pages (platform, pricing, legal) ---
-  const allPages = [
-    ...getAllPlatformPages(),
-    ...getAllPricingLegalPages(),
-    ...getAllServicesPages(),
-    ...getAllSolutionsPages(),
-    ...getAllResourcesPages(),
-    ...getAllSupportPages(),
-    ...getAllBrandDocsPages(),
+  // --- Seed all section pages ---
+  // Section definitions: [indexSlug, childPages[]]
+  const sections: Array<{ indexSlug: string; pages: RequiredDataFromCollectionSlug<'pages'>[] }> = [
+    { indexSlug: 'platform', pages: getAllPlatformPages() },
+    { indexSlug: 'services', pages: getAllServicesPages() },
+    { indexSlug: 'legal', pages: getAllPricingLegalPages() },
+    { indexSlug: 'solutions', pages: getAllSolutionsPages() },
+    { indexSlug: 'resources', pages: getAllResourcesPages() },
+    { indexSlug: 'support', pages: getAllSupportPages() },
+    { indexSlug: 'brand-docs', pages: getAllBrandDocsPages() },
   ]
 
-  for (const pageData of allPages) {
-    const existing = await payload.find({
+  for (const section of sections) {
+    // Create/update all pages in this section
+    for (const pageData of section.pages) {
+      const isIndex = pageData.slug === section.indexSlug
+      const existing = await payload.find({
+        collection: 'pages',
+        where: { slug: { equals: pageData.slug } },
+        limit: 1,
+        depth: 0,
+      })
+
+      if (existing.docs.length > 0) {
+        await payload.update({
+          collection: 'pages',
+          id: existing.docs[0].id,
+          data: {
+            title: pageData.title,
+            hero: pageData.hero,
+            layout: pageData.layout,
+            meta: pageData.meta,
+          },
+          context: { disableRevalidate: true },
+        })
+        payload.logger.info(`— Updated page: ${pageData.slug}`)
+        updated.push(pageData.slug)
+      } else {
+        await payload.create({
+          collection: 'pages',
+          data: pageData as any,
+          context: { disableRevalidate: true },
+        })
+        payload.logger.info(`— Created page: ${pageData.slug}`)
+        updated.push(pageData.slug)
+      }
+    }
+
+    // Set parent relationships: find index page ID, assign to children
+    const indexPage = await payload.find({
       collection: 'pages',
-      where: { slug: { equals: pageData.slug } },
+      where: { slug: { equals: section.indexSlug } },
       limit: 1,
       depth: 0,
     })
 
-    if (existing.docs.length > 0) {
-      await payload.update({
-        collection: 'pages',
-        id: existing.docs[0].id,
-        data: {
-          title: pageData.title,
-          hero: pageData.hero,
-          layout: pageData.layout,
-          meta: pageData.meta,
-        },
-        context: { disableRevalidate: true },
-      })
-      payload.logger.info(`— Updated page: ${pageData.slug}`)
-      updated.push(pageData.slug)
-    } else {
-      await payload.create({
-        collection: 'pages',
-        data: pageData as any,
-        context: { disableRevalidate: true },
-      })
-      payload.logger.info(`— Created page: ${pageData.slug}`)
-      updated.push(pageData.slug)
+    if (indexPage.docs.length > 0) {
+      const parentId = indexPage.docs[0].id
+      for (const pageData of section.pages) {
+        if (pageData.slug === section.indexSlug) continue // skip index page itself
+        // Also skip pages that aren't direct children (e.g., pricing page in legal section)
+        if (pageData.slug === 'pricing') continue
+
+        const childPage = await payload.find({
+          collection: 'pages',
+          where: { slug: { equals: pageData.slug } },
+          limit: 1,
+          depth: 0,
+        })
+
+        if (childPage.docs.length > 0 && !(childPage.docs[0] as any).parent) {
+          await payload.update({
+            collection: 'pages',
+            id: childPage.docs[0].id,
+            data: { parent: parentId } as any,
+            context: { disableRevalidate: true },
+          })
+        }
+      }
     }
   }
 

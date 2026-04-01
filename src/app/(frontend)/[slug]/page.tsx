@@ -28,12 +28,14 @@ export async function generateStaticParams() {
     select: {
       slug: true,
     },
+    where: {
+      parent: { exists: false },
+    },
   })
 
   const params = pages.docs
     ?.filter((doc) => {
-      // Exclude home page (handled by page.tsx) and platform pages (handled by /platform/ routes)
-      return doc.slug !== 'home' && !doc.slug?.includes('--')
+      return doc.slug !== 'home'
     })
     .map(({ slug }) => {
       return { slug }
@@ -155,6 +157,7 @@ const queryPageBySlug = cache(async ({ slug }: { slug: string }) => {
       slug: {
         equals: slug,
       },
+      parent: { exists: false },
     },
   })
 

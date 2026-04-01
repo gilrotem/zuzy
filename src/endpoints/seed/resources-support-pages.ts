@@ -180,7 +180,7 @@ function buildSectionPage(
   def: PageDef,
 ): RequiredDataFromCollectionSlug<'pages'> {
   return {
-    slug: `${section}--${def.slug}`,
+    slug: def.slug,
     _status: 'published',
     title: def.heTitle,
     hero: { type: 'none' },

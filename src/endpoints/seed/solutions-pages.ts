@@ -100,7 +100,7 @@ const solutions: SolutionDef[] = [
 
 function buildSolutionPage(sol: SolutionDef): RequiredDataFromCollectionSlug<'pages'> {
   return {
-    slug: `solutions--${sol.slug}`,
+    slug: sol.slug,
     _status: 'published',
     title: sol.heTitle,
     hero: { type: 'none' },

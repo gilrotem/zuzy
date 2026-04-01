@@ -283,7 +283,7 @@ function buildBrandDocsIndexPage(): RequiredDataFromCollectionSlug<'pages'> {
 function buildDesignSystemPage(): RequiredDataFromCollectionSlug<'pages'> {
   return {
     title: 'Design System',
-    slug: 'brand-docs--design-system',
+    slug: 'design-system',
     _status: 'published',
     hero: {
       type: 'lowImpact',

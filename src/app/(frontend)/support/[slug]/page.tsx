@@ -19,9 +19,9 @@ export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
   const pages = await payload.find({
     collection: 'pages', draft: false, limit: 1000, overrideAccess: false, pagination: false,
-    select: { slug: true }, where: { slug: { like: 'support--%' } },
+    select: { slug: true }, where: { 'parent.slug': { equals: 'support' } },
   })
-  return pages.docs.map(({ slug }) => ({ slug: slug!.replace('support--', '') }))
+  return pages.docs.map(({ slug }) => ({ slug: slug! }))
 }
 
 type Args = { params: Promise<{ slug?: string }> }
@@ -30,10 +30,9 @@ export default async function SupportDetailPage({ params: paramsPromise }: Args)
   const { isEnabled: draft } = await draftMode()
   const { slug = '' } = await paramsPromise
   const decodedSlug = decodeURIComponent(slug)
-  const payloadSlug = `support--${decodedSlug}`
   const url = `/support/${decodedSlug}`
 
-  const page: RequiredDataFromCollectionSlug<'pages'> | null = await queryPageBySlug({ slug: payloadSlug })
+  const page: RequiredDataFromCollectionSlug<'pages'> | null = await queryPageBySlug({ slug: decodedSlug, parentSlug: 'support' })
   if (!page) return <PayloadRedirects url={url} />
 
   const { hero, layout } = page
@@ -59,13 +58,13 @@ export default async function SupportDetailPage({ params: paramsPromise }: Args)
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
   const { slug = '' } = await paramsPromise
-  const page = await queryPageBySlug({ slug: `support--${decodeURIComponent(slug)}` })
+  const page = await queryPageBySlug({ slug: decodeURIComponent(slug), parentSlug: 'support' })
   return generateMeta({ doc: page })
 }
 
-const queryPageBySlug = cache(async ({ slug }: { slug: string }) => {
+const queryPageBySlug = cache(async ({ slug, parentSlug }: { slug: string; parentSlug: string }) => {
   const { isEnabled: draft } = await draftMode()
   const payload = await getPayload({ config: configPromise })
-  const result = await payload.find({ collection: 'pages', draft, limit: 1, pagination: false, overrideAccess: draft, where: { slug: { equals: slug } } })
+  const result = await payload.find({ collection: 'pages', draft, limit: 1, pagination: false, overrideAccess: draft, where: { slug: { equals: slug }, 'parent.slug': { equals: parentSlug } } })
   return result.docs?.[0] || null
 })

@@ -27,14 +27,14 @@ export async function generateStaticParams() {
       slug: true,
     },
     where: {
-      slug: {
-        like: 'services--%',
+      'parent.slug': {
+        equals: 'services',
       },
     },
   })
 
   const params = pages.docs.map(({ slug }) => ({
-    slug: slug!.replace('services--', ''),
+    slug: slug!,
   }))
 
   return params
@@ -50,10 +50,9 @@ export default async function ServiceDetailPage({ params: paramsPromise }: Args)
   const { isEnabled: draft } = await draftMode()
   const { slug = '' } = await paramsPromise
   const decodedSlug = decodeURIComponent(slug)
-  const payloadSlug = `services--${decodedSlug}`
   const url = `/services/${decodedSlug}`
 
-  const page: RequiredDataFromCollectionSlug<'pages'> | null = await queryPageBySlug({ slug: payloadSlug })
+  const page: RequiredDataFromCollectionSlug<'pages'> | null = await queryPageBySlug({ slug: decodedSlug, parentSlug: 'services' })
 
   if (!page) {
     return <PayloadRedirects url={url} />
@@ -102,13 +101,12 @@ export default async function ServiceDetailPage({ params: paramsPromise }: Args)
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
   const { slug = '' } = await paramsPromise
   const decodedSlug = decodeURIComponent(slug)
-  const payloadSlug = `services--${decodedSlug}`
-  const page = await queryPageBySlug({ slug: payloadSlug })
+  const page = await queryPageBySlug({ slug: decodedSlug, parentSlug: 'services' })
 
   return generateMeta({ doc: page })
 }
 
-const queryPageBySlug = cache(async ({ slug }: { slug: string }) => {
+const queryPageBySlug = cache(async ({ slug, parentSlug }: { slug: string; parentSlug: string }) => {
   const { isEnabled: draft } = await draftMode()
 
   const payload = await getPayload({ config: configPromise })
@@ -122,6 +120,9 @@ const queryPageBySlug = cache(async ({ slug }: { slug: string }) => {
     where: {
       slug: {
         equals: slug,
+      },
+      'parent.slug': {
+        equals: parentSlug,
       },
     },
   })

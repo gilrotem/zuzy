@@ -180,7 +180,7 @@ function buildPlatformModulePage(
   mod: PlatformModule,
 ): RequiredDataFromCollectionSlug<'pages'> {
   return {
-    slug: `platform--${mod.slug}`,
+    slug: mod.slug,
     _status: 'published',
     title: mod.heTitle,
     hero: {

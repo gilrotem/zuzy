@@ -162,7 +162,14 @@ export const Pages: CollectionConfig<'pages'> = {
         position: 'sidebar',
       },
     },
-    slugField(),
+    slugField({
+      overrides: (field) => ({
+        ...field,
+        fields: field.fields.map((f) =>
+          'name' in f && f.name === 'slug' ? { ...f, unique: false } : f,
+        ),
+      }),
+    }),
   ],
   hooks: {
     afterChange: [revalidatePage],

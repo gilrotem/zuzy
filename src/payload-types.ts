@@ -1232,10 +1232,7 @@ export interface AppGridBlock {
   apps?:
     | {
         title: string;
-        /**
-         * Path to icon image, e.g. /media/app-icons/01_seo_rank_tracker.png
-         */
-        icon: string;
+        icon: number | Media;
         /**
          * App URL
          */

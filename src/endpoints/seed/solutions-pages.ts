@@ -1,4 +1,5 @@
 import type { RequiredDataFromCollectionSlug } from 'payload'
+import type { BrandAssetMap } from './brand-assets'
 
 function richTextParagraph(text: string) {
   return {
@@ -98,7 +99,7 @@ const solutions: SolutionDef[] = [
   },
 ]
 
-function buildSolutionPage(sol: SolutionDef): RequiredDataFromCollectionSlug<'pages'> {
+function buildSolutionPage(sol: SolutionDef, brandAssets?: BrandAssetMap): RequiredDataFromCollectionSlug<'pages'> {
   return {
     slug: sol.slug,
     _status: 'published',
@@ -112,6 +113,7 @@ function buildSolutionPage(sol: SolutionDef): RequiredDataFromCollectionSlug<'pa
         subheading: sol.heTagline,
         richText: richTextParagraph(sol.heDescription),
         style: 'centered',
+        ...(brandAssets?.heroes.solutions && { backgroundImage: brandAssets.heroes.solutions.id }),
         links: [
           {
             link: {
@@ -180,7 +182,7 @@ function buildSolutionPage(sol: SolutionDef): RequiredDataFromCollectionSlug<'pa
   }
 }
 
-function buildSolutionsIndexPage(): RequiredDataFromCollectionSlug<'pages'> {
+function buildSolutionsIndexPage(brandAssets?: BrandAssetMap): RequiredDataFromCollectionSlug<'pages'> {
   return {
     slug: 'solutions',
     _status: 'published',
@@ -193,6 +195,7 @@ function buildSolutionsIndexPage(): RequiredDataFromCollectionSlug<'pages'> {
         heading: 'פתרונות לכל סוג עסק',
         subheading: 'לא משנה באיזה שלב אתם — יש לנו את הכלים והשירותים שיעזרו לכם לצמוח',
         style: 'centered',
+        ...(brandAssets?.heroes.solutions && { backgroundImage: brandAssets.heroes.solutions.id }),
       },
       {
         blockType: 'featuresBlock',
@@ -240,9 +243,9 @@ function buildSolutionsIndexPage(): RequiredDataFromCollectionSlug<'pages'> {
   }
 }
 
-export function getAllSolutionsPages(): RequiredDataFromCollectionSlug<'pages'>[] {
+export function getAllSolutionsPages(brandAssets?: BrandAssetMap): RequiredDataFromCollectionSlug<'pages'>[] {
   return [
-    buildSolutionsIndexPage(),
-    ...solutions.map(buildSolutionPage),
+    buildSolutionsIndexPage(brandAssets),
+    ...solutions.map((sol) => buildSolutionPage(sol, brandAssets)),
   ]
 }

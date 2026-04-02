@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="800" viewBox="0 0 1920 800">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0D9488" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#7C3AED" stop-opacity="0.10"/>
+    </linearGradient>
+  </defs>
+  <rect width="1920" height="800" fill="url(#bg)"/>
+  <!-- Hexagonal grid pattern -->
+  <g stroke="#0D9488" stroke-opacity="0.08" stroke-width="1.5" fill="none">
+    <polygon points="160,80 210,55 260,80 260,130 210,155 160,130"/>
+    <polygon points="260,80 310,55 360,80 360,130 310,155 260,130"/>
+    <polygon points="210,155 260,130 310,155 310,205 260,230 210,205"/>
+  </g>
+  <g stroke="#7C3AED" stroke-opacity="0.06" stroke-width="1.5" fill="none" transform="translate(1400, 450)">
+    <polygon points="160,80 210,55 260,80 260,130 210,155 160,130"/>
+    <polygon points="260,80 310,55 360,80 360,130 310,155 260,130"/>
+    <polygon points="210,155 260,130 310,155 310,205 260,230 210,205"/>
+  </g>
+  <!-- Flowing curves -->
+  <path d="M0,500 Q480,300 960,400 T1920,300" fill="none" stroke="#7C3AED" stroke-opacity="0.06" stroke-width="2"/>
+  <path d="M0,550 Q480,350 960,450 T1920,350" fill="none" stroke="#0D9488" stroke-opacity="0.05" stroke-width="1.5"/>
+</svg>

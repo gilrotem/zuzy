@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="800" viewBox="0 0 1920 800">
+  <defs>
+    <linearGradient id="bg" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#7C3AED" stop-opacity="0.10"/>
+      <stop offset="50%" stop-color="#0D9488" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#7C3AED" stop-opacity="0.08"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#0D9488" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#0D9488" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1920" height="800" fill="url(#bg)"/>
+  <ellipse cx="960" cy="400" rx="400" ry="300" fill="url(#glow)"/>
+  <!-- Diamond grid -->
+  <g stroke="#7C3AED" stroke-opacity="0.06" stroke-width="1" fill="none">
+    <rect x="100" y="100" width="60" height="60" transform="rotate(45, 130, 130)"/>
+    <rect x="200" y="150" width="60" height="60" transform="rotate(45, 230, 180)"/>
+    <rect x="150" y="250" width="60" height="60" transform="rotate(45, 180, 280)"/>
+  </g>
+  <g stroke="#0D9488" stroke-opacity="0.06" stroke-width="1" fill="none" transform="translate(1500, 350)">
+    <rect x="100" y="100" width="60" height="60" transform="rotate(45, 130, 130)"/>
+    <rect x="200" y="150" width="60" height="60" transform="rotate(45, 230, 180)"/>
+    <rect x="150" y="250" width="60" height="60" transform="rotate(45, 180, 280)"/>
+  </g>
+  <!-- Arcs -->
+  <path d="M0,700 Q960,200 1920,700" fill="none" stroke="#7C3AED" stroke-opacity="0.05" stroke-width="2"/>
+  <path d="M0,750 Q960,250 1920,750" fill="none" stroke="#0D9488" stroke-opacity="0.04" stroke-width="1.5"/>
+</svg>

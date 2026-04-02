@@ -1,4 +1,5 @@
 import type { RequiredDataFromCollectionSlug } from 'payload'
+import type { BrandAssetMap } from './brand-assets'
 
 function richTextParagraph(text: string) {
   return {
@@ -147,7 +148,7 @@ const services: ServiceDef[] = [
   },
 ]
 
-function buildServicePage(svc: ServiceDef): RequiredDataFromCollectionSlug<'pages'> {
+function buildServicePage(svc: ServiceDef, brandAssets?: BrandAssetMap): RequiredDataFromCollectionSlug<'pages'> {
   return {
     slug: svc.slug,
     _status: 'published',
@@ -161,6 +162,7 @@ function buildServicePage(svc: ServiceDef): RequiredDataFromCollectionSlug<'page
         subheading: svc.heTagline,
         richText: richTextParagraph(svc.heDescription),
         style: 'centered',
+        ...(brandAssets?.heroes.services && { backgroundImage: brandAssets.heroes.services.id }),
         links: [
           {
             link: {
@@ -232,7 +234,7 @@ function buildServicePage(svc: ServiceDef): RequiredDataFromCollectionSlug<'page
   }
 }
 
-function buildServicesIndexPage(): RequiredDataFromCollectionSlug<'pages'> {
+function buildServicesIndexPage(brandAssets?: BrandAssetMap): RequiredDataFromCollectionSlug<'pages'> {
   return {
     slug: 'services',
     _status: 'published',
@@ -245,6 +247,7 @@ function buildServicesIndexPage(): RequiredDataFromCollectionSlug<'pages'> {
         heading: 'שירותי SEO מקצועיים',
         subheading: 'תנו למומחים שלנו לעשות את העבודה — אתם מתמקדים בעסק',
         style: 'centered',
+        ...(brandAssets?.heroes.services && { backgroundImage: brandAssets.heroes.services.id }),
         links: [
           {
             link: {
@@ -306,9 +309,9 @@ function buildServicesIndexPage(): RequiredDataFromCollectionSlug<'pages'> {
   }
 }
 
-export function getAllServicesPages(): RequiredDataFromCollectionSlug<'pages'>[] {
+export function getAllServicesPages(brandAssets?: BrandAssetMap): RequiredDataFromCollectionSlug<'pages'>[] {
   return [
-    buildServicesIndexPage(),
-    ...services.map(buildServicePage),
+    buildServicesIndexPage(brandAssets),
+    ...services.map((svc) => buildServicePage(svc, brandAssets)),
   ]
 }

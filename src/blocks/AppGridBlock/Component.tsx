@@ -1,5 +1,6 @@
 import React from 'react'
 import type { AppGridBlock as AppGridBlockProps } from '@/payload-types'
+import { Media } from '@/components/Media'
 import { cn } from '@/utilities/ui'
 
 export const AppGridBlockComponent: React.FC<
@@ -25,11 +26,14 @@ export const AppGridBlockComponent: React.FC<
             )}
           >
             <div className="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0">
-              <img
-                src={app.icon}
-                alt={app.title}
-                className="w-full h-full object-contain rounded-lg"
-              />
+              {app.icon && typeof app.icon === 'object' ? (
+                <Media
+                  resource={app.icon}
+                  imgClassName="w-full h-full object-contain rounded-lg"
+                />
+              ) : (
+                <div className="w-full h-full bg-muted rounded-lg" />
+              )}
             </div>
             <span className="text-sm font-medium text-center leading-tight group-hover:text-primary transition-colors">
               {app.title}

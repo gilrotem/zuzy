@@ -9,6 +9,7 @@ import { imageHero1 } from './image-hero-1'
 import { post1 } from './post-1'
 import { post2 } from './post-2'
 import { post3 } from './post-3'
+import { seedBrandAssets } from './brand-assets'
 
 const collections: CollectionSlug[] = [
   'categories',
@@ -59,6 +60,8 @@ export const seed = async ({
               primaryColor: '#7C3AED',
               accentColor: '#0D9488',
               defaultTheme: 'light',
+              logo: null,
+              favicon: null,
             }
           : {
               navItems: [],
@@ -150,6 +153,9 @@ export const seed = async ({
     ),
   ])
 
+  // Seed brand assets (app icons, hero backgrounds, logos)
+  const brandAssets = await seedBrandAssets(payload, req)
+
   payload.logger.info(`— Seeding posts...`)
 
   // Do not create posts with `Promise.all` because we want the posts to be created in order
@@ -218,7 +224,7 @@ export const seed = async ({
     payload.create({
       collection: 'pages',
       depth: 0,
-      data: home({ metaImage: image2Doc }),
+      data: home({ metaImage: image2Doc, brandAssets }),
     }),
     payload.create({
       collection: 'pages',
@@ -285,6 +291,16 @@ export const seed = async ({
       },
     }),
   ])
+
+  // Set SiteSettings logo and favicon
+  await payload.updateGlobal({
+    slug: 'site-settings',
+    data: {
+      logo: brandAssets.logos.horizontalPurple.id,
+      favicon: brandAssets.favicon.id,
+    } as any,
+    depth: 0,
+  })
 
   payload.logger.info('Seeded database successfully!')
 }

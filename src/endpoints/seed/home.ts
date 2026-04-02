@@ -1,8 +1,10 @@
 import type { RequiredDataFromCollectionSlug } from 'payload'
 import type { Media } from '@/payload-types'
+import type { BrandAssetMap } from './brand-assets'
 
 type HomeArgs = {
   metaImage: Media
+  brandAssets?: BrandAssetMap
 }
 
 // Helper to create a Lexical richText node with a single paragraph
@@ -41,6 +43,7 @@ function richTextParagraph(text: string) {
 
 export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> = ({
   metaImage,
+  brandAssets,
 }) => {
   return {
     slug: 'home',
@@ -56,6 +59,7 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
         heading: 'הכל במקום אחד, מלוטש כמו יהלום',
         subheading: 'פלטפורמת SEO, שיווק דיגיטלי וניהול לקוחות — בכלי אחד חכם',
         style: 'centered',
+        ...(brandAssets?.heroes.home && { backgroundImage: brandAssets.heroes.home.id }),
         links: [
           {
             link: {
@@ -85,46 +89,46 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
         style: 'cards',
         features: [
           {
-            icon: '🔍',
             title: 'SEO מתקדם',
             description: richTextParagraph(
               'ניתוח מילות מפתח, מעקב דירוגים ואופטימיזציה טכנית — הכל אוטומטי',
             ),
+            ...(brandAssets?.appIcons.rankTracker && { image: brandAssets.appIcons.rankTracker.id }),
           },
           {
-            icon: '🔎',
             title: 'מעקב דירוגים',
             description: richTextParagraph(
               'מעקב יומי אחרי דירוגי מילות מפתח בגוגל — עם היסטוריה ומגמות',
             ),
+            ...(brandAssets?.appIcons.geoStrategy && { image: brandAssets.appIcons.geoStrategy.id }),
           },
           {
-            icon: '🛠️',
             title: 'בדיקת אתר טכנית',
             description: richTextParagraph(
               'סריקת האתר לבעיות טכניות, מהירות ונגישות — עם המלצות תיקון',
             ),
+            ...(brandAssets?.appIcons.bottleneck && { image: brandAssets.appIcons.bottleneck.id }),
           },
           {
-            icon: '✍️',
             title: 'עורך תוכן',
             description: richTextParagraph(
               'כתיבת ועריכת תוכן אופטימלי ל-SEO עם ניקוד והמלצות בזמן אמת',
             ),
+            ...(brandAssets?.appIcons.contentDomination && { image: brandAssets.appIcons.contentDomination.id }),
           },
           {
-            icon: '📈',
             title: 'אנליטיקס ודוחות',
             description: richTextParagraph(
               'דשבורדים מותאמים אישית ודוחות שעוזרים לקבל החלטות מבוססות דאטה',
             ),
+            ...(brandAssets?.appIcons.businessStrategy && { image: brandAssets.appIcons.businessStrategy.id }),
           },
           {
-            icon: '🤖',
             title: 'עוזר AI חכם',
             description: richTextParagraph(
               'המלצות SEO חכמות, מחקר מילות מפתח אוטומטי ותובנות שחוסכות שעות',
             ),
+            ...(brandAssets?.appIcons.smartAgent && { image: brandAssets.appIcons.smartAgent.id }),
           },
         ],
       },
@@ -187,6 +191,7 @@ export const home: (args: HomeArgs) => RequiredDataFromCollectionSlug<'pages'> =
         blockType: 'ctaBlock',
         blockName: 'CTA',
         heading: 'מוכנים להתחיל לצמוח?',
+        ...(brandAssets?.heroes.home && { backgroundImage: brandAssets.heroes.home.id }),
         richText: richTextParagraph(
           'הצטרפו לאלפי בעלי עסקים שכבר משתמשים ב-ZUZY כדי לשלוט בנוכחות הדיגיטלית שלהם.',
         ),

@@ -1,4 +1,5 @@
 import type { RequiredDataFromCollectionSlug } from 'payload'
+import type { BrandAssetMap } from './brand-assets'
 
 // Helper to create a Lexical richText node with a single paragraph
 function richTextParagraph(text: string) {
@@ -178,6 +179,7 @@ const platformModules: PlatformModule[] = [
 
 function buildPlatformModulePage(
   mod: PlatformModule,
+  brandAssets?: BrandAssetMap,
 ): RequiredDataFromCollectionSlug<'pages'> {
   return {
     slug: mod.slug,
@@ -194,6 +196,7 @@ function buildPlatformModulePage(
         subheading: mod.heTagline,
         richText: richTextParagraph(mod.heDescription),
         style: 'centered',
+        ...(brandAssets?.heroes.platform && { backgroundImage: brandAssets.heroes.platform.id }),
         links: [
           {
             link: {
@@ -254,7 +257,7 @@ function buildPlatformModulePage(
   }
 }
 
-export function buildPlatformIndexPage(): RequiredDataFromCollectionSlug<'pages'> {
+export function buildPlatformIndexPage(brandAssets?: BrandAssetMap): RequiredDataFromCollectionSlug<'pages'> {
   return {
     slug: 'platform',
     _status: 'published',
@@ -269,6 +272,7 @@ export function buildPlatformIndexPage(): RequiredDataFromCollectionSlug<'pages'
         heading: 'פלטפורמת SEO מקצה לקצה',
         subheading: 'כל הכלים שצריך כדי לשלוט בנוכחות הדיגיטלית — במקום אחד',
         style: 'centered',
+        ...(brandAssets?.heroes.platform && { backgroundImage: brandAssets.heroes.platform.id }),
         links: [
           {
             link: {
@@ -383,10 +387,10 @@ export function buildPlatformIndexPage(): RequiredDataFromCollectionSlug<'pages'
   }
 }
 
-export function getAllPlatformPages(): RequiredDataFromCollectionSlug<'pages'>[] {
+export function getAllPlatformPages(brandAssets?: BrandAssetMap): RequiredDataFromCollectionSlug<'pages'>[] {
   return [
-    buildPlatformIndexPage(),
-    ...platformModules.map(buildPlatformModulePage),
+    buildPlatformIndexPage(brandAssets),
+    ...platformModules.map((mod) => buildPlatformModulePage(mod, brandAssets)),
   ]
 }
 

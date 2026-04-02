@@ -53,56 +53,48 @@ export async function POST(request: Request): Promise<Response> {
     const req = await createLocalReq({ user }, payload)
 
     if (step === 1) {
-      // Step 1: Upload app icons (8 files) + logo + favicon
-      payload.logger.info('Step 1: Uploading app icons, logo, favicon...')
-      const icons = []
-      const iconFiles = [
-        { path: '/media/app-icons/01_seo_rank_tracker.png', alt: 'SEO Rank Tracker' },
-        { path: '/media/app-icons/02_content_domination.png', alt: 'Content Domination' },
-        { path: '/media/app-icons/03_geo_strategy_maker.png', alt: 'Geo Strategy Maker' },
-        { path: '/media/app-icons/04_crm.png', alt: 'CRM' },
-        { path: '/media/app-icons/05_smart_agent_bot.png', alt: 'Smart Agent Bot' },
-        { path: '/media/app-icons/06_social_lead_generator.png', alt: 'Social Lead Generator' },
-        { path: '/media/app-icons/07_business_strategy_planner.png', alt: 'Business Strategy Planner' },
-        { path: '/media/app-icons/08_bottleneck_identifier.png', alt: 'Bottleneck Identifier' },
-      ]
-      for (const icon of iconFiles) {
-        icons.push(await uploadIfNotExists(payload, icon.path, icon.alt))
-        payload.logger.info(`  Done: ${icon.alt}`)
-      }
-
-      const logo = await uploadIfNotExists(payload, '/brand/logo-horizontal-purple.svg', 'ZUZY Logo — Purple Horizontal')
-      const favicon = await uploadIfNotExists(payload, '/favicon.svg', 'ZUZY Favicon')
-
-      // Set SiteSettings
-      await payload.updateGlobal({
-        slug: 'site-settings',
-        data: { logo: logo.id, favicon: favicon.id } as any,
-      })
-
-      return Response.json({ success: true, step: 1, uploaded: icons.length + 2, message: 'App icons + logo + favicon uploaded. Run step=2 next.' })
+      // Step 1: Upload first 3 app icons
+      payload.logger.info('Step 1: Uploading app icons 1-3...')
+      const i1 = await uploadIfNotExists(payload, '/media/app-icons/01_seo_rank_tracker.png', 'SEO Rank Tracker')
+      const i2 = await uploadIfNotExists(payload, '/media/app-icons/02_content_domination.png', 'Content Domination')
+      const i3 = await uploadIfNotExists(payload, '/media/app-icons/03_geo_strategy_maker.png', 'Geo Strategy Maker')
+      return Response.json({ success: true, step: 1, uploaded: 3, message: 'Icons 1-3 done. Run step=2.' })
     }
 
     if (step === 2) {
-      // Step 2: Upload hero backgrounds (4 files)
-      payload.logger.info('Step 2: Uploading hero backgrounds...')
+      // Step 2: Upload app icons 4-6
+      payload.logger.info('Step 2: Uploading app icons 4-6...')
+      const i4 = await uploadIfNotExists(payload, '/media/app-icons/04_crm.png', 'CRM')
+      const i5 = await uploadIfNotExists(payload, '/media/app-icons/05_smart_agent_bot.png', 'Smart Agent Bot')
+      const i6 = await uploadIfNotExists(payload, '/media/app-icons/06_social_lead_generator.png', 'Social Lead Generator')
+      return Response.json({ success: true, step: 2, uploaded: 3, message: 'Icons 4-6 done. Run step=3.' })
+    }
+
+    if (step === 3) {
+      // Step 3: Upload app icons 7-8 + logo + favicon + set SiteSettings
+      payload.logger.info('Step 3: Uploading icons 7-8, logo, favicon...')
+      const i7 = await uploadIfNotExists(payload, '/media/app-icons/07_business_strategy_planner.png', 'Business Strategy Planner')
+      const i8 = await uploadIfNotExists(payload, '/media/app-icons/08_bottleneck_identifier.png', 'Bottleneck Identifier')
+      const logo = await uploadIfNotExists(payload, '/brand/logo-horizontal-purple.svg', 'ZUZY Logo — Purple Horizontal')
+      const favicon = await uploadIfNotExists(payload, '/favicon.svg', 'ZUZY Favicon')
+      await payload.updateGlobal({ slug: 'site-settings', data: { logo: logo.id, favicon: favicon.id } as any })
+      return Response.json({ success: true, step: 3, uploaded: 4, message: 'Icons 7-8 + logo + favicon done. Run step=4.' })
+    }
+
+    if (step === 4) {
+      // Step 4: Upload hero backgrounds (small SVGs, should be fast)
+      payload.logger.info('Step 4: Uploading hero backgrounds...')
       const heroes = {
         home: await uploadIfNotExists(payload, '/brand/heroes/hero-home.svg', 'ZUZY Hero — Home'),
         services: await uploadIfNotExists(payload, '/brand/heroes/hero-services.svg', 'ZUZY Hero — Services'),
         solutions: await uploadIfNotExists(payload, '/brand/heroes/hero-solutions.svg', 'ZUZY Hero — Solutions'),
         platform: await uploadIfNotExists(payload, '/brand/heroes/hero-platform.svg', 'ZUZY Hero — Platform'),
       }
-
-      return Response.json({ success: true, step: 2, uploaded: 4, heroIds: {
-        home: heroes.home.id,
-        services: heroes.services.id,
-        solutions: heroes.solutions.id,
-        platform: heroes.platform.id,
-      }, message: 'Hero backgrounds uploaded. Run step=3 next.' })
+      return Response.json({ success: true, step: 4, uploaded: 4, message: 'Hero backgrounds done. Run step=5.' })
     }
 
-    if (step === 3) {
-      // Step 3: Update all pages with brand assets
+    if (step === 5) {
+      // Step 5: Update all pages with brand assets
       payload.logger.info('Step 3: Updating pages...')
 
       // Fetch uploaded assets by alt text
@@ -178,10 +170,10 @@ export async function POST(request: Request): Promise<Response> {
         }
       }
 
-      return Response.json({ success: true, step: 3, pagesUpdated, message: 'All pages updated with brand assets.' })
+      return Response.json({ success: true, step: 5, pagesUpdated, message: 'All pages updated with brand assets.' })
     }
 
-    return Response.json({ error: 'Invalid step. Use ?step=1, ?step=2, or ?step=3' }, { status: 400 })
+    return Response.json({ error: 'Invalid step. Use ?step=1 through ?step=5' }, { status: 400 })
   } catch (e) {
     payload.logger.error({ err: e, message: 'Brand asset seeder error' })
     return new Response(`Error: ${e instanceof Error ? e.message : 'unknown'}`, { status: 500 })

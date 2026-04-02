@@ -1,27 +1,36 @@
-import type { Payload, PayloadRequest } from 'payload'
+import type { Payload, PayloadRequest, File } from 'payload'
 import type { Media } from '@/payload-types'
-import fs from 'fs'
-import path from 'path'
+import { getServerSideURL } from '@/utilities/getURL'
 
 /**
  * Non-destructive brand asset seeder.
- * Uploads brand images to Media, sets SiteSettings logo/favicon,
+ * Fetches brand images via HTTP (works on Vercel serverless),
+ * uploads to Media collection, sets SiteSettings logo/favicon,
  * and updates ALL existing pages with hero backgrounds and feature images.
  * Does NOT delete any existing content.
  */
 
-function readLocalFile(relativePath: string) {
-  const absolutePath = path.resolve(process.cwd(), relativePath)
-  const data = fs.readFileSync(absolutePath)
-  const filename = path.basename(relativePath)
-  const ext = path.extname(filename).toLowerCase()
-  const mimeMap: Record<string, string> = {
-    '.png': 'image/png',
-    '.svg': 'image/svg+xml',
-    '.webp': 'image/webp',
-    '.jpg': 'image/jpeg',
-    '.ico': 'image/x-icon',
+async function fetchFileFromPublic(publicPath: string): Promise<File> {
+  const baseURL = getServerSideURL()
+  const url = `${baseURL}${publicPath}`
+  const res = await fetch(url)
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch ${url}: ${res.status}`)
   }
+
+  const data = await res.arrayBuffer()
+  const filename = publicPath.split('/').pop() || `file-${Date.now()}`
+  const ext = filename.split('.').pop()?.toLowerCase() || ''
+  const mimeMap: Record<string, string> = {
+    png: 'image/png',
+    svg: 'image/svg+xml',
+    webp: 'image/webp',
+    jpg: 'image/jpeg',
+    jpeg: 'image/jpeg',
+    ico: 'image/x-icon',
+  }
+
   return {
     name: filename,
     data: Buffer.from(data),
@@ -32,7 +41,7 @@ function readLocalFile(relativePath: string) {
 
 async function uploadIfNotExists(
   payload: Payload,
-  filePath: string,
+  publicPath: string,
   alt: string,
 ): Promise<Media> {
   // Check if already uploaded by alt text
@@ -46,7 +55,7 @@ async function uploadIfNotExists(
     return existing.docs[0] as Media
   }
 
-  const file = readLocalFile(filePath)
+  const file = await fetchFileFromPublic(publicPath)
   const doc = await payload.create({
     collection: 'media',
     data: { alt },
@@ -64,32 +73,36 @@ export async function seedBrandAssetsNonDestructive({
 }): Promise<{ uploaded: number; pagesUpdated: number }> {
   payload.logger.info('=== Brand Asset Seeder (non-destructive) ===')
 
-  // 1. Upload app icons
+  // 1. Upload app icons (sequentially to avoid overwhelming S3)
   payload.logger.info('Uploading app icons...')
-  const appIcons = await Promise.all([
-    uploadIfNotExists(payload, 'public/media/app-icons/01_seo_rank_tracker.png', 'SEO Rank Tracker'),
-    uploadIfNotExists(payload, 'public/media/app-icons/02_content_domination.png', 'Content Domination'),
-    uploadIfNotExists(payload, 'public/media/app-icons/03_geo_strategy_maker.png', 'Geo Strategy Maker'),
-    uploadIfNotExists(payload, 'public/media/app-icons/04_crm.png', 'CRM'),
-    uploadIfNotExists(payload, 'public/media/app-icons/05_smart_agent_bot.png', 'Smart Agent Bot'),
-    uploadIfNotExists(payload, 'public/media/app-icons/06_social_lead_generator.png', 'Social Lead Generator'),
-    uploadIfNotExists(payload, 'public/media/app-icons/07_business_strategy_planner.png', 'Business Strategy Planner'),
-    uploadIfNotExists(payload, 'public/media/app-icons/08_bottleneck_identifier.png', 'Bottleneck Identifier'),
-  ])
+  const appIcons = []
+  const iconFiles = [
+    { path: '/media/app-icons/01_seo_rank_tracker.png', alt: 'SEO Rank Tracker' },
+    { path: '/media/app-icons/02_content_domination.png', alt: 'Content Domination' },
+    { path: '/media/app-icons/03_geo_strategy_maker.png', alt: 'Geo Strategy Maker' },
+    { path: '/media/app-icons/04_crm.png', alt: 'CRM' },
+    { path: '/media/app-icons/05_smart_agent_bot.png', alt: 'Smart Agent Bot' },
+    { path: '/media/app-icons/06_social_lead_generator.png', alt: 'Social Lead Generator' },
+    { path: '/media/app-icons/07_business_strategy_planner.png', alt: 'Business Strategy Planner' },
+    { path: '/media/app-icons/08_bottleneck_identifier.png', alt: 'Bottleneck Identifier' },
+  ]
+  for (const icon of iconFiles) {
+    appIcons.push(await uploadIfNotExists(payload, icon.path, icon.alt))
+  }
 
   // 2. Upload hero backgrounds
   payload.logger.info('Uploading hero backgrounds...')
   const heroes = {
-    home: await uploadIfNotExists(payload, 'public/brand/heroes/hero-home.svg', 'ZUZY Hero — Home'),
-    services: await uploadIfNotExists(payload, 'public/brand/heroes/hero-services.svg', 'ZUZY Hero — Services'),
-    solutions: await uploadIfNotExists(payload, 'public/brand/heroes/hero-solutions.svg', 'ZUZY Hero — Solutions'),
-    platform: await uploadIfNotExists(payload, 'public/brand/heroes/hero-platform.svg', 'ZUZY Hero — Platform'),
+    home: await uploadIfNotExists(payload, '/brand/heroes/hero-home.svg', 'ZUZY Hero — Home'),
+    services: await uploadIfNotExists(payload, '/brand/heroes/hero-services.svg', 'ZUZY Hero — Services'),
+    solutions: await uploadIfNotExists(payload, '/brand/heroes/hero-solutions.svg', 'ZUZY Hero — Solutions'),
+    platform: await uploadIfNotExists(payload, '/brand/heroes/hero-platform.svg', 'ZUZY Hero — Platform'),
   }
 
   // 3. Upload logo and favicon
   payload.logger.info('Uploading logo and favicon...')
-  const logo = await uploadIfNotExists(payload, 'public/brand/logo-horizontal-purple.svg', 'ZUZY Logo — Purple Horizontal')
-  const favicon = await uploadIfNotExists(payload, 'public/favicon.svg', 'ZUZY Favicon')
+  const logo = await uploadIfNotExists(payload, '/brand/logo-horizontal-purple.svg', 'ZUZY Logo — Purple Horizontal')
+  const favicon = await uploadIfNotExists(payload, '/favicon.svg', 'ZUZY Favicon')
 
   // 4. Set SiteSettings logo + favicon
   payload.logger.info('Setting SiteSettings logo and favicon...')
@@ -105,12 +118,6 @@ export async function seedBrandAssetsNonDestructive({
   payload.logger.info('Updating pages with brand assets...')
   let pagesUpdated = 0
 
-  // Map slugs to hero images
-  const heroMap: Record<string, number> = {
-    home: heroes.home.id,
-  }
-
-  // App icon map for features
   const appIconMap = {
     rankTracker: appIcons[0],
     contentDomination: appIcons[1],
@@ -138,23 +145,15 @@ export async function seedBrandAssetsNonDestructive({
     const updatedLayout = layout.map((block: any) => {
       // Add hero backgrounds to HeroBlocks
       if (block.blockType === 'heroBlock' && !block.backgroundImage) {
-        // Determine which hero to use based on page context
         let heroId: number | undefined
 
-        // Platform pages
         if (slug === 'platform' || ['rank-tracker', 'site-audit', 'copilot', 'content-editor', 'keyword-research', 'analytics', 'reports', 'pages'].includes(slug)) {
           heroId = heroes.platform.id
-        }
-        // Services pages
-        else if (slug === 'services' || ['seo-strategy', 'content-optimization', 'technical-audit', 'local-seo', 'link-building'].includes(slug)) {
+        } else if (slug === 'services' || ['seo-strategy', 'content-optimization', 'technical-audit', 'local-seo', 'link-building'].includes(slug)) {
           heroId = heroes.services.id
-        }
-        // Solutions pages
-        else if (slug === 'solutions' || ['ecommerce', 'startups', 'agencies', 'enterprise'].includes(slug)) {
+        } else if (slug === 'solutions' || ['ecommerce', 'startups', 'agencies', 'enterprise'].includes(slug)) {
           heroId = heroes.solutions.id
-        }
-        // Homepage and others
-        else if (slug === 'home') {
+        } else if (slug === 'home') {
           heroId = heroes.home.id
         }
 
@@ -184,7 +183,7 @@ export async function seedBrandAssetsNonDestructive({
         return { ...block, features: updatedFeatures }
       }
 
-      // Add hero background to CTABlocks without one
+      // Add hero background to CTABlocks on homepage
       if (block.blockType === 'ctaBlock' && !block.backgroundImage && slug === 'home') {
         updated = true
         return { ...block, backgroundImage: heroes.home.id }
@@ -205,7 +204,7 @@ export async function seedBrandAssetsNonDestructive({
     }
   }
 
-  const totalUploaded = appIcons.length + Object.keys(heroes).length + 2 // +2 for logo and favicon
+  const totalUploaded = appIcons.length + Object.keys(heroes).length + 2
   payload.logger.info(`=== Done! ${totalUploaded} assets, ${pagesUpdated} pages updated ===`)
 
   return { uploaded: totalUploaded, pagesUpdated }

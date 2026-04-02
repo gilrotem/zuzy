@@ -4,6 +4,10 @@ import { authenticated } from '../access/authenticated'
 import { authenticatedOrPublished } from '../access/authenticatedOrPublished'
 import { slugField } from 'payload'
 import {
+  revalidateBrandDoc,
+  revalidateDeleteBrandDoc,
+} from './BrandDocs/hooks/revalidateBrandDoc'
+import {
   MetaDescriptionField,
   MetaImageField,
   MetaTitleField,
@@ -23,6 +27,10 @@ export const BrandDocs: CollectionConfig = {
     delete: authenticated,
     read: authenticatedOrPublished,
     update: authenticated,
+  },
+  hooks: {
+    afterChange: [revalidateBrandDoc],
+    afterDelete: [revalidateDeleteBrandDoc],
   },
   admin: {
     defaultColumns: ['title', 'docType', 'sortOrder', 'updatedAt'],

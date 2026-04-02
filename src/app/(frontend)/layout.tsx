@@ -1,10 +1,12 @@
 import type { Metadata } from 'next'
+import type { SiteSetting, SeoSetting } from '@/payload-types'
 
 import { cn } from '@/utilities/ui'
 import { GeistMono } from 'geist/font/mono'
 import { GeistSans } from 'geist/font/sans'
 import { IBM_Plex_Sans_Hebrew } from 'next/font/google'
 import React from 'react'
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 import { AdminBar } from '@/components/AdminBar'
 import { Footer } from '@/Footer/Component'
@@ -32,15 +34,15 @@ const zuzyFont = IBM_Plex_Sans_Hebrew({
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { isEnabled } = await draftMode()
-  let siteSettingsData: any = {}
-  let seoSettingsData: any = {}
+  let siteSettingsData = {} as Partial<SiteSetting>
+  let seoSettingsData = {} as Partial<SeoSetting>
   try {
-    siteSettingsData = (await getCachedGlobal('site-settings' as any, 0)()) || {}
+    siteSettingsData = ((await getCachedGlobal('site-settings' as any, 0)()) || {}) as SiteSetting
   } catch {
     /* global may not exist yet */
   }
   try {
-    seoSettingsData = (await getCachedGlobal('seo-settings' as any, 1)()) || {}
+    seoSettingsData = ((await getCachedGlobal('seo-settings' as any, 1)()) || {}) as SeoSetting
   } catch {
     /* global may not exist yet */
   }
@@ -50,6 +52,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const accentColor = siteSettingsData?.accentColor || '#0D9488'
   const customCSS = siteSettingsData?.customCSS
   const customJS = siteSettingsData?.customJS
+  const ga4Id = (siteSettingsData as any)?.ga4MeasurementId
 
   return (
     <html
@@ -73,8 +76,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         {seoSettingsData?.bingVerification && (
           <meta name="msvalidate.01" content={seoSettingsData.bingVerification} />
         )}
-        <JsonLd data={generateOrganizationJsonLd(seoSettingsData || {})} />
-        <JsonLd data={generateWebSiteJsonLd(seoSettingsData || {})} />
+        <JsonLd data={generateOrganizationJsonLd(seoSettingsData as any)} />
+        <JsonLd data={generateWebSiteJsonLd(seoSettingsData as any)} />
       </head>
       <body>
         <Providers>
@@ -93,6 +96,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         {customJS && (
           <script dangerouslySetInnerHTML={{ __html: customJS }} />
         )}
+        {ga4Id && <GoogleAnalytics gaId={ga4Id} />}
       </body>
     </html>
   )

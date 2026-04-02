@@ -70,6 +70,29 @@ export const SiteSettings: GlobalConfig = {
           ],
         },
         {
+          label: 'Analytics & Tracking',
+          fields: [
+            {
+              name: 'ga4MeasurementId',
+              label: 'GA4 Measurement ID',
+              type: 'text',
+              admin: {
+                description: 'Google Analytics 4 Measurement ID (e.g., G-XXXXXXXXXX)',
+                placeholder: 'G-XXXXXXXXXX',
+              },
+            },
+            {
+              name: 'gtmContainerId',
+              label: 'GTM Container ID',
+              type: 'text',
+              admin: {
+                description: 'Google Tag Manager Container ID (e.g., GTM-XXXXXXX)',
+                placeholder: 'GTM-XXXXXXX',
+              },
+            },
+          ],
+        },
+        {
           label: 'Custom Code',
           fields: [
             {

@@ -1,9 +1,13 @@
 import type { CollectionConfig } from 'payload'
 
-import { anyone } from '../access/anyone'
 import { authenticated } from '../access/authenticated'
+import { authenticatedOrPublished } from '../access/authenticatedOrPublished'
 import { slugField } from 'payload'
 import { generatePreviewPath } from '../utilities/generatePreviewPath'
+import {
+  revalidateProduct,
+  revalidateDeleteProduct,
+} from './Products/hooks/revalidateProduct'
 
 import {
   MetaDescriptionField,
@@ -23,7 +27,7 @@ export const Products: CollectionConfig<'products'> = {
   access: {
     create: authenticated,
     delete: authenticated,
-    read: anyone,
+    read: authenticatedOrPublished,
     update: authenticated,
   },
   defaultPopulate: {
@@ -56,6 +60,10 @@ export const Products: CollectionConfig<'products'> = {
         collection: 'products',
         req,
       }),
+  },
+  hooks: {
+    afterChange: [revalidateProduct],
+    afterDelete: [revalidateDeleteProduct],
   },
   versions: {
     drafts: {

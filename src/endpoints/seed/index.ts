@@ -35,6 +35,11 @@ export const seed = async ({
   payload: Payload
   req: PayloadRequest
 }): Promise<void> => {
+  if (process.env.NODE_ENV === 'production') {
+    payload.logger.error('Seed endpoint is disabled in production')
+    throw new Error('Seed endpoint is disabled in production')
+  }
+
   payload.logger.info('Seeding database...')
 
   // we need to clear the media directory before seeding

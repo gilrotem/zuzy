@@ -1600,6 +1600,10 @@ export interface Search {
   priority?: number | null;
   doc:
     | {
+        relationTo: 'pages';
+        value: number | Page;
+      }
+    | {
         relationTo: 'posts';
         value: number | Post;
       }
@@ -2931,6 +2935,14 @@ export interface SiteSetting {
    */
   accentColor?: string | null;
   /**
+   * Google Analytics 4 Measurement ID (e.g., G-XXXXXXXXXX)
+   */
+  ga4MeasurementId?: string | null;
+  /**
+   * Google Tag Manager Container ID (e.g., GTM-XXXXXXX)
+   */
+  gtmContainerId?: string | null;
+  /**
    * CSS code to inject into <head>
    */
   customCSS?: string | null;
@@ -3095,6 +3107,8 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   defaultTheme?: T;
   primaryColor?: T;
   accentColor?: T;
+  ga4MeasurementId?: T;
+  gtmContainerId?: T;
   customCSS?: T;
   customJS?: T;
   updatedAt?: T;

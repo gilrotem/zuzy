@@ -269,6 +269,67 @@ zuzy.co.il/
 - For seohub database work → open `seohub/` workspace
 - For brand/design tokens → open `zuzy-brand-hub/` workspace
 
+## Shmebulok — Payload CMS Expert Agent
+
+**Shmebulok** (שמביולוק) is a specialized Payload CMS v3 expert that lives at `~/.claude/skills/payload-expert/`. It doesn't run inside your context — it runs as a **subagent** with its own clean context, researches the answer, and returns a concise result.
+
+### When the User Says "Shmebulok"
+
+The user may say any of these:
+- "Ask Shmebulok" / "Consult Shmebulok" / "Check with Shmebulok"
+- "Does Shmebulok approve?" / "Run this by Shmebulok"
+- "שמביולוק" (Hebrew)
+- "Let Shmebulok evaluate this"
+- "Shmebulok, what do you think?"
+
+**When you hear any of these → spawn an Agent subagent** with:
+1. The delegation prompt template from `~/.claude/skills/payload-expert/SKILL.md`
+2. The relevant reference file from `~/.claude/skills/payload-expert/references/`
+3. The specific question or code to evaluate
+
+### When to Call Shmebulok Without Being Asked
+
+You should also delegate to Shmebulok **proactively** in these situations:
+- You're about to make a **Payload architectural decision** (new collection, new plugin, schema change)
+- You hit a **Payload-specific error** you can't explain from the code alone
+- You need to know if a **Payload plugin or built-in feature** already does what you're about to build
+- You're unsure whether something is a **v2 pattern vs. v3 pattern**
+- The task involves **Payload internals** you haven't seen in this project before (Jobs, custom endpoints, Lexical nodes, migration data transforms)
+
+### How to Delegate
+
+```
+Agent subagent prompt:
+"You are Shmebulok, the Payload CMS v3 expert. Project uses Payload 3.79.0,
+Next.js 15, PostgreSQL (Supabase), plugins: s3-storage, redirects, nested-docs,
+seo, form-builder, search. 6 locales (he default, en, ru, ar, fr, es).
+
+TASK: {the specific question}
+
+INSTRUCTIONS:
+1. Read {relevant reference file from ~/.claude/skills/payload-expert/references/}
+2. Read relevant project source files for current patterns
+3. WebSearch 'site:payloadcms.com/docs {topic}' for official approach
+4. If needed, check GitHub issues/discussions
+5. Return: recommended approach, code snippets, commands to run, pitfalls to avoid
+
+CRITICAL: Payload v3 only. No Express, no Slate, no webpack. Payload-native solutions only."
+```
+
+### Reference File Router
+
+| Topic | File |
+|-------|------|
+| Collections, globals, fields, localization | `~/.claude/skills/payload-expert/references/collections-guide.md` |
+| Hooks, access control, auth, revalidation | `~/.claude/skills/payload-expert/references/hooks-and-access.md` |
+| Plugins (official or custom) | `~/.claude/skills/payload-expert/references/plugins-guide.md` |
+| Blocks, custom fields, Lexical editor | `~/.claude/skills/payload-expert/references/blocks-and-fields.md` |
+| REST/GraphQL/Local API, endpoints, queries | `~/.claude/skills/payload-expert/references/api-and-endpoints.md` |
+| Admin UI, custom components, live preview | `~/.claude/skills/payload-expert/references/admin-ui.md` |
+| Migrations, seeding, database | `~/.claude/skills/payload-expert/references/migration-patterns.md` |
+
+---
+
 ## How To Work
 
 - **Thoroughness over speed. Always.** Every analysis must be deep and rigorous.

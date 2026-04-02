@@ -4,6 +4,7 @@ import * as migration_20260330_005511_add_comparison_table_block from './2026033
 import * as migration_20260331_182150_add_brand_docs_design_types from './20260331_182150_add_brand_docs_design_types';
 import * as migration_20260401_120445 from './20260401_120445';
 import * as migration_20260401_124257 from './20260401_124257';
+import * as migration_20260401_151243 from './20260401_151243';
 
 export const migrations = [
   {
@@ -34,6 +35,11 @@ export const migrations = [
   {
     up: migration_20260401_124257.up,
     down: migration_20260401_124257.down,
-    name: '20260401_124257'
+    name: '20260401_124257',
+  },
+  {
+    up: migration_20260401_151243.up,
+    down: migration_20260401_151243.down,
+    name: '20260401_151243'
   },
 ];

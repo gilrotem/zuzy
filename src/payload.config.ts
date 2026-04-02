@@ -1,3 +1,4 @@
+import { resendAdapter } from '@payloadcms/email-resend'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { he } from '@payloadcms/translations/languages/he'
 import { en } from '@payloadcms/translations/languages/en'
@@ -110,6 +111,11 @@ export default buildConfig({
     fallback: true,
   },
 
+  email: resendAdapter({
+    defaultFromAddress: process.env.RESEND_FROM_ADDRESS || 'noreply@zuzy.co.il',
+    defaultFromName: 'ZUZY',
+    apiKey: process.env.RESEND_API_KEY || '',
+  }),
   plugins,
   secret: process.env.PAYLOAD_SECRET,
   sharp,

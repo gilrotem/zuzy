@@ -18,6 +18,10 @@
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
     "test": "pnpm run test:int && pnpm run test:e2e",
     "test:e2e": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" playwright test --config=playwright.config.ts",
+    "seed:brand-assets": "cross-env NODE_OPTIONS=--no-deprecation payload run src/scripts/seed-brand-assets.ts",
+    "seed:pages": "cross-env NODE_OPTIONS=--no-deprecation payload run src/scripts/seed-pages.ts",
+    "seed:brand-docs": "cross-env NODE_OPTIONS=--no-deprecation payload run src/scripts/seed-brand-docs.ts",
+    "seed:all": "pnpm seed:brand-assets && pnpm seed:pages && pnpm seed:brand-docs",
     "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts"
   },
   "dependencies": {

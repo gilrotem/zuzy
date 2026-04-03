@@ -222,6 +222,7 @@ const run = async () => {
       slug: 'site-settings',
       data: { logo: logo.id, favicon: favicon.id } as any,
       depth: 0,
+      context: { disableRevalidate: true },
     })
     payload.logger.info(`  SiteSettings updated (logo: ${logo.id}, favicon: ${favicon.id})`)
   }

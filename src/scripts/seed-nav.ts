@@ -107,6 +107,67 @@ const run = async () => {
 
   payload.logger.info('Header navigation seeded successfully')
 
+  // --- Footer ---
+  const footerData = {
+    columns: [
+      {
+        label: 'פלטפורמה',
+        navItems: [
+          makeLink('מעקב דירוגים', '/platform/rank-tracker'),
+          makeLink('ביקורת אתר', '/platform/site-audit'),
+          makeLink('קופיילוט SEO', '/platform/copilot'),
+          makeLink('עורך תוכן', '/platform/content-editor'),
+          makeLink('מחקר מילות מפתח', '/platform/keyword-research'),
+          makeLink('אנליטיקס', '/platform/analytics'),
+        ],
+      },
+      {
+        label: 'שירותים',
+        navItems: [
+          makeLink('אסטרטגיית SEO', '/services/seo-strategy'),
+          makeLink('אופטימיזציית תוכן', '/services/content-optimization'),
+          makeLink('ביקורת טכנית', '/services/technical-audit'),
+          makeLink('SEO מקומי', '/services/local-seo'),
+          makeLink('בניית קישורים', '/services/link-building'),
+        ],
+      },
+      {
+        label: 'משאבים',
+        navItems: [
+          makeLink('מדריכים', '/resources/guides'),
+          makeLink('מילון מונחים', '/resources/glossary'),
+          makeLink('וובינרים', '/resources/webinars'),
+          makeLink('תיעוד API', '/resources/api-docs'),
+          makeLink('יומן שינויים', '/resources/changelog'),
+        ],
+      },
+      {
+        label: 'החברה',
+        navItems: [
+          makeLink('בלוג', '/blog'),
+          makeLink('תמחור', '/pricing'),
+          makeLink('יצירת קשר', '/support/contact'),
+          makeLink('מרכז עזרה', '/support/help-center'),
+        ],
+      },
+    ],
+    bottomLinks: [
+      makeLink('תנאי שימוש', '/legal/terms'),
+      makeLink('פרטיות', '/legal/privacy'),
+      makeLink('עוגיות', '/legal/cookies'),
+      makeLink('אבטחה', '/legal/security'),
+    ],
+    copyright: `© ${new Date().getFullYear()} ZUZY. כל הזכויות שמורות.`,
+  }
+
+  await payload.updateGlobal({
+    slug: 'footer',
+    data: footerData,
+    context: { disableRevalidate: true },
+  })
+
+  payload.logger.info('Footer navigation seeded successfully')
+
   payload.logger.info('=== Navigation seeding complete ===')
   process.exit(0)
 }

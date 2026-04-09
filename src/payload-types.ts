@@ -2915,7 +2915,33 @@ export interface Header {
  */
 export interface Footer {
   id: number;
-  navItems?:
+  columns?:
+    | {
+        label: string;
+        navItems?:
+          | {
+              link: {
+                type?: ('reference' | 'custom') | null;
+                newTab?: boolean | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'posts';
+                      value: number | Post;
+                    } | null);
+                url?: string | null;
+                label: string;
+              };
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  bottomLinks?:
     | {
         link: {
           type?: ('reference' | 'custom') | null;
@@ -2935,6 +2961,10 @@ export interface Footer {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Copyright text for footer bottom bar
+   */
+  copyright?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -3116,7 +3146,27 @@ export interface HeaderSelect<T extends boolean = true> {
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
-  navItems?:
+  columns?:
+    | T
+    | {
+        label?: T;
+        navItems?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                  };
+              id?: T;
+            };
+        id?: T;
+      };
+  bottomLinks?:
     | T
     | {
         link?:
@@ -3130,6 +3180,7 @@ export interface FooterSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  copyright?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

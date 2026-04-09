@@ -44,10 +44,6 @@ const nextConfig = {
 
     return webpackConfig
   },
-  eslint: {
-    // ESLint warnings (e.g. @typescript-eslint/no-explicit-any) should not fail production builds
-    ignoreDuringBuilds: true,
-  },
   reactStrictMode: true,
   redirects,
   // Blog proxy rewrites removed in Phase 4 — /blog/* now handled by Next.js routes

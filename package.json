@@ -21,8 +21,7 @@
     "seed:brand-assets": "cross-env NODE_OPTIONS=--no-deprecation payload run src/scripts/seed-brand-assets.ts",
     "seed:pages": "cross-env NODE_OPTIONS=--no-deprecation payload run src/scripts/seed-pages.ts",
     "seed:brand-docs": "cross-env NODE_OPTIONS=--no-deprecation payload run src/scripts/seed-brand-docs.ts",
-    "seed:nav": "cross-env NODE_OPTIONS=--no-deprecation payload run src/scripts/seed-navigation.ts",
-    "seed:all": "pnpm seed:brand-assets && pnpm seed:pages && pnpm seed:brand-docs && pnpm seed:nav",
+    "seed:all": "pnpm seed:brand-assets && pnpm seed:pages && pnpm seed:brand-docs",
     "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts"
   },
   "dependencies": {

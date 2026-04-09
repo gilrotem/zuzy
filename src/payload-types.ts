@@ -2863,12 +2863,7 @@ export interface Header {
   id: number;
   navItems?:
     | {
-        style: 'dropdown' | 'link';
-        /**
-         * The visible label in the navigation bar
-         */
-        label: string;
-        directLink?: {
+        link: {
           type?: ('reference' | 'custom') | null;
           newTab?: boolean | null;
           reference?:
@@ -2883,34 +2878,6 @@ export interface Header {
           url?: string | null;
           label: string;
         };
-        /**
-         * Optional description shown at the top of the dropdown panel
-         */
-        description?: string | null;
-        children?:
-          | {
-              link: {
-                type?: ('reference' | 'custom') | null;
-                newTab?: boolean | null;
-                reference?:
-                  | ({
-                      relationTo: 'pages';
-                      value: number | Page;
-                    } | null)
-                  | ({
-                      relationTo: 'posts';
-                      value: number | Post;
-                    } | null);
-                url?: string | null;
-                label: string;
-              };
-              /**
-               * Short description below the link label
-               */
-              description?: string | null;
-              id?: string | null;
-            }[]
-          | null;
         id?: string | null;
       }[]
     | null;
@@ -2923,39 +2890,7 @@ export interface Header {
  */
 export interface Footer {
   id: number;
-  columns?:
-    | {
-        /**
-         * Column heading
-         */
-        label: string;
-        navItems?:
-          | {
-              link: {
-                type?: ('reference' | 'custom') | null;
-                newTab?: boolean | null;
-                reference?:
-                  | ({
-                      relationTo: 'pages';
-                      value: number | Page;
-                    } | null)
-                  | ({
-                      relationTo: 'posts';
-                      value: number | Post;
-                    } | null);
-                url?: string | null;
-                label: string;
-              };
-              id?: string | null;
-            }[]
-          | null;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * Links shown in the bottom bar (legal, etc.)
-   */
-  bottomLinks?:
+  navItems?:
     | {
         link: {
           type?: ('reference' | 'custom') | null;
@@ -2975,10 +2910,6 @@ export interface Footer {
         id?: string | null;
       }[]
     | null;
-  /**
-   * Copyright text shown at the bottom of the footer
-   */
-  copyright?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -3124,9 +3055,7 @@ export interface HeaderSelect<T extends boolean = true> {
   navItems?:
     | T
     | {
-        style?: T;
-        label?: T;
-        directLink?:
+        link?:
           | T
           | {
               type?: T;
@@ -3134,22 +3063,6 @@ export interface HeaderSelect<T extends boolean = true> {
               reference?: T;
               url?: T;
               label?: T;
-            };
-        description?: T;
-        children?:
-          | T
-          | {
-              link?:
-                | T
-                | {
-                    type?: T;
-                    newTab?: T;
-                    reference?: T;
-                    url?: T;
-                    label?: T;
-                  };
-              description?: T;
-              id?: T;
             };
         id?: T;
       };
@@ -3162,27 +3075,7 @@ export interface HeaderSelect<T extends boolean = true> {
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
-  columns?:
-    | T
-    | {
-        label?: T;
-        navItems?:
-          | T
-          | {
-              link?:
-                | T
-                | {
-                    type?: T;
-                    newTab?: T;
-                    reference?: T;
-                    url?: T;
-                    label?: T;
-                  };
-              id?: T;
-            };
-        id?: T;
-      };
-  bottomLinks?:
+  navItems?:
     | T
     | {
         link?:
@@ -3196,7 +3089,6 @@ export interface FooterSelect<T extends boolean = true> {
             };
         id?: T;
       };
-  copyright?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

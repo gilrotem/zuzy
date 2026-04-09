@@ -2863,6 +2863,7 @@ export interface Header {
   id: number;
   navItems?:
     | {
+        style: 'link' | 'dropdown';
         link: {
           type?: ('reference' | 'custom') | null;
           newTab?: boolean | null;
@@ -2878,6 +2879,30 @@ export interface Header {
           url?: string | null;
           label: string;
         };
+        children?:
+          | {
+              link: {
+                type?: ('reference' | 'custom') | null;
+                newTab?: boolean | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'posts';
+                      value: number | Post;
+                    } | null);
+                url?: string | null;
+                label: string;
+              };
+              /**
+               * Optional description shown below the link
+               */
+              description?: string | null;
+              id?: string | null;
+            }[]
+          | null;
         id?: string | null;
       }[]
     | null;
@@ -3055,6 +3080,7 @@ export interface HeaderSelect<T extends boolean = true> {
   navItems?:
     | T
     | {
+        style?: T;
         link?:
           | T
           | {
@@ -3063,6 +3089,21 @@ export interface HeaderSelect<T extends boolean = true> {
               reference?: T;
               url?: T;
               label?: T;
+            };
+        children?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                  };
+              description?: T;
+              id?: T;
             };
         id?: T;
       };

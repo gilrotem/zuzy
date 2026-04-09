@@ -13,11 +13,44 @@ export const Header: GlobalConfig = {
       name: 'navItems',
       type: 'array',
       fields: [
+        {
+          name: 'style',
+          type: 'select',
+          defaultValue: 'link',
+          options: [
+            { label: 'Link', value: 'link' },
+            { label: 'Dropdown', value: 'dropdown' },
+          ],
+          required: true,
+        },
         link({
           appearances: false,
         }),
+        {
+          name: 'children',
+          type: 'array',
+          label: 'Dropdown Items',
+          maxRows: 12,
+          admin: {
+            condition: (_, siblingData) => siblingData?.style === 'dropdown',
+            initCollapsed: true,
+          },
+          fields: [
+            link({
+              appearances: false,
+            }),
+            {
+              name: 'description',
+              type: 'textarea',
+              localized: true,
+              admin: {
+                description: 'Optional description shown below the link',
+              },
+            },
+          ],
+        },
       ],
-      maxRows: 6,
+      maxRows: 10,
       admin: {
         initCollapsed: true,
         components: {

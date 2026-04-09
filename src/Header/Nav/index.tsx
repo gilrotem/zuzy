@@ -116,7 +116,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
           href="https://core.zuzy.co.il/login"
           className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
         >
-          Login
+          התחברות
         </a>
       </nav>
 
@@ -195,14 +195,14 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
             className="flex items-center gap-2 py-3 px-2 text-base text-white/80 hover:text-white hover:bg-white/5 rounded-md transition-colors"
           >
             <SearchIcon className="w-5" />
-            <span>Search</span>
+            <span>חיפוש</span>
           </Link>
 
           <a
             href="https://core.zuzy.co.il/login"
             className="mt-4 block rounded-md bg-primary px-4 py-3 text-center text-base font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Login
+            התחברות
           </a>
         </nav>
       </div>

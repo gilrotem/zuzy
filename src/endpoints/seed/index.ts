@@ -241,14 +241,18 @@ export const seed = async ({
       data: {
         navItems: [
           {
-            link: {
+            style: 'link',
+            label: 'Posts',
+            directLink: {
               type: 'custom',
               label: 'Posts',
               url: '/posts',
             },
           },
           {
-            link: {
+            style: 'link',
+            label: 'Contact',
+            directLink: {
               type: 'reference',
               label: 'Contact',
               reference: {
@@ -263,22 +267,21 @@ export const seed = async ({
     payload.updateGlobal({
       slug: 'footer',
       data: {
-        navItems: [
+        columns: [
           {
-            link: {
-              type: 'custom',
-              label: 'Admin',
-              url: '/admin',
-            },
+            label: 'Links',
+            navItems: [
+              {
+                link: {
+                  type: 'custom',
+                  label: 'Admin',
+                  url: '/admin',
+                },
+              },
+            ],
           },
-          {
-            link: {
-              type: 'custom',
-              label: 'Source Code',
-              newTab: true,
-              url: 'https://github.com/payloadcms/payload/tree/main/templates/website',
-            },
-          },
+        ],
+        bottomLinks: [
           {
             link: {
               type: 'custom',

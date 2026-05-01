@@ -27,7 +27,6 @@ export const BLOCKED_PATHS = [
   '/_vercel',
   '/next/preview',
   '/next/seed',
-  '/posts',
   '/search',
 ]
 

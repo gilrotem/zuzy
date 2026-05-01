@@ -22,9 +22,6 @@ const DEFAULT_DISALLOW = [
   '/api/*',
   '/_next',
   '/_vercel',
-  '/posts',
-  '/posts/*',
-  '/posts/page/*',
   '/search',
 ]
 

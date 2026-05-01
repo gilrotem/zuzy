@@ -2,7 +2,7 @@
 
 > Living document. Status: ⬜ Not started | 🔄 In progress | ✅ Complete
 > Phase history below. Find `🔜 Next Phase` for current work.
-> Last updated: 2026-03-31
+> Last updated: 2026-04-29
 
 ---
 
@@ -104,7 +104,106 @@
 
 ---
 
-## 🔜 Phase 8 — (TBD)
+## ✅ Phase 8 — Blog/WP Architecture Cleanup (2026-04-29)
+
+**Plan**: `.claude/plans/BLOG-WP-CLEANUP.md`
+**Scope**: End the recurring blog/WP/Posts conflicts by enforcing a single architecture across all layers (WP server, Payload, Next.js, docs, memory).
+
+### 8.A — WP-side guardrails ✅
+- [x] Deployed `wp-content/mu-plugins/zuzy-headless-guardrails.php` on wp.zuzy.co.il:
+  - 308 redirect every WP frontend URL → `www.zuzy.co.il/blog/...` (post slug, category, fallback to `/blog/`)
+  - Allowlist: `/wp-admin`, `/wp-json`, `/wp-login.php`, `/wp-cron.php`, `/xmlrpc.php`, `/wp-content`, `/wp-includes`
+  - X-Robots-Tag: noindex, nofollow on every frontend response
+  - `wp_sitemaps_enabled` filter → false
+  - RSS/Atom feed actions removed
+
+### 8.B — Codebase deletion ✅
+- [x] Deleted `src/app/(frontend)/posts/` (3 routes)
+- [x] Deleted `src/collections/Posts/` (collection + revalidation hooks)
+- [x] Deleted `src/blocks/RelatedPosts/`, `src/blocks/ArchiveBlock/`, `src/blocks/Banner/`
+- [x] Deleted `src/components/Card/`, `src/components/CollectionArchive/`
+- [x] Deleted `src/heros/PostHero/`
+- [x] Deleted `src/utilities/formatAuthors.ts`
+- [x] Deleted `src/endpoints/seed/post-1.ts`, `post-2.ts`, `post-3.ts`, `image-1.ts`
+- [x] `src/payload.config.ts` — removed Posts import + registration
+- [x] `src/plugins/index.ts` — removed Post type, removed `'posts'` from redirectsPlugin + searchPlugin collection arrays
+- [x] `src/blocks/RenderBlocks.tsx` — removed ArchiveBlock import + registration
+- [x] `src/collections/Pages/index.ts` — removed Archive from blocks array
+- [x] `src/endpoints/seed/index.ts` — removed post imports + seeding + image-post fetches; replaced `Posts → /posts` Header nav with `Blog → /blog`
+- [x] `src/lib/seo-config.ts` — removed `/posts` from BLOCKED_PATHS
+- [x] `src/app/robots.ts` — removed `/posts*` from DEFAULT_DISALLOW
+- [x] `src/fields/link.ts` — `relationTo: ['pages', 'products', 'brand-docs']` (was `['pages', 'posts']`)
+- [x] `src/fields/defaultLexical.ts` — `enabledCollections: ['pages', 'products', 'brand-docs']`
+- [x] `src/components/RichText/index.tsx` — dropped Banner import + converter; updated `internalDocToHref` to handle non-pages collections via prefix
+- [x] `src/components/Link/index.tsx` — replaced `Page | Post` with `Page | Product | BrandDoc`
+- [x] `src/components/PayloadRedirects/index.tsx` — same
+- [x] `src/utilities/generateMeta.ts` — removed Post from union
+- [x] `src/utilities/generatePreviewPath.ts` — removed `posts: '/posts'` from collectionPrefixMap
+- [x] `src/app/(frontend)/search/page.tsx` — rewrote to use per-item `doc.relationTo` (Card+CollectionArchive replaced with inline simple results component)
+
+### 8.C — Migration ⏳ (USER MUST RUN — interactive prompt cannot be automated)
+
+The Payload schema diff is large (drop `posts` + sub-tables, drop `archive` block columns, drop `posts_id` from `*_rels` tables, add `products_id` + `brand_docs_id` columns). Drizzle prompts interactively to confirm "create new" vs "rename from existing" for each enum/column. The default answer is **always "create new"** — that's correct for every prompt in this migration.
+
+**Steps:**
+```bash
+# In zuzy-website root (NOT worktree, OR worktree with .env present):
+pnpm payload migrate:create drop_posts_and_align
+# Press ENTER on every prompt (default = "create new"). Do NOT pick "rename from".
+
+# This generates: src/migrations/YYYYMMDD_HHMMSS_drop_posts_and_align.ts (+ .json)
+
+# Verify the SQL by inspecting the .ts file before applying.
+
+# Apply locally:
+pnpm payload migrate
+# WARNING: .env DATABASE_URL points to production (Supabase) since it was pulled via `vercel env pull`.
+# Running `pnpm payload migrate` in this state applies the migration to PRODUCTION.
+# Plan accordingly: run during low traffic OR set up a separate dev DB.
+```
+
+**After migration is applied:**
+- `pnpm build` passes (header_rels has the right columns)
+- `posts` table is gone, demo posts deleted
+- Production DB schema aligned with new code
+
+**Deployment ordering note:** After the migration applies, the OLD code currently in production starts erroring (it queries `posts` which no longer exists). To avoid a long broken window, run the migration as close to the deploy as possible:
+1. Push the code commit (Vercel starts building)
+2. Run `pnpm payload migrate` while Vercel is mid-build
+3. Vercel deploy completes → new code matches new schema
+
+For a fresh low-traffic site, this brief inconsistency is acceptable. For higher traffic in the future, consider adding `payload migrate` to the `build` script in `package.json` so migrations and code deploy atomically.
+
+### 8.D — Docs alignment ✅
+- [x] Deleted stale `ZUZY-PROJECT-BRIEF.md`
+- [x] `CLAUDE.md` — added LOCKED ARCHITECTURE block, removed Posts from Collections, fixed URL Architecture to match live state (Pattern A nesting + Pattern B flat slugs documented honestly)
+- [x] `../zuzy-architecture/OVERVIEW.md` — fixed "proxy" → REST API, added redirect/noindex enforcement note, added Posts collection deletion note
+- [x] `../zuzy-architecture/DECISIONS-LOG.md` D2 — appended 2026-04-29 enforcement details
+- [x] `../zuzy-architecture/SYNC-LOG.md` — moved D10-D18 to Completed; deprecated old proxy entry; added 2026-04-29 entries; flagged core.zuzy.co.il drift + DNS-RECORDS gap as Active items for user
+- [x] `../zuzy-architecture/DNS-RECORDS.md` — flagged file as incomplete (missing wp/core records)
+
+### 8.E — Verification ⏳
+- [x] `pnpm generate:types` — clean
+- [x] `pnpm generate:importmap` — clean
+- [x] `npx tsc --noEmit` — exit 0, zero errors
+- [ ] `pnpm build` — currently fails on `column header_rels.products_id does not exist` (DB schema lags code). Will pass after 8.C migration applies.
+
+### 8.F — Architecture lock ✅
+- [x] Memory: `feedback_blog_arch_locked.md` — future Claude sessions see this in MEMORY.md index
+- [x] CLAUDE.md LOCKED ARCHITECTURE block at top — STOP-and-ask rules for any future agent
+
+### 8.G — Pending (user)
+- [ ] **Deploy WP mu-plugin** (Phase 8.A) — `wp-content/mu-plugins/zuzy-headless-guardrails.php` on the WP server. Snippet provided in chat 2026-04-29.
+- [ ] **Generate + apply Payload migration** (8.C) — run interactively, press Enter for all prompts.
+- [ ] **Verify build passes** — `pnpm build` should succeed after migration.
+- [ ] **Update `../zuzy-architecture/DNS-RECORDS.md`** — add `wp` and `core` records from Hostinger panel (DNS-RECORDS.md is flagged as incomplete).
+- [ ] **Clarify `core.zuzy.co.il` actual purpose** — current state: marketing landing ("ZUZY4SEO"); D1 says: seohub app shell with `Disallow: /`. Either D1 changed or seohub robots config drifted.
+- [ ] **Commit + push** — after build passes locally, push to trigger Vercel deploy.
+- [ ] **Production smoke tests** (Phase D below) — after deploy.
+
+---
+
+## 🔜 Phase 9 — (TBD)
 
 ---
 

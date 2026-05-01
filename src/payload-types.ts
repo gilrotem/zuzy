@@ -68,7 +68,6 @@ export interface Config {
   blocks: {};
   collections: {
     pages: Page;
-    posts: Post;
     media: Media;
     categories: Category;
     'product-categories': ProductCategory;
@@ -93,7 +92,6 @@ export interface Config {
   };
   collectionsSelect: {
     pages: PagesSelect<false> | PagesSelect<true>;
-    posts: PostsSelect<false> | PostsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     'product-categories': ProductCategoriesSelect<false> | ProductCategoriesSelect<true>;
@@ -201,8 +199,12 @@ export interface Page {
                   value: number | Page;
                 } | null)
               | ({
-                  relationTo: 'posts';
-                  value: number | Post;
+                  relationTo: 'products';
+                  value: number | Product;
+                } | null)
+              | ({
+                  relationTo: 'brand-docs';
+                  value: number | BrandDoc;
                 } | null);
             url?: string | null;
             label: string;
@@ -220,13 +222,7 @@ export interface Page {
     | (
         | CallToActionBlock
         | ContentBlock
-        | {
-            media: number | Media;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'mediaBlock';
-          }
-        | ArchiveBlock
+        | MediaBlock
         | FormBlock
         | HeroBlock
         | FeaturesBlock
@@ -236,31 +232,9 @@ export interface Page {
         | PricingBlock
         | RichContentBlock
         | ProcessStepsBlock
-        | {
-            /**
-             * Paste full HTML code here. It will be rendered directly on the page.
-             */
-            html: string;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'rawHtml';
-          }
-        | {
-            language?: ('typescript' | 'javascript' | 'css' | 'html') | null;
-            code: string;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'code';
-          }
-        | {
-            title?: string | null;
-            subtitle?: string | null;
-            ctaText?: string | null;
-            ctaLink?: string | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'appCostCalculator';
-          }
+        | RawHTMLBlock
+        | CodeBlock
+        | AppCostCalculatorBlock
         | AppGridBlock
         | ComparisonTableBlock
         | LogoGridBlock
@@ -318,13 +292,17 @@ export interface Page {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "posts".
+ * via the `definition` "products".
  */
-export interface Post {
+export interface Product {
   id: number;
   title: string;
-  heroImage?: (number | null) | Media;
-  content: {
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  description?: {
     root: {
       type: string;
       children: {
@@ -338,9 +316,15 @@ export interface Post {
       version: number;
     };
     [k: string]: unknown;
-  };
-  relatedPosts?: (number | Post)[] | null;
-  categories?: (number | Category)[] | null;
+  } | null;
+  featuredImage?: (number | null) | Media;
+  productCategories?: (number | ProductCategory)[] | null;
+  price?: number | null;
+  currency?: ('ILS' | 'USD' | 'EUR') | null;
+  /**
+   * Product ID in GROW payment system
+   */
+  growProductId?: string | null;
   meta?: {
     title?: string | null;
     /**
@@ -367,19 +351,6 @@ export interface Post {
      */
     breadcrumbLabel?: string | null;
   };
-  publishedAt?: string | null;
-  authors?: (number | User)[] | null;
-  populatedAuthors?:
-    | {
-        id?: string | null;
-        name?: string | null;
-      }[]
-    | null;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -506,20 +477,21 @@ export interface FolderInterface {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "categories".
+ * via the `definition` "product-categories".
  */
-export interface Category {
+export interface ProductCategory {
   id: number;
   title: string;
+  description?: string | null;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
   generateSlug?: boolean | null;
   slug: string;
-  parent?: (number | null) | Category;
+  parent?: (number | null) | ProductCategory;
   breadcrumbs?:
     | {
-        doc?: (number | null) | Category;
+        doc?: (number | null) | ProductCategory;
         url?: string | null;
         label?: string | null;
         id?: string | null;
@@ -530,29 +502,99 @@ export interface Category {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users".
+ * via the `definition` "brand-docs".
  */
-export interface User {
+export interface BrandDoc {
   id: number;
-  name?: string | null;
+  title: string;
+  /**
+   * Short description of the document
+   */
+  summary?: string | null;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    description?: string | null;
+    /**
+     * Override robots directives for this page. Leave empty to use defaults (index, follow).
+     */
+    robotsOverride?: ('noindex' | 'nofollow' | 'noarchive' | 'nosnippet' | 'noimageindex')[] | null;
+    /**
+     * Override the auto-generated canonical URL. Use for duplicate content or cross-domain canonicals.
+     */
+    canonicalOverride?: string | null;
+    /**
+     * Override the auto-detected structured data type. Leave empty for automatic detection.
+     */
+    jsonLdType?:
+      | ('WebPage' | 'Article' | 'Product' | 'FAQPage' | 'AboutPage' | 'ContactPage' | 'CollectionPage')
+      | null;
+    /**
+     * Custom label shown in breadcrumbs. Falls back to page title.
+     */
+    breadcrumbLabel?: string | null;
+  };
+  docType:
+    | 'essence'
+    | 'brand-voice'
+    | 'business-model'
+    | 'differentiation'
+    | 'process'
+    | 'sales'
+    | 'solutions'
+    | 'faq'
+    | 'case-studies'
+    | 'design-tokens'
+    | 'logo-usage'
+    | 'typography'
+    | 'color-palette'
+    | 'motion';
+  icon?:
+    | (
+        | 'dna'
+        | 'mic'
+        | 'briefcase'
+        | 'target'
+        | 'gear'
+        | 'chart'
+        | 'puzzle'
+        | 'question'
+        | 'clipboard'
+        | 'palette'
+        | 'frame'
+        | 'typography'
+        | 'rainbow'
+        | 'sparkles'
+      )
+    | null;
+  sortOrder?: number | null;
+  publishedAt?: string | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
   updatedAt: string;
   createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  sessions?:
-    | {
-        id: string;
-        createdAt?: string | null;
-        expiresAt: string;
-      }[]
-    | null;
-  password?: string | null;
-  collection: 'users';
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -585,8 +627,12 @@ export interface CallToActionBlock {
                 value: number | Page;
               } | null)
             | ({
-                relationTo: 'posts';
-                value: number | Post;
+                relationTo: 'products';
+                value: number | Product;
+              } | null)
+            | ({
+                relationTo: 'brand-docs';
+                value: number | BrandDoc;
               } | null);
           url?: string | null;
           label: string;
@@ -635,8 +681,12 @@ export interface ContentBlock {
                 value: number | Page;
               } | null)
             | ({
-                relationTo: 'posts';
-                value: number | Post;
+                relationTo: 'products';
+                value: number | Product;
+              } | null)
+            | ({
+                relationTo: 'brand-docs';
+                value: number | BrandDoc;
               } | null);
           url?: string | null;
           label: string;
@@ -654,37 +704,13 @@ export interface ContentBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ArchiveBlock".
+ * via the `definition` "MediaBlock".
  */
-export interface ArchiveBlock {
-  introContent?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  populateBy?: ('collection' | 'selection') | null;
-  relationTo?: 'posts' | null;
-  categories?: (number | Category)[] | null;
-  limit?: number | null;
-  selectedDocs?:
-    | {
-        relationTo: 'posts';
-        value: number | Post;
-      }[]
-    | null;
+export interface MediaBlock {
+  media: number | Media;
   id?: string | null;
   blockName?: string | null;
-  blockType: 'archive';
+  blockType: 'mediaBlock';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -920,8 +946,12 @@ export interface HeroBlock {
                 value: number | Page;
               } | null)
             | ({
-                relationTo: 'posts';
-                value: number | Post;
+                relationTo: 'products';
+                value: number | Product;
+              } | null)
+            | ({
+                relationTo: 'brand-docs';
+                value: number | BrandDoc;
               } | null);
           url?: string | null;
           label: string;
@@ -1009,8 +1039,12 @@ export interface CTABlock {
                 value: number | Page;
               } | null)
             | ({
-                relationTo: 'posts';
-                value: number | Post;
+                relationTo: 'products';
+                value: number | Product;
+              } | null)
+            | ({
+                relationTo: 'brand-docs';
+                value: number | BrandDoc;
               } | null);
           url?: string | null;
           label: string;
@@ -1134,8 +1168,12 @@ export interface PricingBlock {
                       value: number | Page;
                     } | null)
                   | ({
-                      relationTo: 'posts';
-                      value: number | Post;
+                      relationTo: 'products';
+                      value: number | Product;
+                    } | null)
+                  | ({
+                      relationTo: 'brand-docs';
+                      value: number | BrandDoc;
                     } | null);
                 url?: string | null;
                 label: string;
@@ -1222,6 +1260,43 @@ export interface ProcessStepsBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'processStepsBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "RawHTMLBlock".
+ */
+export interface RawHTMLBlock {
+  /**
+   * Paste full HTML code here. It will be rendered directly on the page.
+   */
+  html: string;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'rawHtml';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CodeBlock".
+ */
+export interface CodeBlock {
+  language?: ('typescript' | 'javascript' | 'css' | 'html') | null;
+  code: string;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'code';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AppCostCalculatorBlock".
+ */
+export interface AppCostCalculatorBlock {
+  title?: string | null;
+  subtitle?: string | null;
+  ctaText?: string | null;
+  ctaLink?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'appCostCalculator';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1350,21 +1425,20 @@ export interface InteractiveDemoBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "product-categories".
+ * via the `definition` "categories".
  */
-export interface ProductCategory {
+export interface Category {
   id: number;
   title: string;
-  description?: string | null;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
   generateSlug?: boolean | null;
   slug: string;
-  parent?: (number | null) | ProductCategory;
+  parent?: (number | null) | Category;
   breadcrumbs?:
     | {
-        doc?: (number | null) | ProductCategory;
+        doc?: (number | null) | Category;
         url?: string | null;
         label?: string | null;
         id?: string | null;
@@ -1375,164 +1449,29 @@ export interface ProductCategory {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "products".
+ * via the `definition` "users".
  */
-export interface Product {
+export interface User {
   id: number;
-  title: string;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  description?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  featuredImage?: (number | null) | Media;
-  productCategories?: (number | ProductCategory)[] | null;
-  price?: number | null;
-  currency?: ('ILS' | 'USD' | 'EUR') | null;
-  /**
-   * Product ID in GROW payment system
-   */
-  growProductId?: string | null;
-  meta?: {
-    title?: string | null;
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
-     */
-    image?: (number | null) | Media;
-    description?: string | null;
-    /**
-     * Override robots directives for this page. Leave empty to use defaults (index, follow).
-     */
-    robotsOverride?: ('noindex' | 'nofollow' | 'noarchive' | 'nosnippet' | 'noimageindex')[] | null;
-    /**
-     * Override the auto-generated canonical URL. Use for duplicate content or cross-domain canonicals.
-     */
-    canonicalOverride?: string | null;
-    /**
-     * Override the auto-detected structured data type. Leave empty for automatic detection.
-     */
-    jsonLdType?:
-      | ('WebPage' | 'Article' | 'Product' | 'FAQPage' | 'AboutPage' | 'ContactPage' | 'CollectionPage')
-      | null;
-    /**
-     * Custom label shown in breadcrumbs. Falls back to page title.
-     */
-    breadcrumbLabel?: string | null;
-  };
+  name?: string | null;
   updatedAt: string;
   createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "brand-docs".
- */
-export interface BrandDoc {
-  id: number;
-  title: string;
-  /**
-   * Short description of the document
-   */
-  summary?: string | null;
-  content?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  meta?: {
-    title?: string | null;
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
-     */
-    image?: (number | null) | Media;
-    description?: string | null;
-    /**
-     * Override robots directives for this page. Leave empty to use defaults (index, follow).
-     */
-    robotsOverride?: ('noindex' | 'nofollow' | 'noarchive' | 'nosnippet' | 'noimageindex')[] | null;
-    /**
-     * Override the auto-generated canonical URL. Use for duplicate content or cross-domain canonicals.
-     */
-    canonicalOverride?: string | null;
-    /**
-     * Override the auto-detected structured data type. Leave empty for automatic detection.
-     */
-    jsonLdType?:
-      | ('WebPage' | 'Article' | 'Product' | 'FAQPage' | 'AboutPage' | 'ContactPage' | 'CollectionPage')
-      | null;
-    /**
-     * Custom label shown in breadcrumbs. Falls back to page title.
-     */
-    breadcrumbLabel?: string | null;
-  };
-  docType:
-    | 'essence'
-    | 'brand-voice'
-    | 'business-model'
-    | 'differentiation'
-    | 'process'
-    | 'sales'
-    | 'solutions'
-    | 'faq'
-    | 'case-studies'
-    | 'design-tokens'
-    | 'logo-usage'
-    | 'typography'
-    | 'color-palette'
-    | 'motion';
-  icon?:
-    | (
-        | 'dna'
-        | 'mic'
-        | 'briefcase'
-        | 'target'
-        | 'gear'
-        | 'chart'
-        | 'puzzle'
-        | 'question'
-        | 'clipboard'
-        | 'palette'
-        | 'frame'
-        | 'typography'
-        | 'rainbow'
-        | 'sparkles'
-      )
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
     | null;
-  sortOrder?: number | null;
-  publishedAt?: string | null;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
+  password?: string | null;
+  collection: 'users';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1550,10 +1489,6 @@ export interface Redirect {
       | ({
           relationTo: 'pages';
           value: number | Page;
-        } | null)
-      | ({
-          relationTo: 'posts';
-          value: number | Post;
         } | null)
       | ({
           relationTo: 'products';
@@ -1599,10 +1534,6 @@ export interface Search {
     | {
         relationTo: 'pages';
         value: number | Page;
-      }
-    | {
-        relationTo: 'posts';
-        value: number | Post;
       }
     | {
         relationTo: 'products';
@@ -1750,10 +1681,6 @@ export interface PayloadLockedDocument {
         value: number | Page;
       } | null)
     | ({
-        relationTo: 'posts';
-        value: number | Post;
-      } | null)
-    | ({
         relationTo: 'media';
         value: number | Media;
       } | null)
@@ -1873,7 +1800,6 @@ export interface PagesSelect<T extends boolean = true> {
         cta?: T | CallToActionBlockSelect<T>;
         content?: T | ContentBlockSelect<T>;
         mediaBlock?: T | MediaBlockSelect<T>;
-        archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
         heroBlock?: T | HeroBlockSelect<T>;
         featuresBlock?: T | FeaturesBlockSelect<T>;
@@ -1978,20 +1904,6 @@ export interface ContentBlockSelect<T extends boolean = true> {
  */
 export interface MediaBlockSelect<T extends boolean = true> {
   media?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ArchiveBlock_select".
- */
-export interface ArchiveBlockSelect<T extends boolean = true> {
-  introContent?: T;
-  populateBy?: T;
-  relationTo?: T;
-  categories?: T;
-  limit?: T;
-  selectedDocs?: T;
   id?: T;
   blockName?: T;
 }
@@ -2327,41 +2239,6 @@ export interface InteractiveDemoBlockSelect<T extends boolean = true> {
   heading?: T;
   id?: T;
   blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "posts_select".
- */
-export interface PostsSelect<T extends boolean = true> {
-  title?: T;
-  heroImage?: T;
-  content?: T;
-  relatedPosts?: T;
-  categories?: T;
-  meta?:
-    | T
-    | {
-        title?: T;
-        image?: T;
-        description?: T;
-        robotsOverride?: T;
-        canonicalOverride?: T;
-        jsonLdType?: T;
-        breadcrumbLabel?: T;
-      };
-  publishedAt?: T;
-  authors?: T;
-  populatedAuthors?:
-    | T
-    | {
-        id?: T;
-        name?: T;
-      };
-  generateSlug?: T;
-  slug?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -2873,8 +2750,12 @@ export interface Header {
                 value: number | Page;
               } | null)
             | ({
-                relationTo: 'posts';
-                value: number | Post;
+                relationTo: 'products';
+                value: number | Product;
+              } | null)
+            | ({
+                relationTo: 'brand-docs';
+                value: number | BrandDoc;
               } | null);
           url?: string | null;
           label: string;
@@ -2890,8 +2771,12 @@ export interface Header {
                       value: number | Page;
                     } | null)
                   | ({
-                      relationTo: 'posts';
-                      value: number | Post;
+                      relationTo: 'products';
+                      value: number | Product;
+                    } | null)
+                  | ({
+                      relationTo: 'brand-docs';
+                      value: number | BrandDoc;
                     } | null);
                 url?: string | null;
                 label: string;
@@ -2929,8 +2814,12 @@ export interface Footer {
                       value: number | Page;
                     } | null)
                   | ({
-                      relationTo: 'posts';
-                      value: number | Post;
+                      relationTo: 'products';
+                      value: number | Product;
+                    } | null)
+                  | ({
+                      relationTo: 'brand-docs';
+                      value: number | BrandDoc;
                     } | null);
                 url?: string | null;
                 label: string;
@@ -2952,8 +2841,12 @@ export interface Footer {
                 value: number | Page;
               } | null)
             | ({
-                relationTo: 'posts';
-                value: number | Post;
+                relationTo: 'products';
+                value: number | Product;
+              } | null)
+            | ({
+                relationTo: 'brand-docs';
+                value: number | BrandDoc;
               } | null);
           url?: string | null;
           label: string;
@@ -3282,10 +3175,6 @@ export interface TaskSchedulePublish {
           value: number | Page;
         } | null)
       | ({
-          relationTo: 'posts';
-          value: number | Post;
-        } | null)
-      | ({
           relationTo: 'brand-docs';
           value: number | BrandDoc;
         } | null);
@@ -3293,78 +3182,6 @@ export interface TaskSchedulePublish {
     user?: (number | null) | User;
   };
   output?: unknown;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "MediaBlock".
- */
-export interface MediaBlock {
-  media: number | Media;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'mediaBlock';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "RawHTMLBlock".
- */
-export interface RawHTMLBlock {
-  /**
-   * Paste full HTML code here. It will be rendered directly on the page.
-   */
-  html: string;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'rawHtml';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CodeBlock".
- */
-export interface CodeBlock {
-  language?: ('typescript' | 'javascript' | 'css' | 'html') | null;
-  code: string;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'code';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "AppCostCalculatorBlock".
- */
-export interface AppCostCalculatorBlock {
-  title?: string | null;
-  subtitle?: string | null;
-  ctaText?: string | null;
-  ctaLink?: string | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'appCostCalculator';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "BannerBlock".
- */
-export interface BannerBlock {
-  style: 'info' | 'warning' | 'error' | 'success';
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'banner';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

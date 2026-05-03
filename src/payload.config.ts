@@ -14,7 +14,6 @@ import { fileURLToPath } from 'url'
 import { Categories } from './collections/Categories'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
-import { Posts } from './collections/Posts'
 import { ProductCategories } from './collections/ProductCategories'
 import { Products } from './collections/Products'
 import { Users } from './collections/Users'
@@ -87,7 +86,7 @@ export default buildConfig({
       }
     })(),
   }),
-  collections: [Pages, Posts, Media, Categories, ProductCategories, Products, BrandDocs, Users],
+  collections: [Pages, Media, Categories, ProductCategories, Products, BrandDocs, Users],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer, SiteSettings, SEOSettings],
 

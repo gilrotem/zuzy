@@ -11,14 +11,14 @@ import { FixedToolbarFeature, HeadingFeature, lexicalEditor } from '@payloadcms/
 import { searchFields } from '@/search/fieldOverrides'
 import { beforeSyncWithSearch } from '@/search/beforeSync'
 
-import { Page, Post, Product, BrandDoc } from '@/payload-types'
+import { Page, Product, BrandDoc } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
 
-const generateTitle: GenerateTitle<Post | Page | Product | BrandDoc> = ({ doc }) => {
+const generateTitle: GenerateTitle<Page | Product | BrandDoc> = ({ doc }) => {
   return doc?.title ? `${doc.title} | ZUZY` : 'ZUZY'
 }
 
-const generateURL: GenerateURL<Post | Page | Product | BrandDoc> = ({ doc }) => {
+const generateURL: GenerateURL<Page | Product | BrandDoc> = ({ doc }) => {
   const url = getServerSideURL()
 
   return doc?.slug ? `${url}/${doc.slug}` : url
@@ -67,7 +67,7 @@ export const plugins: Plugin[] = [
     },
   }),
   redirectsPlugin({
-    collections: ['pages', 'posts', 'products', 'brand-docs'],
+    collections: ['pages', 'products', 'brand-docs'],
     overrides: {
       // @ts-expect-error - This is a valid override, mapped fields don't resolve to the same type
       fields: ({ defaultFields }) => {
@@ -123,7 +123,7 @@ export const plugins: Plugin[] = [
     },
   }),
   searchPlugin({
-    collections: ['pages', 'posts', 'products', 'brand-docs'],
+    collections: ['pages', 'products', 'brand-docs'],
     beforeSync: beforeSyncWithSearch,
     searchOverrides: {
       fields: ({ defaultFields }) => {

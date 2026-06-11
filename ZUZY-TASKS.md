@@ -203,7 +203,15 @@ For a fresh low-traffic site, this brief inconsistency is acceptable. For higher
 
 ---
 
-## 🔜 Phase 9 — (TBD)
+## 🔜 Phase 9 — Footer + Legal Hub (one-hub model)
+
+**Spec**: `.claude/plans/FOOTER-LEGAL-HUB.md` (brief written 2026-06-11 from the seohub GSC session, on Gil's instruction — contains the locked one-hub decision, live-probe state, and the phase structure).
+**Trigger**: Google OAuth app verification needs the homepage to link the privacy policy; the footer global is empty; the legal silo is incomplete (`/legal/gdpr` + `/legal/accessibility` 404, `/accessibility` misredirects to `/legal/security`).
+**Mode**: Phase 0 (two bottom-bar legal links — may already be done by Gil via admin; verify first) can execute immediately. Phase 1 (full footer + legal-silo completion) is **PLAN-FIRST**: produce the plan, get Gil's approval, only then implement.
+
+- [ ] Phase 0 — homepage footer links privacy + terms (live HTML verified)
+- [ ] Phase 1 plan written + approved by Gil
+- [ ] Phase 1 implemented per approved plan (six legal pages live, redirect fixed, silo-mapped columns)
 
 ---
 

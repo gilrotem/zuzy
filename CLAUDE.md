@@ -23,7 +23,7 @@ See also: `../zuzy-architecture/ORCHESTRATION-PROTOCOL.md` for cross-workspace r
 
 ### Forbidden Actions
 - **NEVER delete files** unless the task explicitly names each file to delete.
-- **NEVER create git branches** without explicit instruction.
+- **NEVER commit code directly to `master`.** Every code change goes feature branch → PR → Vercel preview → Gil's go-ahead → merge. `master` auto-deploys production — a direct push IS a production deploy. The ONLY direct-to-master commits are docs-only follow-ups (`*.md`, plans, task files) after a merge.
 - **NEVER modify files outside the current task's stated scope.**
 - **NEVER commit without a passing build** (`pnpm build`).
 - **NEVER push without a passing build.**
@@ -47,6 +47,14 @@ SEO changes are effectively irreversible — Google may take weeks to recrawl. B
 
 **Three domains. Three roles. Zero overlap.**
 
+**The mental model — reconstruct this before acting; every rule below derives from it:**
+- **www = the face.** Payload + Next.js renders EVERYTHING Google sees — marketing pages AND the blog.
+- **wp = the typewriter.** Writers (and seohub's content push) type there; it serves JSON to www and is invisible to the world.
+- **core = the app.** A different project, a different workspace. Not yours.
+- **Google sees exactly ONE site: `www.zuzy.co.il`.**
+
+**Re-grounding rule:** before ANY change touching blog routes, redirects, robots, sitemap, nav, or URL structure — re-read this LOCKED ARCHITECTURE block in full. If you are unsure which system owns a URL: STOP and ask, never infer. The typical-Payload prior ("blog = a Payload Posts collection") is exactly the hallucination that repeatedly recreated deleted code here.
+
 | Domain | Role | Indexed? |
 |---|---|---|
 | `zuzy.co.il` / `www.zuzy.co.il` | The public site (Payload + Next.js). Marketing pages + blog at `/blog/*`. | ✅ The only thing Google indexes |
@@ -67,6 +75,7 @@ Editor → wp-admin → WP DB
 2. `wp.zuzy.co.il` frontend is never user-facing. Guardrails enforced by `wp-content/mu-plugins/zuzy-headless-guardrails.php` (lives on the WP server, not in this repo).
 3. Never modify `wp.zuzy.co.il/robots.txt`, `wp-sitemap.xml`, or the WP frontend redirect logic without explicit user approval. The WP-side mu-plugin owns this.
 4. The OTHER subdomains visible in Hostinger DNS (`gpr-smart-agent`, `magnet`, `seo-rank-tracker`, `app`, `yaron`, `dagim`, `avi`, `sami-hacabai`, `effective`, `helga`, `gpa`, `links`) are **unrelated projects on Lovable.dev / external hosts**. They are not part of zuzy-website and must not be referenced or modified from this workspace.
+5. **Legal pages: ONE hub (locked 2026-06-11).** All legal/compliance pages live ONLY at `www.zuzy.co.il/legal/*`. Subdomains and other systems link INTO the hub from their footers — never create a legal page on a subdomain or a second copy anywhere (drift already happened once: core had 6 pages, www had 4, texts diverged). core's `/legal/*` duplicates are scheduled to 301 into the hub (seohub workspace's job). If a product ever needs distinct terms, that is a new document inside the hub (e.g. `/legal/terms-core`), never a parallel hub.
 
 If a future task seems to require violating any of these rules: **STOP and ask the user.** This is non-negotiable.
 
@@ -364,6 +373,20 @@ CRITICAL: Payload v3 only. No Express, no Slate, no webpack. Payload-native solu
 - Run `npx tsc --noEmit` after code changes to catch type errors early.
 - Update `ZUZY-TASKS.md` after completing tasks (check boxes, add dates).
 
+## Session & Context Hygiene
+
+Documented failure mode in this workspace: long sessions drift — around the middle of the context
+window, agents regress to the "typical Payload site" prior and hallucinate architecture (recreating
+deleted Posts code, breaking WP redirects). These rules kill that mode:
+
+- **One phase per chat.** A phase ends with the Post-Phase Protocol; the next phase gets a fresh chat.
+- **Every ZUZY-TASKS.md phase entry must be SSOT** — complete and chat-independent: a fresh chat
+  executes from the entry + its linked spec alone, with zero conversation memory.
+- **Lazy-load context.** Read docs when the task touches them, not everything upfront.
+- **The honesty valve:** if the session has grown long and your certainty about the architecture is
+  dropping — STOP, write your state into the plan file, and tell the user to open a fresh chat.
+  Pushing through fog is how the Posts collection got recreated.
+
 ## Post-Phase Protocol
 
 **Mindset: Controlled slowness.** After implementation, shift from building mode to inspection mode.
@@ -401,11 +424,11 @@ Execute ALL stages in order. Do NOT skip steps. Do NOT rush to commit.
    - Search (`/search`) still works if content types changed
 8. **FIX**: If any issue found → fix → repeat from step 1
 
-### Stage 3 — Commit & Deploy
-9. **COMMIT**: `git commit` with clear message (`feat:`, `fix:`, `refactor:`)
-10. **PUSH**: `git push` — triggers Vercel deploy
+### Stage 3 — Commit & PR (never straight to master)
+9. **COMMIT** on the feature branch with a clear message (`feat:`, `fix:`, `refactor:`)
+10. **PUSH the branch + open a PR.** Gil verifies on the PR's Vercel preview deployment. Merge ONLY on his explicit go-ahead — `master` auto-deploys production, so the merge is the deploy.
 
-### Stage 4 — Production Verification
+### Stage 4 — Production Verification (post-merge)
 11. **DEPLOY CHECK**: Verify Vercel build succeeded (no errors in build log)
 12. **PRODUCTION SMOKE TEST**: Verify on live `www.zuzy.co.il`:
     - `curl` every new route — all return 200
@@ -470,7 +493,8 @@ When the user types **"סע"** as the first message:
 
 - Commit with clear messages: `feat:`, `fix:`, `refactor:`, `docs:`
 - Don't commit `.env*` files
-- Don't commit without user asking (unless running Post-Phase Protocol)
+- **Never commit code to `master` directly** — feature branch → PR → Vercel preview → Gil's go-ahead → merge. `master` auto-deploys production.
+- Docs-only follow-ups after a merge (ZUZY-TASKS.md, `.claude/plans/`, `*.md`) may go straight to master.
 
 ## User
 

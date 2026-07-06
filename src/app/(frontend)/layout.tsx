@@ -16,11 +16,7 @@ import { InitTheme } from '@/providers/Theme/InitTheme'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { draftMode } from 'next/headers'
 import { getCachedGlobal } from '@/utilities/getGlobals'
-import {
-  generateOrganizationJsonLd,
-  generateWebSiteJsonLd,
-  JsonLd,
-} from '@/lib/json-ld'
+import { generateEntityGraph, JsonLd } from '@/lib/json-ld'
 
 import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
@@ -76,8 +72,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         {seoSettingsData?.bingVerification && (
           <meta name="msvalidate.01" content={seoSettingsData.bingVerification} />
         )}
-        <JsonLd data={generateOrganizationJsonLd(seoSettingsData as any)} />
-        <JsonLd data={generateWebSiteJsonLd(seoSettingsData as any)} />
+        <JsonLd data={generateEntityGraph(seoSettingsData as any)} />
       </head>
       <body>
         <Providers>

@@ -1,12 +1,14 @@
 import canUseDOM from './canUseDOM'
 
 export const getServerSideURL = () => {
+  // .trim() guards against a stray newline/whitespace in the env value (a bad
+  // paste in the Vercel dashboard once leaked "\n" into every canonical/JSON-LD URL).
   return (
     process.env.NEXT_PUBLIC_SERVER_URL ||
     (process.env.VERCEL_PROJECT_PRODUCTION_URL
       ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
       : 'http://localhost:3000')
-  )
+  ).trim()
 }
 
 export const getClientSideURL = () => {

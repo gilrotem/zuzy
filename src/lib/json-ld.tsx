@@ -12,10 +12,12 @@
  */
 
 import { getServerSideURL } from '@/utilities/getURL'
+import { BUSINESS_INFO, type OpeningHours } from '@/lib/business-info'
 import type { Media } from '@/payload-types'
 
 type SEOSettingsData = {
   orgName?: string | null
+  orgLegalName?: string | null
   orgDescription?: string | null
   orgLogo?: Media | string | null
   orgEmail?: string | null
@@ -27,6 +29,16 @@ type SEOSettingsData = {
     postalCode?: string | null
     country?: string | null
   } | null
+  orgGeo?: {
+    latitude?: number | null
+    longitude?: number | null
+  } | null
+  orgOpeningHours?: Array<{
+    days?: string[] | null
+    opens?: string | null
+    closes?: string | null
+  }> | null
+  googleBusinessUrl?: string | null
   socialProfiles?: Array<{
     platform?: string | null
     url?: string | null
@@ -42,74 +54,139 @@ function getMediaUrl(media: Media | string | null | undefined): string | undefin
 }
 
 /**
- * Organization schema — rendered once in root layout
+ * Stable Schema.org node identifiers — everything references these @ids so
+ * search engines resolve one consistent entity (the NAP-consistency lever).
  */
-export function generateOrganizationJsonLd(seoSettings: SEOSettingsData) {
-  const siteUrl = getServerSideURL()
-  const logoUrl = getMediaUrl(seoSettings.orgLogo)
+export const ORG_ID = (siteUrl: string) => `${siteUrl}/#organization`
+export const LOCALBUSINESS_ID = (siteUrl: string) => `${siteUrl}/#localbusiness`
+export const WEBSITE_ID = (siteUrl: string) => `${siteUrl}/#website`
 
-  const schema: Record<string, unknown> = {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: seoSettings.orgName || 'ZUZY',
-    url: siteUrl,
+function buildPostalAddress(seoSettings: SEOSettingsData) {
+  const addr = seoSettings.orgAddress
+  return {
+    '@type': 'PostalAddress',
+    streetAddress: addr?.streetAddress || BUSINESS_INFO.address.streetAddress,
+    addressLocality: addr?.city || BUSINESS_INFO.address.addressLocality,
+    ...(addr?.region && { addressRegion: addr.region }),
+    postalCode: addr?.postalCode || BUSINESS_INFO.address.postalCode,
+    addressCountry: addr?.country || BUSINESS_INFO.address.addressCountry,
   }
+}
 
-  if (seoSettings.orgDescription) {
-    schema.description = seoSettings.orgDescription
-  }
+function buildOpeningHours(seoSettings: SEOSettingsData) {
+  const source: OpeningHours[] =
+    seoSettings.orgOpeningHours && seoSettings.orgOpeningHours.length > 0
+      ? seoSettings.orgOpeningHours.map((h) => ({
+          days: h.days || [],
+          opens: h.opens || '',
+          closes: h.closes || '',
+        }))
+      : (BUSINESS_INFO.openingHours as unknown as OpeningHours[])
 
-  if (logoUrl) {
-    schema.logo = {
-      '@type': 'ImageObject',
-      url: logoUrl.startsWith('http') ? logoUrl : `${siteUrl}${logoUrl}`,
-    }
-  }
-
-  if (seoSettings.orgEmail) {
-    schema.email = seoSettings.orgEmail
-  }
-
-  if (seoSettings.orgPhone) {
-    schema.telephone = seoSettings.orgPhone
-  }
-
-  if (seoSettings.orgAddress) {
-    const addr = seoSettings.orgAddress
-    if (addr.streetAddress || addr.city || addr.country) {
-      schema.address = {
-        '@type': 'PostalAddress',
-        ...(addr.streetAddress && { streetAddress: addr.streetAddress }),
-        ...(addr.city && { addressLocality: addr.city }),
-        ...(addr.region && { addressRegion: addr.region }),
-        ...(addr.postalCode && { postalCode: addr.postalCode }),
-        ...(addr.country && { addressCountry: addr.country }),
-      }
-    }
-  }
-
-  const sameAs = seoSettings.socialProfiles
-    ?.map((p) => p.url)
-    .filter(Boolean) as string[] | undefined
-
-  if (sameAs && sameAs.length > 0) {
-    schema.sameAs = sameAs
-  }
-
-  return schema
+  return source
+    .filter((h) => h.days.length > 0 && h.opens && h.closes)
+    .map((h) => ({
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: h.days,
+      opens: h.opens,
+      closes: h.closes,
+    }))
 }
 
 /**
- * WebSite schema with SearchAction — rendered once in root layout
+ * Unified entity @graph — rendered once in the root layout.
+ *
+ * Emits a single connected graph instead of disconnected islands:
+ *   Organization  ← the brand entity (NAP, sameAs, contactPoint)
+ *   ProfessionalService (LocalBusiness) ← the physical presence (address, geo, hours)
+ *   WebSite       ← the site + SearchAction, published by the Organization
+ *
+ * Values come from the SEO Settings global when present, otherwise fall back to
+ * the canonical BUSINESS_INFO baseline so the NAP always renders correctly.
  */
-export function generateWebSiteJsonLd(seoSettings: SEOSettingsData) {
+export function generateEntityGraph(seoSettings: SEOSettingsData) {
   const siteUrl = getServerSideURL()
+  const logoUrl = getMediaUrl(seoSettings.orgLogo)
+  const name = seoSettings.orgName || BUSINESS_INFO.name
+  const legalName = seoSettings.orgLegalName || BUSINESS_INFO.legalName
+  const description = seoSettings.orgDescription || BUSINESS_INFO.description
+  const email = seoSettings.orgEmail || BUSINESS_INFO.email
+  const telephone = seoSettings.orgPhone || BUSINESS_INFO.telephone
+  const address = buildPostalAddress(seoSettings)
+  const openingHours = buildOpeningHours(seoSettings)
 
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: seoSettings.orgName || 'ZUZY',
+  const logo = logoUrl
+    ? {
+        '@type': 'ImageObject',
+        url: logoUrl.startsWith('http') ? logoUrl : `${siteUrl}${logoUrl}`,
+      }
+    : undefined
+
+  const lat = seoSettings.orgGeo?.latitude ?? BUSINESS_INFO.geo.latitude
+  const lng = seoSettings.orgGeo?.longitude ?? BUSINESS_INFO.geo.longitude
+
+  const socialSameAs = (seoSettings.socialProfiles || [])
+    .map((p) => p.url)
+    .filter(Boolean) as string[]
+  const gbUrl = seoSettings.googleBusinessUrl || BUSINESS_INFO.googleBusinessUrl
+  const sameAs = Array.from(
+    new Set([
+      ...(socialSameAs.length > 0 ? socialSameAs : [...BUSINESS_INFO.sameAs]),
+      ...(gbUrl ? [gbUrl] : []),
+    ]),
+  )
+
+  const organization: Record<string, unknown> = {
+    '@type': 'Organization',
+    '@id': ORG_ID(siteUrl),
+    name,
+    legalName,
+    alternateName: legalName,
     url: siteUrl,
+    description,
+    email,
+    telephone,
+    address,
+    ...(logo && { logo }),
+    ...(sameAs.length > 0 && { sameAs }),
+    contactPoint: [
+      {
+        '@type': 'ContactPoint',
+        telephone,
+        email,
+        contactType: 'customer service',
+        areaServed: 'IL',
+        availableLanguage: ['he', 'en'],
+      },
+    ],
+  }
+
+  const localBusiness: Record<string, unknown> = {
+    '@type': 'ProfessionalService',
+    '@id': LOCALBUSINESS_ID(siteUrl),
+    name,
+    url: siteUrl,
+    ...(logo && { image: logo }),
+    email,
+    telephone,
+    address,
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: lat,
+      longitude: lng,
+    },
+    ...(openingHours.length > 0 && { openingHoursSpecification: openingHours }),
+    parentOrganization: { '@id': ORG_ID(siteUrl) },
+    ...(gbUrl && { hasMap: gbUrl }),
+  }
+
+  const website = {
+    '@type': 'WebSite',
+    '@id': WEBSITE_ID(siteUrl),
+    name,
+    url: siteUrl,
+    inLanguage: 'he-IL',
+    publisher: { '@id': ORG_ID(siteUrl) },
     potentialAction: {
       '@type': 'SearchAction',
       target: {
@@ -118,6 +195,11 @@ export function generateWebSiteJsonLd(seoSettings: SEOSettingsData) {
       },
       'query-input': 'required name=search_term_string',
     },
+  }
+
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [organization, localBusiness, website],
   }
 }
 

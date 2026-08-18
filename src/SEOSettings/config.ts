@@ -26,6 +26,15 @@ export const SEOSettings: GlobalConfig = {
               },
             },
             {
+              name: 'orgLegalName',
+              label: 'Legal / Full Name',
+              type: 'text',
+              admin: {
+                description:
+                  'Full registered name exactly as on Google Business Profile (used as legalName + alternateName). Leave empty to use the canonical baseline.',
+              },
+            },
+            {
               name: 'orgDescription',
               label: 'Organization Description',
               type: 'textarea',
@@ -91,6 +100,74 @@ export const SEOSettings: GlobalConfig = {
                   },
                 },
               ],
+            },
+            {
+              name: 'orgGeo',
+              label: 'Geo Coordinates',
+              type: 'group',
+              admin: {
+                description:
+                  'LocalBusiness map coordinates. Leave empty to use the canonical baseline.',
+              },
+              fields: [
+                {
+                  name: 'latitude',
+                  label: 'Latitude',
+                  type: 'number',
+                },
+                {
+                  name: 'longitude',
+                  label: 'Longitude',
+                  type: 'number',
+                },
+              ],
+            },
+            {
+              name: 'orgOpeningHours',
+              label: 'Opening Hours',
+              type: 'array',
+              admin: {
+                description:
+                  'Opening hours for the LocalBusiness schema. Leave empty to use the canonical baseline (Sun–Thu 09:00–18:00, Fri 09:00–14:00).',
+              },
+              fields: [
+                {
+                  name: 'days',
+                  label: 'Days',
+                  type: 'select',
+                  hasMany: true,
+                  options: [
+                    { label: 'Sunday', value: 'Sunday' },
+                    { label: 'Monday', value: 'Monday' },
+                    { label: 'Tuesday', value: 'Tuesday' },
+                    { label: 'Wednesday', value: 'Wednesday' },
+                    { label: 'Thursday', value: 'Thursday' },
+                    { label: 'Friday', value: 'Friday' },
+                    { label: 'Saturday', value: 'Saturday' },
+                  ],
+                },
+                {
+                  name: 'opens',
+                  label: 'Opens (HH:MM)',
+                  type: 'text',
+                  admin: { description: '24h format, e.g. 09:00' },
+                },
+                {
+                  name: 'closes',
+                  label: 'Closes (HH:MM)',
+                  type: 'text',
+                  admin: { description: '24h format, e.g. 18:00' },
+                },
+              ],
+            },
+            {
+              name: 'googleBusinessUrl',
+              label: 'Google Business / Maps URL',
+              type: 'text',
+              admin: {
+                description:
+                  'Add ONLY once the Google Business Profile is verified. Added to sameAs + used as hasMap on the LocalBusiness node.',
+              },
             },
           ],
         },

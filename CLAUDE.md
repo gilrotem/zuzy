@@ -32,16 +32,33 @@ See also: `../zuzy-architecture/ORCHESTRATION-PROTOCOL.md` for cross-workspace r
 - **NEVER commit without a passing build** (`pnpm build`).
 - **NEVER push without a passing build.**
 
-### SEO Safety (CRITICAL)
-SEO changes are effectively irreversible — Google may take weeks to recrawl. Bad changes tank rankings.
+### SEO — the five surfaces that go through Gil
 
-- **NEVER modify robots.txt logic** without listing exact changes for user approval.
-- **NEVER add/remove/change redirect rules** without listing each redirect for approval.
-- **NEVER change canonical URL patterns** without approval.
-- **NEVER modify sitemap inclusion/exclusion** without approval.
-- **NEVER change meta robots defaults** (index/noindex/follow/nofollow) without approval.
-- All JSON-LD structured data must match schema.org specs exactly.
-- Hreflang changes must be verified for all 6 locales.
+SEO changes are slow to reverse; Google may take weeks to recrawl. So these five surfaces
+are **Gil's call, every time**. Changing them is normal and expected — it just goes
+through him first.
+
+| Surface | What to bring him |
+|---|---|
+| `robots.txt` logic | The exact before/after lines |
+| Redirect rules | Every `source → destination`, with the live status code of both sides |
+| Canonical URL patterns | The current and proposed canonical for a sample page from each URL shape |
+| Sitemap inclusion / exclusion | Which URLs enter the sitemap and which leave it |
+| `meta robots` defaults | The pages affected and the index/noindex/follow/nofollow change |
+
+**How to bring the evidence** — the point is that he can see the effect, not just the intent:
+
+1. **Before** — `node ../zuzy-architecture/conformance/check.mjs`, record the failing lines.
+2. **A test** that fails without the change and passes with it.
+3. **After** — the same check, showing those exact lines flipped to PASS.
+
+Then he approves, and it ships.
+
+**Finding one of these broken is worth raising immediately.** Leaving a known-broken SEO
+surface alone is not the safe option — it is how `/contact` stayed a 404 inside the
+sitemap for months. Say what you found, bring the fix, get the approval.
+
+JSON-LD structured data follows schema.org specs.
 
 ---
 
@@ -147,10 +164,19 @@ Globals are registered in `src/payload.config.ts` → `globals: [Header, Footer,
 | `src/app/sitemap.ts` | DB-driven sitemap (respects per-page robotsOverride, sitemapExcludePaths) | Working |
 | `src/app/blog/sitemap.ts` | Blog-specific sitemap (all WP posts + categories) | Working |
 | `src/lib/seo-config.ts` | Collection → URL path mapping, indexable collections | Working |
-| `src/lib/page-metadata.ts` | Unified metadata generator (title, description, OG, Twitter) | Working |
-| `src/lib/hreflang.ts` | Hreflang links for all locales | Working |
+| `src/utilities/generateMeta.ts` | **The metadata generator the routes actually use** (12+ routes) | ⚠️ emits no self-referencing canonical, and `og:url` is the bare origin on every page — it never receives the page path |
 | `src/lib/json-ld.tsx` | 7 JSON-LD schema generators + `JsonLd` component | Working |
 | `@payloadcms/plugin-seo` | Basic per-page SEO fields (in plugins/index.ts) | Working |
+
+Status in this table means **verified against production**, not "the file exists". Run
+`node ../zuzy-architecture/conformance/check.mjs` before trusting any row. Rows that
+claimed "Working" for months while the surface was broken are exactly what this project
+keeps getting wrong.
+
+**Hreflang and multi-locale SEO are out of scope.** Not in development now, not soon.
+`src/lib/hreflang.ts` and `src/lib/page-metadata.ts` were deleted on 2026-09-10 — the
+latter was dead code with zero callers that made it look like canonicals worked. Do not
+reintroduce either, and do not add `alternates.languages` anywhere.
 
 ### SEO Settings Global (`src/SEOSettings/config.ts`)
 - Organization tab (name, description, logo, email, phone, address)

@@ -1,4 +1,4 @@
-import { resendAdapter } from '@payloadcms/email-resend'
+import { brevoAdapter } from '@/email/brevoAdapter'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { he } from '@payloadcms/translations/languages/he'
 import { en } from '@payloadcms/translations/languages/en'
@@ -110,10 +110,10 @@ export default buildConfig({
     fallback: true,
   },
 
-  email: resendAdapter({
-    defaultFromAddress: process.env.RESEND_FROM_ADDRESS || 'noreply@zuzy.co.il',
+  email: brevoAdapter({
+    defaultFromAddress: process.env.EMAIL_FROM_ADDRESS || 'noreply@zuzy.co.il',
     defaultFromName: 'ZUZY',
-    apiKey: process.env.RESEND_API_KEY || '',
+    apiKey: process.env.BREVO_API_KEY || '',
   }),
   plugins,
   secret: process.env.PAYLOAD_SECRET,
